@@ -66,8 +66,7 @@ hexo d
 > 2. 看看仓库名称是否打错，一定要是username.github.io
 > 3. 看看仓库中根目录是否有index.html文件，如果没有则去hexo重新生成部署
 > 3. 如果找不出任何异常就试试在Pages设置中将Branch选择None，点一下Save，再选回来，点一下Save。
-  
-<font color=red>***不使用Hexo直接用Git将项目推送到GitHub的项目仓库中也可以。***</font>  
+
 ## 安装主题
 1. 安装NexT
 ```
@@ -383,6 +382,37 @@ tags:
 - 主页文章预览
 在文章中加入`<!-- more -->`标签，以指定首页显示文章预览的内容。
 
+## 多终端同步
+有些情况下，可能会使用多台设备对博客进行维护，但是github page的项目中发布的仅仅是我们`hexo g`时再public当中的内容，就需要对hexo项目本身的内容进行同步。我们可以使用U盘，云盘，git等工具。在这里介绍一下git的思路。（git的操作可以参照github给出的提示使用）使用git同步我们可以新建一个仓库或者新建一个分支。
+- 首先我们初始化git项目
+```git
+cd blog_root
+git init
+```
+这时会自动帮我们生成`.gitignore`文件，对一些文件路径进行忽略。其中包括了`public`和`node_modules`文件夹。  
+- 关联到Github远程分支
+```git
+git remote add origin git@github.com:username/blog.git  //我的仓库名是blog
+```
+- 将所有文件推送上去
+```git
+git add ./*
+git commit -m "xxx"
+git push origin master
+```
+- 来到另一个终端
+这个终端的前提是要先安装好Nodejs以及Hexo。
+- clone下git上的blog项目
+```git
+git clone git@github.com:username/blog.git
+```
+- 安装组件
+```
+cd blog
+npm install
+```
+
+至此，就已经成功进行同步，可以正常对hexo项目进行操作。以后进行维护时，先从git拉取最新内容，并且再完成修改后及时推送到git上即可。  
 ## 官方文档
 本篇当中只提及到了一些我用到的并且我认为比较重要的部分，只是冰山一脚，Hexo和NexT还有很多其他功能，可以去他们的官网查看一下。
 Hexo：https://hexo.io/zh-cn/  
