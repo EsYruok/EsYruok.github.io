@@ -24,7 +24,7 @@ npm config set cache "D:\Mysoftware\nodejs\node_cache"
 添加系统变量 NODE_PATH 为node_global的路径
 ```
 
-## 部署Hexo
+## 建立Hexo项目
 建议使用管理员权限执行命令
 1. 安装Hexo 
 ```
@@ -44,6 +44,10 @@ hexo s
 这时通过提示访问 http://localhost:4000 就可以在本地看到一个初始化的博客。hexo -h 也可以看到命令各种选项的说明。  
 4. 使用Hexo部署到Github
 本地测试成功后，进行部署。
+- 安装部署工具
+```
+npm install hexo-deployer-git --save
+```
 - 先修改博客根目录配置文件/_config.yml 根据自己的git情况配置
 ```yml
 # Deployment
@@ -54,7 +58,7 @@ deploy:
   branch: master
  
 ```
-- 执行部署命令
+- 部署
 ```
 hexo d
 ```
@@ -383,36 +387,36 @@ tags:
 在文章中加入`<!-- more -->`标签，以指定首页显示文章预览的内容。
 
 ## 多终端同步
-有些情况下，可能会使用多台设备对博客进行维护，但是github page的项目中发布的仅仅是我们`hexo g`时再public当中的内容，就需要对hexo项目本身的内容进行同步。我们可以使用U盘，云盘，git等工具。在这里介绍一下git的思路。（git的操作可以参照github给出的提示使用）使用git同步我们可以新建一个仓库或者新建一个分支。
-- 首先我们初始化git项目
+有些情况下，可能会使用多台设备对博客进行维护，但是github page的项目中发布的仅仅是我们`hexo g`时在public当中的内容，就需要对hexo项目本身的内容进行同步。我们可以使用U盘，云盘，git等工具。在这里介绍一下git的思路。（git的操作可以参照github给出的提示使用）使用git同步我们可以新建一个分支来存放博客源码。  
+- 首先在github的项目中新建一个分支hexo
+**branch** -> **New branch** -> 输入hexo -> **Create branch**  
+- 将默认分支设置为hexo
+**Settings** -> **Branches** -> **Default branch**  
+- 使用git重新clone仓库
 ```git
-cd blog_root
-git init
+git clone git@github.com:username/username.github.io.git
 ```
-这时会自动帮我们生成`.gitignore`文件，对一些文件路径进行忽略。其中包括了`public`和`node_modules`文件夹。  
-- 关联到Github远程分支
+- 切换到hexo分支，将除`.git`文件夹以外的所有文件删除  
+- 将hexo项目当中除`.git`文件夹以外的所有文件拷贝到git仓库中，并提交
 ```git
-git remote add origin git@github.com:username/blog.git  //我的仓库名是blog
+cd username.github.io.git
+git add .
+git commit -m "add branch"
+git push
 ```
-- 将所有文件推送上去
-```git
-git add ./*
-git commit -m "xxx"
-git push origin master
+可以去github验证一下两个分支是否是预想的内容。`master`存放这网站的静态文件，`hexo`存放的是博客源码文件
+- 在编辑的时候要保证分支处在hexo分支上,重新安装插件
 ```
-- 来到另一个终端
-这个终端的前提是要先安装好Nodejs以及Hexo。
-- clone下git上的blog项目
-```git
-git clone git@github.com:username/blog.git
-```
-- 安装组件
-```
-cd blog
 npm install
+npm install hexo-deployer-git --save
+```
+- 编辑过后要同步两个分支
+```git
+hexo d
+git push
 ```
 
-至此，就已经成功进行同步，可以正常对hexo项目进行操作。以后进行维护时，先从git拉取最新内容，并且再完成修改后及时推送到git上即可。  
+其他终端操作过程大致相同，直接git拉取，安装插件即可使用。  
 ## 官方文档
 本篇当中只提及到了一些我用到的并且我认为比较重要的部分，只是冰山一脚，Hexo和NexT还有很多其他功能，可以去他们的官网查看一下。
 Hexo：https://hexo.io/zh-cn/  
