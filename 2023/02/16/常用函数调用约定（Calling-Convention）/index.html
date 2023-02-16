@@ -20,23 +20,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Truth">
-<meta property="og:url" content="http://example.com/index.html">
+    <meta name="description" content="介绍windows下的调用约定，常用的有__stdcall，__cdecl，__thiscall，__fastcall以及不常用的__vectorcall，__clrcall。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常用函数调用约定（Calling Convention）">
+<meta property="og:url" content="http://example.com/2023/02/16/%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%BA%A6%E5%AE%9A%EF%BC%88Calling-Convention%EF%BC%89/index.html">
 <meta property="og:site_name" content="Truth">
+<meta property="og:description" content="介绍windows下的调用约定，常用的有__stdcall，__cdecl，__thiscall，__fastcall以及不常用的__vectorcall，__clrcall。">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-16T13:40:04.000Z">
+<meta property="article:modified_time" content="2023-02-16T15:08:12.619Z">
 <meta property="article:author" content="EsYruok">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/">
+<link rel="canonical" href="http://example.com/2023/02/16/%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%BA%A6%E5%AE%9A%EF%BC%88Calling-Convention%EF%BC%89/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2023/02/16/%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%BA%A6%E5%AE%9A%EF%BC%88Calling-Convention%EF%BC%89/","path":"2023/02/16/常用函数调用约定（Calling-Convention）/","title":"常用函数调用约定（Calling Convention）"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Truth</title>
+<title>常用函数调用约定（Calling Convention） | Truth</title>
   
 
 
@@ -71,7 +75,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">Truth</h1>
+      <p class="site-title">Truth</p>
       <i class="logo-line"></i>
     </a>
   </div>
@@ -124,7 +128,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -137,6 +141,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#stdcall"><span class="nav-number">1.</span> <span class="nav-text">__stdcall</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cdecl"><span class="nav-number">2.</span> <span class="nav-text">__cdecl</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#thiscall"><span class="nav-number">3.</span> <span class="nav-text">__thiscall</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fastcall"><span class="nav-number">4.</span> <span class="nav-text">__fastcall</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vectorcall"><span class="nav-number">5.</span> <span class="nav-text">__vectorcall</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#clrcall"><span class="nav-number">6.</span> <span class="nav-text">__clrcall</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -180,16 +185,17 @@
 
     </div>
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/16/%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%BA%A6%E5%AE%9A%EF%BC%88Calling-Convention%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -203,13 +209,13 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Truth">
+      <meta itemprop="name" content="常用函数调用约定（Calling Convention） | Truth">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/16/%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%BA%A6%E5%AE%9A%EF%BC%88Calling-Convention%EF%BC%89/" class="post-title-link" itemprop="url">常用函数调用约定（Calling Convention）</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          常用函数调用约定（Calling Convention）
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -224,6 +230,13 @@
     </span>
 
   
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
 </div>
 
         </div>
@@ -233,11 +246,17 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>介绍windows下的调用约定，常用的有__stdcall，__cdecl，__thiscall，__fastcall以及不常用的__vectorcall，__clrcall。</p>
-          <!--noindex-->
-          <!--/noindex-->
-        
-      
+        <p>介绍windows下的调用约定，常用的有__stdcall，__cdecl，__thiscall，__fastcall以及不常用的__vectorcall，__clrcall。</p>
+<span id="more"></span>
+
+<h2 id="stdcall"><a href="#stdcall" class="headerlink" title="__stdcall"></a>__stdcall</h2><p>Win32 API使用的调用约定。由被调用者清理堆栈，参数从右向左压入堆栈。  </p>
+<h2 id="cdecl"><a href="#cdecl" class="headerlink" title="__cdecl"></a>__cdecl</h2><p>C&#x2F;C++程序默认的调用约定。由调用者清理堆栈，支持变参函数，参数从右向左压入堆栈。  </p>
+<h2 id="thiscall"><a href="#thiscall" class="headerlink" title="__thiscall"></a>__thiscall</h2><p>C++类成员函数使用的调用约定（固定参数）。由被调用者清理堆栈，所以不支持变参函数，<code>this</code>指针通过<code>ECX</code>传递，其余参数从右向左压入堆栈。<br>变参类成员函数使用的是<code>cdecl</code>调用约定。this指针最后压入堆栈  </p>
+<h2 id="fastcall"><a href="#fastcall" class="headerlink" title="__fastcall"></a>__fastcall</h2><p>一种尽可能使用寄存器传参的调用约定。<br>在x86下，由被调用放清理堆栈，从左到右前两个参数通过<code>ECX,EDX</code>传递，其余参数从右向左压入堆栈。可以看成是<code>cdecl</code>进行某种变化。<br>在x64下，<code>fastcall</code>是默认的调用约定，由调用者清理堆栈，支持变参函数，前4个参数如果是整型则使用<code>RCX,RDX,R8,R9</code>传递，如果是浮点型则使用<code>XMM0,XMM1,XMM2,XMM3</code>传递，其余参数从右向左压入堆栈。<br>前4个参数虽然会通过寄存器传递，但是仍然会在堆栈上留有对应的空间（shadow）让函数来存放使用寄存器来传递的参数。所以其余参数在入栈后仍然是在shadow之后。<br>注意一下，前4个参数是按固定位置来使用寄存器，不是按照顺序来使用寄存器，可能说的比较抽象，下面放几个微软提供的例子很好理解。  </p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">func1</span>(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> c, <span class="type">int</span> d, <span class="type">int</span> e, <span class="type">int</span> f);</span><br><span class="line"><span class="comment">// a in RCX, b in RDX, c in R8, d in R9, f then e pushed on stack</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">func2</span>(<span class="type">float</span> a, <span class="type">double</span> b, <span class="type">float</span> c, <span class="type">double</span> d, <span class="type">float</span> e, <span class="type">float</span> f);</span><br><span class="line"><span class="comment">// a in XMM0, b in XMM1, c in XMM2, d in XMM3, f then e pushed on stack</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">func3</span>(<span class="type">int</span> a, <span class="type">double</span> b, <span class="type">int</span> c, <span class="type">float</span> d, <span class="type">int</span> e, <span class="type">float</span> f);</span><br><span class="line"><span class="comment">// a in RCX, b in XMM1, c in R8, d in XMM3, f then e pushed on stack</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">func4</span>(__m64 a, __m128 b, <span class="keyword">struct</span> c, <span class="type">float</span> d, __m128 e, __m128 f);</span><br><span class="line"><span class="comment">// a in RCX, ptr to b in RDX, ptr to c in R8, d in XMM3,</span></span><br><span class="line"><span class="comment">// ptr to f pushed on stack, then ptr to e pushed on stack</span></span><br></pre></td></tr></table></figure>
+<h2 id="vectorcall"><a href="#vectorcall" class="headerlink" title="__vectorcall"></a>__vectorcall</h2><p><code>__vectorcall</code>是微软所特有的调用约定，继承于<code>fastcall</code>进行扩展，它们非常相似，只是<code>__vectorcall</code>尽可能的使用寄存器传参。<br>x64上，由调用者清理堆栈，整数参数尽可能使用<code>RCX,RDX,R8,R9</code>传递，<code>this</code>指针算第一个整型参数。浮点参数尽可能使用<code>XMM0~XMM5</code>传递。其余参数从右向左压入堆栈。栈上同样拥有shadow区域。<br>x86上，由被调用者清理堆栈，证书参数尽可能使用<code>ECX,EDX</code>传递，<code>this</code>指针算第一个整型参数。浮点参数尽可能使用<code>XMM0~XMM5</code>传递。其余参数从右向左压入堆栈。  </p>
+<h2 id="clrcall"><a href="#clrcall" class="headerlink" title="__clrcall"></a>__clrcall</h2><p>这个是.Net平台用的，用来指定函数只能从托管代码调用。实现方式与<code>__fastcall</code>几乎相同。</p>
+
     </div>
 
     
@@ -245,89 +264,39 @@
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>EsYruok
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2023/02/16/%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%BA%A6%E5%AE%9A%EF%BC%88Calling-Convention%EF%BC%89/" title="常用函数调用约定（Calling Convention）">http://example.com/2023/02/16/常用函数调用约定（Calling-Convention）/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
 </div>
 
 
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/01/Hexo-Next%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%8E%E4%BD%BF%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="EsYruok">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Truth">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Truth">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/01/Hexo-Next%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%8E%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">Hexo-Next博客搭建与使用</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-02-01 10:33:45" itemprop="dateCreated datePublished" datetime="2023-02-01T10:33:45+08:00">2023-02-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-15 23:10:51" itemprop="dateModified" datetime="2023-02-15T23:10:51+08:00">2023-02-15</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>对重新翻新博客过程的一个记录。使用<code>GitHub Pages + Hexo + Next</code>来搭建博客的过程与Hexo写作的基本使用方法。</p>
-          <!--noindex-->
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/02/01/Hexo-Next%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%8E%E4%BD%BF%E7%94%A8/" rel="prev" title="Hexo-Next博客搭建与使用">
+                  <i class="fa fa-chevron-left"></i> Hexo-Next博客搭建与使用
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
     </footer>
   </article>
 </div>
+
 
 
 
