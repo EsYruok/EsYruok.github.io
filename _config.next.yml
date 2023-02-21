@@ -347,7 +347,7 @@ mobile_layout_economy: false
 
 # Browser header panel color.
 theme_color:
-  light: "#222"
+  light: "#B22222"
   dark: "#222"
 
 # Override browsers' default behavior.
@@ -361,8 +361,8 @@ codeblock:
   # Code Highlight theme
   # All available themes: https://theme-next.js.org/highlight/
   theme:
-    light: vs2015
-    dark: xcode
+    light: base16/solarized-light
+    dark: shades-of-purple
   prism:
     light: prism
     dark: prism-dark
@@ -370,7 +370,7 @@ codeblock:
   copy_button:
     enable: true
     # Available values: default | flat | mac
-    style:
+    style: default
 
 back2top:
   enable: true
@@ -387,22 +387,22 @@ reading_progress:
   # Available values: top | bottom
   position: top
   reversed: false
-  color: "#37c6c0"
-  height: 3px
+  color: "#CD5C5C"
+  height: 4px
 
 # Bookmark Support
 bookmark:
   enable: true
   # Customize the color of the bookmark.
-  color: "#222"
+  color: "#FF4500"
   # If auto, save the reading progress when closing the page or clicking the bookmark-icon.
   # If manual, only save it by clicking the bookmark-icon.
-  save: auto
+  save: manual
 
 # `Follow me on GitHub` banner in the top-right corner.
 github_banner:
-  enable: false
-  permalink: https://github.com/yourname
+  enable: true
+  permalink: https://github.com/EsYruok
 
 
 # ---------------------------------------------------------------
