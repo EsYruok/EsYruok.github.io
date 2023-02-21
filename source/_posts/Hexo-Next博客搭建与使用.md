@@ -357,6 +357,38 @@ busuanzi_count:
   post_views: true
   post_views_icon: far fa-eye
 ```
+### 添加背景图片
+1. 在主题根目录的source文件夹下添加一个_data文件夹
+2. 在其中创建一个styles.styl文件
+3. 在文件中写入一下内容
+```styl
+body {
+    background:url(/images/background.jpg);//这里是图片路径
+    background-repeat: no-repeat;
+    background-attachment:fixed;
+    background-position:50% 50%;
+    // background-size: 100% 100%;
+    background-size: cover;
+}
+```
+4. 取消主题配置文件_config.next.yml中style: source/_data/styles.styl的注释
+5. 在source/css/main.styl文件中修改最后的Custom Layer部分
+```styl
+// Custom Layer
+// --------------------------------------------------
+for $inject_style in hexo-config('injects.style')
+  @import '../_data/styles.styl';
+```
+6. 重新生成网站
+
+### 修改主题透明度
+在添加背景图片的styles.styl文件中添加下列代码即可
+```styl
+:root {
+  --content-bg-color:#ffffffdf;
+}
+```
+
 ## 文章写作  
 - 创建一篇新的文章
 `layout`代表想要使用的布局，不加时使用默认布局，在`_config.yml`当中`default_layout` 项设置，默认是post布局。  
