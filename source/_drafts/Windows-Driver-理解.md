@@ -6,6 +6,7 @@ categories:
 
 重新系统的学习一下Windows Driver涉及到的基本概念。
 <!-- more -->
+本文内容出自微软官方文档 https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/  
 ## 什么是driver
 驱动的概念是很难直接给出一个非常精准的定义，我们来一点一点的了解。  
 先以最根本的意义来讲，**驱动是一种用来让操作系统和硬件设备进行通信的软件**。假如一个程序想要从设备读取数据，应用程序要调用操作系统实现的函数，而操作系统调用驱动实现的函数，驱动从硬件获取到数据后再返回给操作系统进而返回给应用程序。有些硬件是根据已有的硬件标准设计的，所以驱动程序可以是硬件厂商编写，也可以是操作系统厂商编写。如下图所示：
@@ -20,16 +21,16 @@ categories:
 现在重新对驱动定义：**驱动是一种观察或参与到系统与设备之间通信的软件。**
 而设备一词并非一定是物理设备，有些驱动程序不与任何的硬件设备相关联。比如，想要编写一个访问内核数据结构的工具，因为虚拟地址和权限的原因，需要将工具拆分成两个组件，一个在用户态作为用户的操作界面，另一个在内核态用来访问内核数据。而这种运行在内核态的驱动程序我们叫它`Software driver`，它不与任何硬件相关联。像一些系统安全研究人员最常接触的就是这种驱动。  
 ![](https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/whatisadriver03.png)  
-还有一种叫`Bus driver`（总线驱动）的驱动，这种在下面介绍`Device nodes`和`device stacks`当中进行说明。  
-这些提到过的有关驱动程序种类的概念名词并非是完全独立的，它们是可能存在交集的。比如树Softerware driver也可能是Function driver或者Filter driver。  
+还有`Bus driver`（总线驱动）在下面介绍`Device nodes`和`device stacks`当中进行说明。  
+
 ## Device nodes 和 Plug and Play device tree
 Windows使用了一个树状结构来组织设备之间的关系叫做`Plug and Play device tree`或者`device tree`。树中的节点叫做`device node`,它可以代表一个物理设备，或是一个复合设备的单独功能，或者是一个软件组件。树的根节点叫做`root device node`。如下图所示：  
 ![](https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/devicetree01.png)  
-既然是树结构则节点间含有父子关系，`device tree`中的一些节点表示总线设备，比如上图中的`PCI bus`代表物理总线，而连接在物理总线的设备则成了`PCI bus`的子节点。并且子节点表示设备也可以是总线设备，上图中`PCI Express Port`连接在`PCI bus`上，而它本身也是一个总线设备连接着一个显示适配器`Display Adapter`，同样显示适配器也连接着一个显示器设备。  
+既然是树结构则节点间含有父子关系，其中一些节点表示总线设备，比如上图中的 PCI bus 代表物理总线，连接在这个物理总线的设备则成了 PCI bus 的子节点。子节点也可以是总线设备，上图中 PCI Express Port 连接在 PCI bus 上，并且它本身也是一个总线设备连接着一个显示适配器 Display Adapter，显示适配器也连接着一个显示器设备。  
 ## Device stacks
-通常，一个发送到设备的I/O请求是由多个驱动程序来进行处理，这些驱动都有一个对应的对象`driver object`（一个`DEVICE_OBJECT`的实例）相关联，并且他们是按照一定顺序排列起来的，这个序列我们称作`device stack`。每一`device node`都有它自己的`device stack`。    
-`device stack`在不同情境下可能有不同的定义方式，最正式的情况下`device stack`代表的是(`driver object`,`driver`)这一对的有序序列。而某些情况下把它看作`driver object`或`driver`单独的有序序列。  
-既然是栈结构那么就有栈顶和栈底。`device stack`中第一个创建的`driver object`作为栈底，最后一个创建的作为栈顶。下图中Proseware Gizmo节点的`device stack`中有三对对象，PCI Bus节点含有两对对象。  
+通常情况下一个发送到设备的I/O请求是由多个驱动程序来处理的，这些驱动都有一个对应的对象`driver object`（就是一个`DEVICE_OBJECT`的实例）相关联，并且他们是按照一定顺序排列起来的，我们称这个有序序列为`device stack`。每一 device node 都有它自己的 device stack。  
+device stack 在不同情境下可能有不同的定义方式，最正式的情况下 device stack 代表的是(driver object,driver)对的有序序列。而某些情况下把它看作 driver object 或 driver 单独的有序序列。  
+既然是栈结构那么就有栈顶和栈底。device stack 中第一个创建的 driver object 作为栈底，最后一个创建的作为栈顶。下图中Proseware Gizmo节点的 device stack 中有三对对象，PCI Bus节点含有两对对象。  
 ![](https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/prosewaredevicenode01.png)  
 在启动时，PnP管理器(Plug and Play manager)让每一个总线设备的驱动程序去枚举连接在总线上的子设备。以下图为例，PnP manager让PCI Bus的驱动程序Pci.sys枚举连接在其总线上的子设备，为了响应请求，Pci.sys为每一个连接在其上的子设备创建了一个设备对象physical device object(PDO)。所以PDO也将是该节点device stack的第一个对象出现在栈底。在创建后device tree看起来就会像图中这个样子。这里要注意Pci.sys即是PCI Bus的FDO也是子设备的PDO。
 ![](https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/prosewaredevicenode04.png)  
@@ -63,7 +64,3 @@ Usbstor.sys即是My USB Storage的PDO也是USB Mass Storage的FDO。我们不用
 大多数发送到设备的I/O请求都是打包成IRP包（I/O request packets）。操作系统或驱动使用`IoCallDriver`来发送一个IRP包，`IoCallDriver`含有两个参数，一个指向`DEVICE_OBJECT`的指针和一个指向IRP结构的指针。当一个程序使用`IoCallDriver`时我们称程序将IRP发送到设备对象或发送到设备对象关联的驱动。而有时我们会使用传递（passes the IRP）或者转发（forwards the IRP）来代替发送（sends the IRP）。  
 通常一个IRP被`device stack`中的多个驱动所处理，最先被栈顶的驱动接收，处理完毕后继续在栈中向下传递，我们称驱动将IRP向下传递到堆栈（passes the IRP down the device stack）。
 ![](https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/prosewaredevicenode03.png)  
-
-## 参考资料
-以上全部知识都出自微软的官方文档经过个人学习理解后写出，更详细可以去原版查阅
-https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/
