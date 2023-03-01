@@ -164,6 +164,6 @@ hva4 __vectorcall example6(hva2 a, hva4 b, __m256 c, hva2 d) {
 ```
 ## __clrcall
 `__clrcall`是.Net当中的调用规范，这个是在C++中使用.Net时用的，用来指定函数只能从托管代码调用。由调用者平衡堆栈，参数由左向右入栈。  
-关于这类调用约定的传参和平栈方式未在微软的文档找到，是通过其他资料查阅，真实性有待验证。  
+关于这类调用约定的传参和平栈方式未在微软的文档找到，是通过其他资料查阅，准确性有待验证。  
 
 参考文档：[Argument Passing and Naming Conventions](https://learn.microsoft.com/en-us/cpp/cpp/argument-passing-and-naming-conventions?view=msvc-170)
