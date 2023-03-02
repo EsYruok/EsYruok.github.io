@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#B22222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#B22222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.14.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"default"},"bookmark":{"enable":true,"color":"#FF4500","save":"manual"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="全面了解一下windows driver当中涉及到的基本概念。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows Driver 理解">
+<meta property="og:url" content="http://example.com/2023/02/28/Windows-Driver-%E7%90%86%E8%A7%A3/index.html">
+<meta property="og:site_name" content="Truth">
+<meta property="og:description" content="全面了解一下windows driver当中涉及到的基本概念。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/whatisadriver01.png">
+<meta property="og:image" content="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/devicetree01.png">
+<meta property="og:image" content="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/prosewaredevicenode01.png">
+<meta property="og:image" content="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/whatisadriver02.png">
+<meta property="og:image" content="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/prosewaredevicenode04.png">
+<meta property="og:image" content="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/prosewaredevicenode02.png">
+<meta property="og:image" content="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/userandkerneldevicestacks01.png">
+<meta property="og:image" content="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/chain01.png">
+<meta property="og:image" content="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/driverstack01.png">
+<meta property="og:image" content="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/driverstack02.png">
+<meta property="article:published_time" content="2023-02-28T06:22:17.000Z">
+<meta property="article:modified_time" content="2023-03-02T16:54:29.046Z">
+<meta property="article:author" content="EsYruok">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/whatisadriver01.png">
+
+
+<link rel="canonical" href="http://example.com/2023/02/28/Windows-Driver-%E7%90%86%E8%A7%A3/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2023/02/28/Windows-Driver-%E7%90%86%E8%A7%A3/","path":"2023/02/28/Windows-Driver-理解/","title":"Windows Driver 理解"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Windows Driver 理解 | Truth</title>
+  
+
+
+
+
+
+
+  <script async defer data-website-id="" src=""></script>
+
+  <script defer data-domain="" src=""></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Truth</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">1</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">3</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFdriver"><span class="nav-number">1.</span> <span class="nav-text">什么是driver</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Software-driver"><span class="nav-number">2.</span> <span class="nav-text">Software driver</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Device-nodes-%E5%92%8C-Plug-and-Play-device-tree"><span class="nav-number">3.</span> <span class="nav-text">Device nodes 和 Plug and Play device tree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Device-stacks"><span class="nav-number">4.</span> <span class="nav-text">Device stacks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#I-x2F-O-request-packets"><span class="nav-number">5.</span> <span class="nav-text">I&#x2F;O request packets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Function-driver-%E4%B8%8E-Filter-driver"><span class="nav-number">6.</span> <span class="nav-text">Function driver 与 Filter driver</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bus-drivers"><span class="nav-number">7.</span> <span class="nav-text">Bus drivers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PDO-%E4%B8%8E-FDO-%E4%B8%8E-Filter-DO"><span class="nav-number">8.</span> <span class="nav-text">PDO 与 FDO 与 Filter DO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#User-mode-device-stacks"><span class="nav-number">9.</span> <span class="nav-text">User-mode device stacks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Minidrivers-Miniport-drivers%E5%92%8Cdriver-pairs"><span class="nav-number">10.</span> <span class="nav-text">Minidrivers, Miniport drivers和driver pairs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Driver-stacks"><span class="nav-number">11.</span> <span class="nav-text">Driver stacks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">12.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="EsYruok"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">EsYruok</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/EsYruok" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;EsYruok" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/28/Windows-Driver-%E7%90%86%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="EsYruok">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Truth">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Windows Driver 理解 | Truth">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Windows Driver 理解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-28 14:22:17" itemprop="dateCreated datePublished" datetime="2023-02-28T14:22:17+08:00">2023-02-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-03 00:54:29" itemprop="dateModified" datetime="2023-03-03T00:54:29+08:00">2023-03-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Windows-Driver/" itemprop="url" rel="index"><span itemprop="name">Windows Driver</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>全面了解一下windows driver当中涉及到的基本概念。  <span id="more"></span></p>
+<h2 id="什么是driver"><a href="#什么是driver" class="headerlink" title="什么是driver"></a>什么是driver</h2><p>很难准确的给驱动一个全面的定义。先从最根本的意义来讲它是一个软件或者说是一个组件，是用来<strong>让操作系统和硬件设备进行通信的软件程序</strong>。假如一个应用程序想要从硬件设备读取数据，应用程序要调用操作系统的函数，而操作系统调用驱动的函数，驱动按照一定的规则与硬件设备进行通信获取数据再返回给操作系统进而返回给应用程序。这种驱动程序可以是硬件设备厂商来提供，也可以是操作系统厂商提供。如下图所示：<br>​​<img src="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/whatisadriver01.png">  </p>
+<h2 id="Software-driver"><a href="#Software-driver" class="headerlink" title="Software driver"></a>Software driver</h2><p>实际上有一部分开发人员编写驱动程序并不是为了支持某一硬件设备，而是为了在内核态运行代码（如果不理解用户模式与内核模式可以看一下<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/user-mode-and-kernel-mode">这里</a>）。比如，想要编写一个访问内核数据结构的工具，因为虚拟地址的原因，需要将工具拆分成两个组件，一个在用户态作为用户的操作界面，另一个在内核态用来访问内核数据。这种驱动程序我们叫<code>Software driver</code>，它不与任何硬件设备相关联。提前提醒一下，每个驱动都会有一个设备对象<code>driver obect</code>的概念，这个概念中的设备二字并非一定是与硬件设备关联。  </p>
+<h2 id="Device-nodes-和-Plug-and-Play-device-tree"><a href="#Device-nodes-和-Plug-and-Play-device-tree" class="headerlink" title="Device nodes 和 Plug and Play device tree"></a>Device nodes 和 Plug and Play device tree</h2><p>Windows使用了一个树状结构来组织设备之间的关系叫做<code>Plug and Play device tree</code>或者简称<code>device tree</code>。树中的节点叫做<code>device node</code>,它可以用来代表一个物理设备，或是一个复合设备的单独功能，或者是一个软件组件。树的根节点叫做<code>root device node</code>。如下图所示：<br><img src="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/devicetree01.png"><br>既然是树结构则节点间含有父子关系。如上图中一些节点表示总线设备（Bus），比如图中的PCI bus代表物理总线，连接在这个物理总线的设备则成了PCI bus的子节点。子节点也可以是总线设备，图中PCI Express Port作为子节点连接在PCI bus上，并且它本身也是一个总线设备连接着一个显示适配器Display Adapter，显示适配器也连接着一个显示器设备。  </p>
+<h2 id="Device-stacks"><a href="#Device-stacks" class="headerlink" title="Device stacks"></a>Device stacks</h2><p>通常情况下一个发送到设备的I&#x2F;O请求是由多个驱动程序来处理的，这些驱动都有一个对应的对象driver object（就是一个<code>DEVICE_OBJECT</code>的实例）相关联，并且它们是按照一定顺序排列起来，我们称这个有序序列为<code>device stack</code>。每一个device node都有它自己的device stack。device stack在最正式的情况下代表的是(driver object,driver)对的有序序列。而某些情景下会把它看作driver object或driver单独的有序序列。所以在其它地方看到这个名词不要对其代表的意义过于僵硬。既然是stack那么就有栈顶和栈底。device stack中将第一个创建的driver object作为栈底，最后一个创建的作为栈顶。如下图中所示，Proseware Gizmo节点的device stack中有三对对象，PCI Bus节点含有两对对象。<br><img src="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/prosewaredevicenode01.png">  </p>
+<h2 id="I-x2F-O-request-packets"><a href="#I-x2F-O-request-packets" class="headerlink" title="I&#x2F;O request packets"></a>I&#x2F;O request packets</h2><p>大多数发送到设备的I&#x2F;O请求都是打包成IRP包（I&#x2F;O request packets）。操作系统或驱动使用<code>IoCallDriver</code>来发送一个IRP包，IoCallDriver含有两个参数，一个指向DEVICE_OBJECT的指针和一个指向IRP结构的指针。当一个程序使用IoCallDriver时我们称程序将IRP发送到设备对象或发送到设备对象关联的驱动。而有时我们会使用传递（passes the IRP）或者转发（forwards the IRP）来代替发送（sends the IRP）这个说法。一个IRP先被device stack栈顶的驱动接收，处理完毕后继续在栈中向下传递，我们称驱动将IRP向下传递到堆栈（passes the IRP down the device stack）。  </p>
+<h2 id="Function-driver-与-Filter-driver"><a href="#Function-driver-与-Filter-driver" class="headerlink" title="Function driver 与 Filter driver"></a>Function driver 与 Filter driver</h2><p>我们现在知道一个硬件设备会有一个device node相关联，而device node含有一个device stack，device stack中可能含有多个驱动程序。而并不是所有驱动都是用来与设备进行通信，其中一些驱动不直接与设备进行通信，仅仅是对请求进行转换，记录，过滤等，然后将请求下发到更下一层的驱动程序。我们将负责对设备进行控制和通信的驱动叫做<code>Function driver</code>,而另一种不主动参与到通信当中起辅助作用的叫做<code>Filter driver</code>。filter drivers可能在function driver上方也可能在下方，在上方的叫上层过滤驱动，在下方的叫下层过滤驱动。<br><img src="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/whatisadriver02.png">  </p>
+<h2 id="Bus-drivers"><a href="#Bus-drivers" class="headerlink" title="Bus drivers"></a>Bus drivers</h2><p>在系统启动时，PnP管理器(Plug and Play manager)让每一个总线设备的驱动程序去枚举连接在总线上的子设备。以下图为例，PnP manager让PCI Bus的驱动程序Pci.sys枚举连接在其总线上的子设备，Pci.sys 为每一个连接在其上的子设备创建一个设备对象 <code>physical device object(PDO)</code>。所以PDO也将是该节点device stack的第一个对象，放在栈底。在创建PDO后device tree看起来就会像图中这个样子。这里要注意Pci.sys即和PCI Bus的FDO关联，也和子设备的PDO关联。从device node的视角来看可以说是Pci.sys即属于PCI Bus所代表的节点也属于其子节点。它扮演着两个角色。其一，它在PCI Bus中创建了FDO，也就是说Pci.sys是PCI Bus的function driver。其二，它为与PCI Bus相连的子节点创建了PDO，那么它就是子节点的<code>Bus driver</code>。<br><img src="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/prosewaredevicenode04.png">  </p>
+<h2 id="PDO-与-FDO-与-Filter-DO"><a href="#PDO-与-FDO-与-Filter-DO" class="headerlink" title="PDO 与 FDO 与 Filter DO"></a>PDO 与 FDO 与 Filter DO</h2><p>PnP manager将device node与新创建的PDO进行关联，并且去注册表查询确认哪些驱动需要成为这个节点的device stack的一部分（这部分信息由安装驱动时厂家所提供的INF文件所提供）。一个device stack当中必须包含一个且仅一个function driver，可选择包含一个或多个filter drivers。每个驱动程序被加载后都将创建一个driver object并放入device stack中。由function driver创建的对象叫做functional device object(FDO)，由filter driver创建的对象叫filter device object(Filter DO)。<br><img src="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/prosewaredevicenode02.png">  </p>
+<h2 id="User-mode-device-stacks"><a href="#User-mode-device-stacks" class="headerlink" title="User-mode device stacks"></a>User-mode device stacks</h2><p>目前为止所讨论的都是内核模式下的驱动程序，有些情况下一个设备除了有内核下的驱动还有用户模式的驱动。用户模式的驱动通常是基于Windows提供的UMDF框架。在UMDF中驱动程序就是一个dll文件，它的device object就是一个实现了IWDFDevice接口的COM对象。这种设备对象在用户模式的堆栈中称作WDF device object(WDF DO)。下图表示了一个USB-FX-2设备的用户模式和内核模式的堆栈，他们都参与到对设备的请求处理当中。<br><img src="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/userandkerneldevicestacks01.png">  </p>
+<h2 id="Minidrivers-Miniport-drivers和driver-pairs"><a href="#Minidrivers-Miniport-drivers和driver-pairs" class="headerlink" title="Minidrivers, Miniport drivers和driver pairs"></a>Minidrivers, Miniport drivers和driver pairs</h2><p>minidriver是微软所提供的一种开发模型，将原本一个驱动程序的任务划分为两部分形成一个dirver pairs，一部分处理一类设备集合中所共有的一般任务，另一部分处理特定与某一个设备的特殊任务。这样使开发人员专注在特有部分，免去对公共部分的重复操作。处理特定任务部分的驱动程序有多种名称包括miniport driver，miniclass driver，minidriver。通常微软来提供共有部分的驱动程序，硬件厂商提供特定部分的驱动程序。  </p>
+<h2 id="Driver-stacks"><a href="#Driver-stacks" class="headerlink" title="Driver stacks"></a>Driver stacks</h2><p>我们前面说明过，一个IRP可能会经过一个device stack当中的多个驱动。与此类似的，一个I&#x2F;O请求也可能经过多个device stack。看一个例子：<br><img src="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/chain01.png"><br>IRP由Disk.sys所创建，它是My USB Storage Device的FDO。IRP由它向下传递给Usbstor.sys。<br>Usbstor.sys即是My USB Storage的PDO也是USB Mass Storage的FDO。<br>同理Usbstor.sys处理完继续将IRP向下发送给Usbhub.sys。<br>当Usbhub.sys完成处理，继续向下发送给(Usbuhci.sys, Usbport.sys)驱动对。它们进行了与主机控制器的实际通信，继而主机控制器又继续与物理USB存储进行通信。我们将参与I&#x2F;O请求所经过的驱动序列叫做I&#x2F;O请求的<code>drive stack</code>。<br>上面所描述的IRP按照一定顺序经过了四个驱动，抛开device node转而关注驱动程序会得到另外一个视角。<br><img src="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/driverstack01.png"><br>还可以继续使用特定技术或者操作系统的特定组件进行划分。<br><img src="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/driverstack02.png"><br>第一部分属于Volume Manager，第二部分属于操作系统的存储组件，第三部分属于操作系统的核心USB部分（core USB portion）。我们对这种框图称为技术驱动栈<code>technology driver stack</code>。  </p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>本文中提到的所有内容都是通过学习微软的官方文档自行理解所得，更详细的内容可以去原版查询。<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/">https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/</a>  </p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>EsYruok
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2023/02/28/Windows-Driver-%E7%90%86%E8%A7%A3/" title="Windows Driver 理解">http://example.com/2023/02/28/Windows-Driver-理解/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/02/16/%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%BA%A6%E5%AE%9A%EF%BC%88Calling-Convention%EF%BC%89/" rel="prev" title="常用函数调用约定（Calling Convention）">
+                  <i class="fa fa-chevron-left"></i> 常用函数调用约定（Calling Convention）
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">EsYruok</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/EsYruok" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
