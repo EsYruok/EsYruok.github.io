@@ -5,7 +5,7 @@ categories:
 date: 2023-02-28 14:22:17
 tags:
 ---
-全面了解一下windows driver当中涉及到的基本概念。  <!-- more -->
+全面了解一下windows driver当中涉及到的基本术语和概念。  <!-- more -->
 ## 什么是driver
 很难准确的给驱动一个全面的定义。先从最根本的意义来讲它是一个软件或者说是一个组件，是用来**让操作系统和硬件设备进行通信的软件程序**。假如一个应用程序想要从硬件设备读取数据，应用程序要调用操作系统的函数，而操作系统调用驱动的函数，驱动按照一定的规则与硬件设备进行通信获取数据再返回给操作系统进而返回给应用程序。这种驱动程序可以是硬件设备厂商来提供，也可以是操作系统厂商提供。如下图所示：
 ​​![](https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/whatisadriver01.png)  
