@@ -37,7 +37,7 @@
 <meta property="og:image" content="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/driverstack01.png">
 <meta property="og:image" content="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/driverstack02.png">
 <meta property="article:published_time" content="2023-02-28T06:22:17.000Z">
-<meta property="article:modified_time" content="2023-03-05T03:55:26.819Z">
+<meta property="article:modified_time" content="2023-03-20T15:24:58.278Z">
 <meta property="article:author" content="EsYruok">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/whatisadriver01.png">
@@ -100,7 +100,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">1</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">4</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">5</span></a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -166,13 +166,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
@@ -247,7 +247,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-05 11:55:26" itemprop="dateModified" datetime="2023-03-05T11:55:26+08:00">2023-03-05</time>
+      <time title="修改时间：2023-03-20 23:24:58" itemprop="dateModified" datetime="2023-03-20T23:24:58+08:00">2023-03-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -289,6 +289,7 @@
 <h2 id="Minidrivers-Miniport-drivers和driver-pairs"><a href="#Minidrivers-Miniport-drivers和driver-pairs" class="headerlink" title="Minidrivers, Miniport drivers和driver pairs"></a>Minidrivers, Miniport drivers和driver pairs</h2><p>minidriver是微软所提供的一种开发模型，将原本一个驱动程序的任务划分为两部分形成一个dirver pairs，一部分处理一类设备集合中所共有的一般任务，另一部分处理特定与某一个设备的特殊任务。这样使开发人员专注在特有部分，免去对公共部分的重复操作。处理特定任务部分的驱动程序有多种名称包括miniport driver，miniclass driver，minidriver。通常微软来提供共有部分的驱动程序，硬件厂商提供特定部分的驱动程序。  </p>
 <h2 id="Driver-stacks"><a href="#Driver-stacks" class="headerlink" title="Driver stacks"></a>Driver stacks</h2><p>我们前面说明过，一个IRP可能会经过一个device stack当中的多个驱动。与此类似的，一个I&#x2F;O请求也可能经过多个device stack。看一个例子：<br><img src="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/chain01.png"><br>IRP由Disk.sys所创建，它是My USB Storage Device的FDO。IRP由它向下传递给Usbstor.sys。<br>Usbstor.sys即是My USB Storage的PDO也是USB Mass Storage的FDO。<br>同理Usbstor.sys处理完继续将IRP向下发送给Usbhub.sys。<br>当Usbhub.sys完成处理，继续向下发送给(Usbuhci.sys, Usbport.sys)驱动对。它们进行了与主机控制器的实际通信，继而主机控制器又继续与物理USB存储进行通信。我们将参与I&#x2F;O请求所经过的驱动序列叫做I&#x2F;O请求的<code>drive stack</code>。<br>上面所描述的IRP按照一定顺序经过了四个驱动，抛开device node转而关注驱动程序会得到另外一个视角。<br><img src="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/driverstack01.png"><br>还可以继续使用特定技术或者操作系统的特定组件进行划分。<br><img src="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/images/driverstack02.png"><br>第一部分属于Volume Manager，第二部分属于操作系统的存储组件，第三部分属于操作系统的核心USB部分（core USB portion）。我们对这种框图称为技术驱动栈<code>technology driver stack</code>。  </p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>本文中提到的所有内容都是通过学习微软的官方文档自行理解所得，更详细的内容可以去原版查询。<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/">https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/</a>  </p>
+<hr>
 
     </div>
 
