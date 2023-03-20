@@ -49,3 +49,5 @@ Usbstor.sys即是My USB Storage的PDO也是USB Mass Storage的FDO。
 ## 参考资料
 本文中提到的所有内容都是通过学习微软的官方文档自行理解所得，更详细的内容可以去原版查询。  
 https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/  
+
+---
