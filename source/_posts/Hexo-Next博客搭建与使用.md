@@ -388,6 +388,13 @@ for $inject_style in hexo-config('injects.style')
   --content-bg-color:#ffffffdf;
 }
 ```
+### 添加Mermaid支持
+1. 安装插件
+```bash
+npm install --save hexo-filter-mermaid-diagrams
+```
+2. 打开_config.next.yml中的mermaid配置
+3. 在文章中插入mermaid代码块语法参考[github项目](https://github.com/mermaid-js/mermaid/blob/develop/README.zh-CN.md)
 
 ## 文章写作  
 - 创建一篇新的文章
