@@ -14,7 +14,7 @@ cache:
   enable: true
 
 # Remove unnecessary files after hexo generate.
-minify: false
+minify: true
 
 # Define custom file paths.
 # Create your custom files in site directory `source/_data` and uncomment needed files below.
@@ -37,13 +37,13 @@ custom_file_path:
 # ---------------------------------------------------------------
 
 # Schemes
-scheme: Muse
+#scheme: Muse
 #scheme: Mist
 #scheme: Pisces
-#scheme: Gemini
+scheme: Gemini
 
 # Dark Mode
-darkmode: false
+darkmode: true
 
 
 # ---------------------------------------------------------------
@@ -67,15 +67,15 @@ creative_commons:
   license: by-nc-sa
   # Available values: big | small
   size: small
-  sidebar: false
-  post: false
+  sidebar: true
+  post: true
   # You can set a language value if you prefer a translated version of CC license, e.g. deed.zh
   # CC licenses are available in 39 languages, you can find the specific and correct abbreviation you need on https://creativecommons.org
   language:
 
 # Open graph settings
 # See: https://hexo.io/docs/helpers#open-graph
-open_graph:
+open_graph: # 分享信息
   enable: true
   options:
     #twitter_card: <twitter:card>
@@ -85,7 +85,7 @@ open_graph:
     #google_plus: <g+:profile_link>
     #fb_admins: <fb:admin_id>
     #fb_app_id: <fb:app_id>
-
+    
 
 # ---------------------------------------------------------------
 # Menu Settings
@@ -96,21 +96,29 @@ open_graph:
 # Value before `||` delimiter is the target link, value after `||` delimiter is the name of Font Awesome icon.
 # External url should start with http:// or https://
 menu:
-  #home: / || fa fa-home
+  home: / || fa fa-home
   #about: /about/ || fa fa-user
   #tags: /tags/ || fa fa-tags
   #categories: /categories/ || fa fa-th
-  #archives: /archives/ || fa fa-archive
+  archives: /archives/ || fa fa-archive
   #schedule: /schedule/ || fa fa-calendar
   #sitemap: /sitemap.xml || fa fa-sitemap
-  #commonweal: /404/ || fa fa-heartbeat
+  #commonweal: /403/ || fa fa-heartbeat
+  #Docs:
+  # default: /docs/ || fa fa-book
+  #  Getting Started:
+  #    default: /getting-started/ || fa fa-flag
+  #    Installation: /installation.html || fa fa-download
+  #    Configuration: /configuration.html || fa fa-wrench
+  #  Third Party Plugins:
+  #    default: /third-party-services/ || fa fa-puzzle-piece
+  #    Math Equations: /math-equations.html || fa fa-square-root-alt
+  #    Comment Systems: /comments.html || fa fa-comment-alt
 
 # Enable / Disable menu icons / item badges.
 menu_settings:
   icons: true
-  badges: false
-
-
+  badges: true 
 # ---------------------------------------------------------------
 # Sidebar Settings
 # See: https://theme-next.js.org/docs/theme-settings/sidebar
@@ -121,9 +129,9 @@ sidebar:
   position: left
 
   # Sidebar width.
-  # Applicable to Muse | Mist and mobile of Pisces | Gemini.
+  # Applicable to Muse | Mist and mobile of Pisces | Gemini. 
   width_expanded: 320
-  # Applicable to desktop of Pisces | Gemini.
+  # Applicable to desktop of Pisces | Gemini. 
   width_dual_column: 240
 
   # Sidebar display.
@@ -143,11 +151,11 @@ sidebar:
 # Sidebar Avatar
 avatar:
   # Replace the default image and set the url here.
-  url: #/images/avatar.gif
+  url: /images/avatar.gif 
   # If true, the avatar will be displayed in circle.
-  rounded: false
+  rounded: true  
   # If true, the avatar will be rotated with the cursor.
-  rotated: false
+  rotated: true 
 
 # Posts / Categories / Tags in sidebar.
 site_state: true
@@ -156,7 +164,7 @@ site_state: true
 # Usage: `Key: permalink || icon`
 # Key is the link label showing to end users.
 # Value before `||` delimiter is the target permalink, value after `||` delimiter is the name of Font Awesome icon.
-social:
+social: # 社交账号
   #GitHub: https://github.com/yourname || fab fa-github
   #E-Mail: mailto:yourname@gmail.com || fa fa-envelope
   #Weibo: https://weibo.com/yourname || fab fa-weibo
@@ -166,6 +174,7 @@ social:
   #YouTube: https://youtube.com/yourname || fab fa-youtube
   #Instagram: https://instagram.com/yourname || fab fa-instagram
   #Skype: skype:yourname?call|chat || fab fa-skype
+  RSS: /atom.xml || fa fa-rss
 
 social_icons:
   enable: true
@@ -174,14 +183,13 @@ social_icons:
 
 # Blog rolls
 links_settings:
-  icon: fa fa-globe
+  icon: fa fa-globe 
   # Available values: block | inline
   layout: block
-
 links:
-  #Title: https://example.com
+  # Title: https://example.com 
 
-# Table of Contents in the Sidebar
+# Table of Contents in the Sidebar 文章内侧边目录
 # Front-matter variable (nonsupport wrap expand_all).
 toc:
   enable: true
@@ -190,7 +198,7 @@ toc:
   # If true, all words will placed on next lines if header width longer then sidebar width.
   wrap: false
   # If true, all level of TOC in a post will be displayed, rather than the activated part of it.
-  expand_all: false
+  expand_all: true
   # Maximum heading depth of generated toc.
   max_depth: 6
 
@@ -212,7 +220,7 @@ footer:
     # Icon name in Font Awesome. See: https://fontawesome.com/icons
     name: fa fa-heart
     # If you want to animate the icon, set it to true.
-    animated: false
+    animated: true
     # Change the color of icon, using Hex Code.
     color: "#ff0000"
 
@@ -224,7 +232,7 @@ footer:
   powered: true
 
   # Beian ICP and gongan information for Chinese users. See: https://beian.miit.gov.cn, https://beian.mps.gov.cn
-  beian:
+  beian: 
     enable: false
     icp:
     # The digit in the num of gongan beian.
@@ -241,7 +249,7 @@ footer:
 # ---------------------------------------------------------------
 
 # Use `description` in front-matter to specify post excerpt.
-excerpt_description: true
+excerpt_description: false 
 
 # Read more button
 # If true, the read more button will be displayed in excerpt section.
@@ -249,30 +257,31 @@ read_more_btn: true
 
 # Post meta display settings
 post_meta:
-  item_text: true
-  created_at: true
+  item_text: false
+  created_at: false
   updated_at:
-    enable: true
+    enable: false
     another_day: true
   categories: true
 
 # Post wordcount display settings
 # Dependencies: https://github.com/next-theme/hexo-word-counter
-symbols_count_time:
+# npm install hexo-word-counter
+symbols_count_time: 
   separated_meta: true
   item_text_total: false
 
 # Use icon instead of the symbol # to indicate the tag at the bottom of the post
-tag_icon: false
+tag_icon: true  
 
-# Donate (Sponsor) settings
+# Donate (Sponsor) settings 
 # Front-matter variable (nonsupport animation).
 reward_settings:
   # If true, a donate button will be displayed in every article by default.
   enable: false
   animation: false
 
-reward:
+reward: 
   #wechatpay: /images/wechatpay.png
   #alipay: /images/alipay.png
   #paypal: /images/paypal.png
@@ -280,7 +289,7 @@ reward:
 
 # Subscribe through Telegram Channel, Twitter, etc.
 # Usage: `Key: permalink || icon` (Font Awesome)
-follow_me:
+follow_me: 
   #Twitter: https://twitter.com/username || fab fa-twitter
   #Telegram: https://t.me/channel_name || fab fa-telegram
   #WeChat: /images/wechat_channel.png || fab fa-weixin
@@ -288,8 +297,9 @@ follow_me:
 
 # Related popular posts
 # Dependencies: https://github.com/sergeyzwezdin/hexo-related-posts
-related_posts:
-  enable: false
+# npm install hexo-related-posts --save-dev
+related_posts: 
+  enable: true
   icon: fa fa-signs-post
 
 # Post edit
@@ -301,7 +311,8 @@ post_edit:
 
 # Show previous post and next post in post footer if exists
 # Available values: left | right | false
-post_navigation: left
+post_navigation: left 
+
 
 
 # ---------------------------------------------------------------
@@ -309,7 +320,7 @@ post_navigation: left
 # See: https://theme-next.js.org/docs/theme-settings/custom-pages
 # ---------------------------------------------------------------
 
-# TagCloud settings for tags page.
+# TagCloud settings for tags page. 
 tagcloud:
   min: 12 # Minimum font size in px
   max: 30 # Maximum font size in px
@@ -338,26 +349,26 @@ calendar:
 
 # Preload styles and preconnect CDN for fonts and plugins.
 # For more information: https://www.w3.org/TR/resource-hints/#preconnect
-preconnect: false
+preconnect: true
 
 # Set the text alignment in posts / pages.
 text_align:
   # Available values: start | end | left | right | center | justify | justify-all | match-parent
-  desktop: justify
+  desktop: justify 
   mobile: justify
 
 # Reduce padding / margin indents on devices with narrow width.
-mobile_layout_economy: false
+mobile_layout_economy: true  # 减少宽度较窄的设备上的边距
 
 # Browser header panel color.
-theme_color:
+theme_color: # title 位置后面的填充色, 和页面最上端的一丝横线
   light: "#222"
   dark: "#222"
 
 # Override browsers' default behavior.
 body_scrollbar:
   # Place the scrollbar over the content.
-  overlay: false
+  overlay: true 
   # Present the scrollbar even if the content is not overflowing.
   stable: false
 
@@ -365,16 +376,17 @@ codeblock:
   # Code Highlight theme
   # All available themes: https://theme-next.js.org/highlight/
   theme:
-    light: default
-    dark: stackoverflow-dark
+    #light: default
+    light: base16/silk-light
+    dark: vs2015
   prism:
     light: prism
     dark: prism-dark
   # Add copy button on codeblock
   copy_button:
-    enable: false
+    enable: enable
     # Available values: default | flat | mac
-    style:
+    style: default
   # Fold code block
   fold:
     enable: false
@@ -385,11 +397,11 @@ back2top:
   # Back to top in sidebar.
   sidebar: false
   # Scroll percent label in b2t button.
-  scrollpercent: false
+  scrollpercent: true # top 按钮变成百分比样式
 
 # Reading progress bar
 reading_progress:
-  enable: false
+  enable: true
   # Available values: left | right
   start_at: left
   # Available values: top | bottom
@@ -398,7 +410,7 @@ reading_progress:
   color: "#37c6c0"
   height: 3px
 
-# Bookmark Support
+# Bookmark Support 书签, 让用户保存阅读进度
 bookmark:
   enable: false
   # Customize the color of the bookmark.
@@ -408,7 +420,7 @@ bookmark:
   save: auto
 
 # `Follow me on GitHub` banner in the top-right corner.
-github_banner:
+github_banner: 
   enable: false
   permalink: https://github.com/yourname
 
@@ -475,7 +487,7 @@ font:
 index_with_subtitle: false
 
 # Automatically add external URL with Base64 encrypt & decrypt.
-exturl: false
+exturl: true
 # If true, an icon will be attached to each external URL
 exturl_icon: true
 
@@ -563,7 +575,11 @@ math:
   every_page: false
 
   mathjax:
-    enable: false
+    # sudo pacman -S pandoc
+    # npm un hexo-renderer-marked
+    # npm i hexo-renderer-pandoc --save
+    # hexo clean && hexo s
+    enable: true
     # Available values: none | ams | all
     tags: none
 
@@ -589,27 +605,27 @@ fancybox: false
 # Medium Zoom is a JavaScript library for zooming images like Medium.
 # Warning: Do not enable both `fancybox` and `mediumzoom`.
 # For more information: https://medium-zoom.francoischalifour.com
-mediumzoom: false
+mediumzoom: true
 
 # Vanilla JavaScript plugin for lazyloading images.
 # For more information: https://apoorv.pro/lozad.js/demo/
-lazyload: false
+lazyload: true
 
 # Automatically insert whitespace between CJK and half-width characters.
 # For more information: https://github.com/vinta/pangu.js
 # Server-side plugin: https://github.com/next-theme/hexo-pangu
-pangu: false
+pangu: true
 
 # Prefetch links based on what is in the user's viewport.
 # For more information: https://getquick.link
 # Front-matter variable (nonsupport home archive).
 quicklink:
-  enable: false
+  enable: true
 
   # Home page and archive page can be controlled through home and archive options below.
   # This configuration item is independent of `enable`.
-  home: false
-  archive: false
+  home: true
+  archive: true
 
   # Default (true) will initialize quicklink after the load event fires.
   delay: true
@@ -641,10 +657,10 @@ motion:
 # Progress bar in the top during page loading.
 # For more information: https://github.com/CodeByZach/pace
 pace:
-  enable: false
+  enable: true
   # All available colors:
   # black | blue | green | orange | pink | purple | red | silver | white | yellow
-  color: blue
+  color: orange
   # All available themes:
   # big-counter | bounce | barber-shop | center-atom | center-circle | center-radar | center-simple
   # corner-indicator | fill-left | flat-top | flash | loading-bar | mac-osx | material | minimal
@@ -652,8 +668,8 @@ pace:
 
 # Generate a ribbon in your website with HTML5 canvas.
 # For more information: https://github.com/hustcc/ribbon.js
-canvas_ribbon:
-  enable: false
+canvas_ribbon: 
+  enable: true
   size: 300 # The width of the ribbon
   alpha: 0.6 # The transparency of the ribbon
   zIndex: -1 # The display level of the ribbon
@@ -861,8 +877,9 @@ algolia_search:
 
 # Local Search
 # Dependencies: https://github.com/next-theme/hexo-generator-searchdb
-local_search:
-  enable: false
+## npm install hexo-generator-searchdb
+local_search: 
+  enable: true
   # If auto, trigger search by changing input.
   # If manual, trigger search by pressing enter key or search button.
   trigger: auto
@@ -928,3 +945,5 @@ vendors:
 css: css
 js: js
 images: images
+
+
