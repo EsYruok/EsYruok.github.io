@@ -95,8 +95,8 @@ Ok! 一个毛坯站点就这样完成了.
     ```
   
 ## 站点部署
-  这里我们除了使用 GitHub Pages 作为部署工具外, 还将使用 Github 作为多端同步的手段.  
-  多端同步的思路大致是, 使用 GitHub 的 master 分支来存放源代码, 使用 page 分支来作为 Pages 的部署分支. 用 master 分支编写文章, page 分支部署站点.   
+这里我们除了使用 GitHub Pages 作为部署工具外, 还将使用 Github 作为多端同步的手段. 多端同步的思路大致是, 使用 GitHub 的 master 分支来存放源代码, 使用 page 分支来作为 Pages 的部署分支. 用 master 分支编写文章, page 分支部署站点.   
+
 1. 创建 GitHub 仓库  
     仓库名必须是 **<username>.github.io** 其中 username 是指 GitHub 的用户名. 仓库必须是 Public 或者您是 Github Pro.  
 2. 提交源代码到 master  
