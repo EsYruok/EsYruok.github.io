@@ -29,14 +29,17 @@ abbrlink: 6b2ed3a
     ```sh
     hexo generate
     ```
+
     > 简写 hexo g
 5. 启动本地服务器
     ```sh
     hexo server 
     ```
+
     > 简写 hexo s  
 
     控制台会显示一个本地的 http 地址来让你预览站点.  
+
     > Options:  
     > --safe 安全模式, 不加载插件  
     > --debug 在终端中显示调试信息  
@@ -51,6 +54,7 @@ Ok! 一个毛坯站点就这样完成了.
     hexo new "title"
     ```
     **new** 命令格式为 **hexo new [layout] \<title>**, **layout** 为可选参数, hexo 默认有三种方案 **post / draft / page**.  
+
     >- post  
     代表你要创建一个要发布的文章, 命令直接在 **source/\_post/** 下建立一个 **\<title>.md** 文件.  
     >- draft  
@@ -75,17 +79,17 @@ Ok! 一个毛坯站点就这样完成了.
     它们会对应一些 Hexo 功能的使用, 比如创建页面时需要使用 **updated** 来展示更新时间, **tag** 和 **categories** 为文章添加标签和分类属性以便参与标签分类的统计与分类展示.  
 2. 修改 Hexo 配置文件  
     修改 **_config.yml** 文件选择使用的主题.  
-    ```
+    ```yml
     theme:next
     ```
 3. 主题配置文件  
     官方文档建议使用 **Alternate Theme Config** 进行配置, 大概意思就是除了主题模块中所携带的配置文件外, 还可以在另一个约定好的位置有另一份配置文件, 这样可以避免主题升级时将配置文件覆盖. 要求这个文件与 Hexo 配置文件在同一级目录, 并且文件名必须是 **_config.next.yml**. 我们可以使用下列命令来生成配置文件.  
-    ```
+    ```sh
     # pwd : hexo-site/
     cp node_modules/hexo-theme-next/_config.yml _config.next.yml
     ```
 4. 升级NexT主题
-    ```
+    ```sh
     cd hexo-site
     npm install hexo-theme-next@latest
     ```
@@ -96,7 +100,7 @@ Ok! 一个毛坯站点就这样完成了.
 1. 创建 GitHub 仓库  
     仓库名必须是 **<username>.github.io** 其中 username 是指 GitHub 的用户名. 仓库必须是 Public 或者您是 Github Pro.  
 2. 提交源代码到 master  
-    ```
+    ```sh
     cd hexo-site
     git init
     git branch -M master
@@ -112,7 +116,7 @@ Ok! 一个毛坯站点就这样完成了.
     稍微有一点繁琐, 因为我们需要两个分支, 而 Git 不能推送一个空的仓库上去, 也不能创建空的分支, 所以我利用 .gitginore 创造一条记录, 创建完 page 分支后又将该文件删除来创造两个需要的分支.     
     page 分支创造好后就可以将 **hexo-site** 下的内容提交到 master 分支上了.  
 3. 安装部署工具
-    ```
+    ```sh
     cd hexo-site
     npm install hexo-deployer-git --save
     ```
@@ -128,7 +132,7 @@ Ok! 一个毛坯站点就这样完成了.
     如果你想使用 ssh 来连接, **repo** 使用 ssh 连接即可.  
     **message** 是自定义提交信息, 如果不设置有默认格式.  
 5. 部署至远程库
-    ```
+    ```sh
     hexo clean && hexo deploy
     ```
     这个动作会产生一个 **.deploy_git** 目录, 并可能提示你去配置一些 git 设置, 最终会将站点的静态文件推送到指定的分支当中.  
