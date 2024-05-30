@@ -11,9 +11,7 @@ date: 2024-01-07 01:26:48
 >  想细致学习的同学不用着急, 在配置文件中官方原本就附带了注释内容, 比较清晰且附带了官方文档的链接地址. 完整读一遍配置文件就可了解到所有的配置内容.    
 
 ## Hexo 配置 (_config.yml)
-如果想折腾 SEO 的话, 在不涉及隐私的情况下尽量填写, 有些选项对 SEO 有用处.  
-
-### 站点信息  
+### Site  
 ```yml
 title: title
 subtitle: subtitle
@@ -105,7 +103,7 @@ tag_map:
 ```
 分类和标签别名, 可以将多个分类/标签映射成一个分类/标签.  
 
-## NexT 配置
+## NexT 配置 (_config.next.yml)
 ### 主题
 ##### 布局
 ```yml
@@ -364,3 +362,18 @@ RSS: /atom.xml || fa fa-rss
 ```
   
 Ok, 一个包括所有基本 DIY 配置的博客就搭建完成了. 当然还有很多关于性能, SEO, CDN 等配置感兴趣的同学继续加油!  
+
+## 终极美化大法
+对于想要尽情挥洒创意的同学, 配置文件中有一项非常重要的部分 custom_file_path. 它可以让你自己通过 css 去设定样式.   
+
+```yml
+custom_file_path:
+  #head: source/_data/head.njk
+  style: source/_data/styles.styl
+```
+
+取消注释并创建对应的文件后, 浏览器按下 F12 对照布局尽情创作吧. 作者不是太懂这方面都是网上翻着例子文档照葫芦画瓢就不班门弄斧了.   
+最后推荐几个素材网站. (吐槽一下: 某些网站真是无语不是要注册就是要会员)  
+[icons](https://icons8.com/icons) | [pngegg](https://www.pngegg.com/)  
+还有个颜色代码工具, 相信你们会用到的 :)  
+[HTML颜色代码](https://htmlcolorcodes.com/zh/)
