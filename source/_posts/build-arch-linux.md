@@ -330,6 +330,7 @@ git clone https://aur.archlinux.org/paru.git
 cd paru
 makepkg -si
 ```
+
 #### Pacman 颜色与多线程
 编辑 /etc/pacman.conf 将 **Color** 与 **ParallelDownloads** 的注释去掉.  
 
