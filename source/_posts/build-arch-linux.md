@@ -8,14 +8,16 @@ date: 2024-01-12 20:04:15
 ---
 ArchLinux是一个以简洁, 高效, 用户完全控制为目标的Linux发行版, 非常适合喜欢自定义系统的朋友. 本文记录了日常所使用的ArchLinux环境的安装过程, 以及对搭建过程中遇到的问题进行记录方便以后查阅, 希望对你也能有所帮助. <!--more-->  
 
-> 要特别感谢 [ArchTurorial](https://archlinuxstudio.github.io/ArchLinuxTutorial/#/) 的教程, 是一份非常详细的 ArchLinux 使用教程, 对我在接触使用 Arch 的过程中提供了非常大的帮助.  
+> 要特别感谢 [ArchTurorial](https://archlinuxstudio.github.io/ArchLinuxTutorial/#/) 的教程, 是一份非常详细的 ArchLinux 安装教程, 对我在接触使用 Arch 的过程中提供了非常大的帮助.  
 
 ---  
 我对操作系统的期望是 ArchLinux + Gnome + Wayland. 接下来的内容都是以这个为目标所使用的步骤.  
 在开始安装前需要做一些准备工作.  
 
 - 前往 [Arch 官网](https://archlinux.org/)下载最新的ISO文件
-- 制作U盘启动盘 (如果是使用虚拟机安装则不需要)
+- 制作U盘启动盘 (如果是使用虚拟机安装则不需要)  
+    windows 下建议使用 rufus  
+    linux 下直接使用命令 `sudo dd bs=4M if=/path/to/archlinux.iso of=/dev/sdx status=progress oflag=sync`
 - 调整主板启动模式为UEFI
 - 关闭主板的安全启动选项 
 
@@ -106,9 +108,16 @@ Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch
 > mirrorlist 文件是一个镜像源的列表, 其中的内容可以从 [Pacman Mirrorlist Generator](https://archlinux.org/mirrorlist/) 获得. 当你使用 pacman 安装软件时, 会从上到下依次尝试每一个源, 直到选择一个可用的源, 所以应当将速度快的服务器放在顶端.  
 > 如果你还不知道用哪一个, 暂时先使用上面中科大或者清华的源放在文件的最前面以提高速度.   
 
+也可以借助 reflector 工具.  
+```sh
+pacman -S reflector # 安装reflector 
+reflector --verbose -l 200 -p https --sort rate --save /etc/pacman.d/mirrorlist # 选择最快的镜像源
+reflector --verbose --country 'China' -l 200 -p https --sort rate --save /etc/pacman.d/mirrorlist # 选择在中国的最快镜像源
+```
+
 #### 安装系统
 ```sh
-pacstrap /mnt base base-devel linux linux-headers linux-firmware dhcpcd iwd bash-completion neovim git
+pacstrap /mnt base linux... # 看下面
 ```
 
 > base : 基础系统工具和库  
@@ -118,7 +127,7 @@ pacstrap /mnt base base-devel linux linux-headers linux-firmware dhcpcd iwd bash
 > linux-firmware : 一些常见的硬件固件  
 > dhcpcd : DHCP客户端  
 > iwd : 无线网管理工具(不使用无线网可以不用)  
-> bash-completion : 命令补全工具  
+> bash-completion : 命令补全工具 (以后想使用zsh的可以先不装这个)
 > neovim : 文本编辑器  
 > git : git 工具, 后面很多软件安装要使用到它
 
@@ -242,14 +251,15 @@ reboot
 安装过程比较长, 重启后就会进入登录界面了. 
 
 #### Wayland 
-gtk3,4 默认支持 Wayland.  
-Qt 想要支持 Wayland 安装 qt5-wayland / qt6-wayland. 想要显式设置的话设置环境变量 QT_QPA_PLATFORM=wayland.  
-Electron (>= 28) 则需要设置环境变量 ELECTRON_OZONE_PLATFORM_HINT 为 auto 或 wayland. (环境变量的优先级低于参数)  
+
+- gtk3,4 默认支持 Wayland.  
+- Qt 想要支持 Wayland 安装 qt5-wayland / qt6-wayland. 想要显式设置的话设置环境变量 QT_QPA_PLATFORM=wayland.  
+- Electron (>= 28) 则需要设置环境变量 ELECTRON_OZONE_PLATFORM_HINT 为 auto 或 wayland. (环境变量的优先级低于参数)  
 还可以使用给应用程序添加参数或写到配置文件 ~/.config/electron-flags.conf 中.   
-```
---enable-features=WaylandWindowDecorations # 解决缺少顶栏
---ozone-platform-hint=auto
-```
+    ```
+    --enable-features=WaylandWindowDecorations # 解决缺少顶栏
+    --ozone-platform-hint=auto
+    ```
 
 #### 设置交换文件(可选)  
 ```sh
@@ -283,18 +293,22 @@ pacman -S sof-firmware alsa-firmware alsa-ucm-conf
 ```
 
 #### 显卡驱动
+我的显卡是 1060 + intel. 其他建议过一遍文档.  
+[Intel graphics](https://wiki.archlinux.org/title/Intel_graphics) | [AMDGPU](https://wiki.archlinux.org/title/AMDGPU) | [Nvidia](https://wiki.archlinux.org/title/NVIDIA) | [optimus-manager](https://github.com/Askannz/optimus-manager)  
 ```sh
 sudo pacman -S mesa lib32-mesa vulkan-intel lib32-vulkan-intel # intel 显卡
 sudo pacman -S nvidia nvidia-settings lib32-nvidia-utils # nvidia 显卡
-yay -S optimus-manager optimus-manager-qt # 切换显卡
+yay -S gdm-prime optimus-manager-git optimus-manager-qt # 切换显卡
+sudo nvim /etc/gdm/custom.conf # remove # before #WaylandEnable=false
 sudo systemctl enable optimus-manager
-sudo pacman -S nvidia-prime # 动态切换, 在想要使用独显的程序前加 prime-run 前缀
+# sudo pacman -S nvidia-prime # 动态切换, 在想要使用独显的程序前加 prime-run 前缀
 ```
 
 #### 中文字体
 ```sh
 sudo pacman -S noto-fonts-cjk noto-fonts-emoji noto-fonts-extra
 ```
+安装完就可以去设置里将系统切换成中文的了.  
 
 #### 浏览器
 ```sh
@@ -316,32 +330,24 @@ git clone https://aur.archlinux.org/paru.git
 cd paru
 makepkg -si
 ```
-
-#### 中文输入法
-```sh 
-sudo pacman -S fcitx5 fcitx5-im 
-sudo pacman -S fcitx5-chinese-addons
-# sudo pacman -S fcitx5-rime # 如果想使用 Rime
-yay -S fcitx5-input-support
-```
-添加环境变量  
-```
-QT_IM_MODULE=fcitx
-XMODIFIERS=@im=fcitx
-```
-安装 Gnome 插件  Input Method Pannel  支持. 这个稍后在后面安装主题时有介绍安装插件的方法.  
-打开  fcitx5-configuration, 点击  Run Fcitx5, 从右侧找到输入法添加到左侧确认即可.  
+#### Pacman 颜色与多线程
+编辑 /etc/pacman.conf 将 **Color** 与 **ParallelDownloads** 的注释去掉.  
 
 ## 桌面美化
-准备了两套主题, [WhiteSur-gtk-theme](https://github.com/vinceliuice/WhiteSur-gtk-theme) 和 [Orchis-theme](https://github.com/vinceliuice/Orchis-theme).
+美化一般就是壁纸 + 主题 + 插件. 壁纸就不提了, 主要介绍一下插件和主题.  
 
 #### 如何安装插件  
 1. 安装 gnome-browser-connector  
     ```
     sudo pacman -S gnome-browser-connector
     ```
-2. 使用 firefox 打开 Gnome 插件地址 extensions.gnome.org 首次页面中会提示安装浏览器插件, 点击安装.  
-3. 搜索想要安装的插件, 进入插件详情页面点击 `OFF/NO` 按钮即可控制开关, 如果未安装过则会出现安装提示.    
+2. 安装浏览器插件  
+    使用 firefox 打开 Gnome 插件地址 extensions.gnome.org.    
+    首次打开页面中会提示 **Click here to install browser extension** 点击安装插件.  
+    浏览器会弹窗提示是否允许安装插件, 选择 **Continue to Installation** 完成安装即可.  
+    重启 firefox.  
+3. 安装 Gnome 插件  
+    进入 extensions.gnome.org 搜索想要安装的插件, 进入插件详情页面点击 **OFF/NO** 按钮即可控制插件开关, 如果该插件未安装则会出现安装提示.    
 
 #### 安装 Tweaks  
  tweaks  是一个帮助我们管理 Gnome 桌面环境的软件, 它可以方便的管理主题, 字体, 窗口样式等设置. 如果你安装了 gnome-extra 可能已经拥有了它.  
@@ -349,42 +355,18 @@ XMODIFIERS=@im=fcitx
 sudo pacman -S gnome-tweaks
 ```
 
-#### WhiteSur  
-需要三个插件支持.  
-- user-themes  
-- dash-to-dock  
-- blur-my-shell   
+#### 安装主题  
+1. 开启 user-themes 插件  
+    这是一个系统插件, 打开 Extensions 程序可以看到所有已安装的插件, 在里面点开即可.
+2. 下载主题  
+    [Gnome-look](www.gnome-look.org)是一个很好的寻找主题的地方. 下载主题压缩包后解压到 ** ~/.themes** 或者 **/usr/share/themes/** 中.  
+    但是!! 强烈建议进入主题的 github 页面使用作者提供的安装方式.  
+3. 更改主题  
+    使用 user-themes 或者 Tweaks 去配置自己的主题.  
+    GNOME 43 之后部分程序使用了 Libadwaita (比如 Files), 这些程序目前不支持自定义主题, 如果想更改只能通过覆盖 gtk-4.0 的配置文件. 这种方式非常不灵活但也是目前唯一的方法. 通常主题的作者会考虑到这一点, 安装脚本中会提供一个快捷的选项稳妥的帮助你完成这一步骤.  
 
-三个 Git 仓库, 根据 Readme 的说明使用安装脚本安装即可.  
-- WhiteSur-gtk-theme : https://github.com/vinceliuice/WhiteSur-gtk-theme
-- WhiteSur-icon-theme : https://github.com/vinceliuice/WhiteSur-icon-theme
-- WhiteSur-wallpapers : https://github.com/vinceliuice/WhiteSur-wallpapers  
-
-以下记录的是我使用的安装过程, 建议每位同学都去阅读 Readme 使用一个合适自己的配置.  
-```sh
-sudo pacman -S nano # 安装firefox主题时需要使用这个编辑器.  
-git clone https://github.com/vinceliuice/WhiteSur-gtk-theme?tab=readme-ov-file
-cd WhiteSur-gtk-theme
-./install.sh -l # 默认是 dark 明亮使用 -l -c Light
-./install.sh -t all 
-./install.sh -N glassy 
-./tweaks.sh -f alt # firefox
-./tweaks.sh -e # 看不懂内容直接保存
-# ./tweaks.sh -f -r 删除 FireFox 主题
-sudo ./tweaks.sh -g  # gdm
-
-# icon
-git clone https://github.com/vinceliuice/WhiteSur-icon-theme
-cd WhiteSur-icon-theme
-./install.sh
-
-# wallpapers
-git clone https://github.com/vinceliuice/WhiteSur-wallpapers
-cd WhiteSur-wallpapers
-sudo ./install-gnome-backgrounds.sh
-```
-
-#### Orchis
+#### Orchis 
+我使用的主题是 [Orchis-theme](https://github.com/vinceliuice/Orchis-theme).  
 必要条件:  
 
 - gnome-themes-extra  
@@ -394,13 +376,13 @@ sudo ./install-gnome-backgrounds.sh
 ```sh
 sudo pacman -S gnome-themes-extra gtk-engine-murrine sassc
 ```
+
 安装主题:  
 ```sh
 git clone https://github.com/vinceliuice/Orchis-theme.git
 cd Orchis-theme
-./install.sh
 ./install.sh -t all 
-./install.sh -l # 默认 light 黑暗主题 -c dark -l 例如暗紫色 -c dark -t purple -l
+./install.sh -l -c dark -l purple 
 ```
 Flatpak  
 
@@ -416,11 +398,6 @@ Flatpak
     flatpak override --filesystem=xdg-config/gtk-4.0
     # flatpak override --user --filesystem=xdg-config/gtk-4.0
     ```
-
-#### 主题设置  
-打开 tweaks  ->  
-选择 **Apperance**, 将 Icons, Shell, Legacy Applications  选择为你想要的主题.  
-选择 **Windows**, 在 Titlebar Buttons 中将 Maximize, Minimize  选中,  Placement  调整为 Left.  
 
 #### 推荐插件  
 - Input Method Pannel  
@@ -442,16 +419,12 @@ Flatpak
 - Removable Drive Menu  
     移动磁盘的托盘图标
 - Extension List  
-    一个插件管理的小工具  
-- Apps Menu  
-    左上角显示一个Apps菜单
-- Place Status Indicator  
-    左上角一个Place菜单
+    一个插件管理的小工具, 与 Extension 作用一样只不过是显示在托盘图标上.   
 
 ## 遇到的问题
 #### VmwareTools  
-Vmware 想要共享剪切板和调整系统桌面大小需要安装 `open-vm-tools`, 并且记得将服务 `vmtoolsd` 和 `vmware-vmblock-fuse` 设置 enable, 还需要安装 `gtkmm3`.    
-```
+Vmware 想要共享剪切板和调整系统桌面大小需要安装 open-vm-tools, 并且记得将服务 vmtoolsd 和 vmware-vmblock-fuse 设置 enable, 还需要安装 gtkmm3.    
+```sh
 sudo pacman -S open-vm-tools
 sudo systemctl enable vmtoolsd vmware-vmblock-fuse
 sudo pacman -S gtkmm3
@@ -459,7 +432,7 @@ sudo pacman -S gtkmm3
 
 #### 声音问题  
 (VMware 环境中)安装 Gnome 时使用了 pipewire, 但是声音会爆裂断断续续的. 不会调试具体原因查阅资料也没弄明白. 所以先选择安装 pulseaudio 代替.  
-```
+```sh
 sudo pacman -R pulse-native-provider # 与 pulseaudio 冲突的包有依赖, 先删除
 sudo pacman -S alsa-utils pulseaudio pavucontol
 systemctl --user enable pulseaudio.service pulseaudio.socket 
@@ -470,3 +443,94 @@ systemctl --user enable pulseaudio.service pulseaudio.socket
 ## 结尾
 &emsp;&emsp;一个桌面环境就安装完了, 在你熟悉了的情况下依靠命令行也能很快的完成. 要特别记得Arch是滚动更新, 每天记得`pacman -Syyu`, 不然太久不更新系统滚挂的风险很高. 另外如果遇到系统进不去了的情况可以使用前面安装基本操作系统中挂载使用`arch-chroot`的方法进入系统进行调整.  
 &emsp;&emsp;我这里只是罗列了一个很基本的环境, 一些像蓝牙,显卡,魔法等问题因为我还没有使用就暂时还没进行记录, [ArchTurorial](https://archlinuxstudio.github.io/ArchLinuxTutorial/#/) 中对这些问题都有一个很好的支持, 需要的同学可以直接跳转过去进行查阅.  
+
+## 常用软件  
+这部分不重要, 所以放在最后给自己做个备忘.  
+
+#### Nerd 字体
+这个字体在配置 nvim zsh 等很多地方都能用到.  
+```sh
+sudo pacman -S ttf-jetbrains-mono-nerd
+```
+
+#### fcitx5  
+中文输入法.  
+```sh 
+sudo pacman -S fcitx5 fcitx5-im 
+sudo pacman -S fcitx5-chinese-addons
+# sudo pacman -S fcitx5-rime # 如果想使用 Rime
+yay -S fcitx5-input-support
+```
+添加环境变量  
+```
+QT_IM_MODULE=fcitx
+XMODIFIERS=@im=fcitx
+```
+输入法候选面板需要 Gnome 插件 Input Method Pannel 支持.  
+打开  fcitx5-configuration, 点击  Run Fcitx5, 从右侧找到输入法添加到左侧确认即可.  
+
+#### Dialect 
+这是一款翻译软件.  
+```sh
+yay -S dialect
+```
+
+#### 猫咪魔法  
+```sh
+yay -S clash-verge-rev-bin
+```
+
+#### Openvpn  
+```sh
+sudo pacman -S openvpn
+```
+为了支持旧版本的加密算法, 需要在 .ovpn 配置文件中增加以下配置.  
+```
+data-ciphers BF-CBC
+data-ciphers-fallback BF-CBC
+providers legacy default
+```
+使用时执行 `sudo openvpn --config xxxx.ovpn`.  
+
+#### Remmina
+```sh 
+sudo pacman -S remmina freerdp
+```
+
+#### vscode  
+```sh
+sudo pacman -S code 
+yay -S code-oss-marketplace
+```
+
+#### zsh  
+```sh
+sudo pacman -S zsh zsh-completions
+```
+执行 `zsh` 运行安装向导. 也可以手动执行 `zsh-newuser-install -f`.   
+设置 zsh 为默认 shell.  
+```sh
+chsh -l # list all shell 
+chsh -s /usr/bin/zsh # change default shell to zsh
+```
+安装 oh-my-zsh.  
+```sh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+设置插件, 编辑 ~/.zshrc 
+```
+plugins = (git z sudo web-search)
+```
+安装 powerlevel10k 主题. 这是 Arch 的安装方法, powerlevel10k 的仓库有详细的各种安装方式.    
+```sh
+yay -S zsh-theme-powerlevel10k-git
+echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
+```
+然后使用 `exec zsh` 来重启 zsh, 应该会自动执行 powerlevel10k 的配置向导, 也可以执行 `p10k configure` 来手动执行向导.  
+
+#### Sunlogin
+```sh
+yay -S sunloginclient
+sudo systemctl start runsunloginclient.service
+sudo systemctl enable runsunloginclient.service # 如果不想让服务一直在后台运行每次使用前记得 start
+```
