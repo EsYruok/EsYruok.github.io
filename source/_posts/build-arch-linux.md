@@ -505,10 +505,15 @@ yay -S code-oss-marketplace
 ```
 
 #### zsh  
+zsh 需要 noto 字体先装一下.  
 ```sh
 sudo pacman -S zsh zsh-completions
 ```
-执行 `zsh` 运行安装向导. 也可以手动执行 `zsh-newuser-install -f`.   
+执行 `zsh` 运行安装向导. 也可以手动执行, 在 zsh 下执行 (没什么用直接关了就行, 后面还有 oh-my-zsh)  
+```sh
+autoload -Uz zsh-newuser-install
+zsh-newuser-install -f
+```
 设置 zsh 为默认 shell.  
 ```sh
 chsh -l # list all shell 
@@ -525,6 +530,9 @@ plugins = (git z sudo web-search)
 安装 powerlevel10k 主题. 这是 Arch 的安装方法, powerlevel10k 的仓库有详细的各种安装方式.    
 ```sh
 yay -S zsh-theme-powerlevel10k-git
+```
+配置进配置文件
+```sh
 echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
 ```
 然后使用 `exec zsh` 来重启 zsh, 应该会自动执行 powerlevel10k 的配置向导, 也可以执行 `p10k configure` 来手动执行向导.  
