@@ -1,6 +1,6 @@
 ---
 title: 搭建Linux + Win11 双系统
-tags: linux
+categories: linux
 abbrlink: a9f101ac
 date: 2024-01-17 08:08:57
 ---

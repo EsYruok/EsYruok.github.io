@@ -1,7 +1,7 @@
 ---
 title: GitHub Pages + Hexo + NexT 博客搭建 (搭建篇)
 date: '2024/1/1 00:12:25'
-tags:
+categories:
   - hexo
 abbrlink: 6b2ed3a
 ---

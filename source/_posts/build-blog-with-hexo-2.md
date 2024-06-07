@@ -1,6 +1,6 @@
 ---
 title: GitHub Pages + Hexo + NexT 搭建博客(配置篇)
-tags:
+categories:
   - hexo
 abbrlink: e3e38b21
 date: 2024-01-07 01:26:48
@@ -159,6 +159,7 @@ menu:
   home: / || fa fa-home
 ```
 默认支持的菜单只有 home 和 archives. 不过 NexT 支持我们自定义创建菜单项目.  
+
 > - 创建自定义页面  
     1. 使用 hexo new page custom-name 创建一个自定义的页面  
     2. 修改新建页面的 index.md 添加 Front-matter 信息与内容  

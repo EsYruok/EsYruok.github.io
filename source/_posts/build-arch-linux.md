@@ -1,7 +1,6 @@
 ---
 title: 搭建ArchLinux桌面环境
-tags:
-  - arch
+categories:
   - linux
 abbrlink: '5e538680'
 date: 2024-01-12 20:04:15
@@ -441,6 +440,16 @@ systemctl --user enable pulseaudio.service pulseaudio.socket
 
 > 安装完成后声音是正常了, 但是重启后发生一种现象就是, 静音播放视频可以播放, 一旦开了声音视频就卡死了. 查阅资料找到一个方案. 修改配置文件 `/etc/pulse/default.pa`, 注释行 `load-module module-suspend-on-idle`.    
 
+#### F区按键映射
+F1 - F12 被映射成多媒体按键  
+```sh
+echo 0 | sudo tee /sys/module/hid_apple/parameters/fnmode
+```
+看看是否恢复正常, 如果正常了就将他写入配置文件.  
+```sh
+echo "options hid_apple fnmode=0" | sudo tee -a /etc/modprobe.d/hid_apple.conf
+```
+
 ## 结尾
 &emsp;&emsp;一个桌面环境就安装完了, 在你熟悉了的情况下依靠命令行也能很快的完成. 要特别记得Arch是滚动更新, 每天记得`pacman -Syyu`, 不然太久不更新系统滚挂的风险很高. 另外如果遇到系统进不去了的情况可以使用前面安装基本操作系统中挂载使用`arch-chroot`的方法进入系统进行调整.  
 &emsp;&emsp;我这里只是罗列了一个很基本的环境, 一些像蓝牙,显卡,魔法等问题因为我还没有使用就暂时还没进行记录, [ArchTurorial](https://archlinuxstudio.github.io/ArchLinuxTutorial/#/) 中对这些问题都有一个很好的支持, 需要的同学可以直接跳转过去进行查阅.  
@@ -453,6 +462,12 @@ systemctl --user enable pulseaudio.service pulseaudio.socket
 ```sh
 sudo pacman -S ttf-jetbrains-mono-nerd
 ```
+手动安装方法:  
+
+1. 在 `usr/share/fonts` 或 `.locale/share/fonts` 下建立属于你字体的目录.  
+2. 将字体文件全部解压到文件夹中.  
+3. 修改所有 ttf 文件权限为 644.  
+4. 刷新字体缓存 `sudo fc-cache -fv`
 
 #### fcitx5  
 中文输入法.  
