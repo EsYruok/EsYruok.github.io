@@ -10,13 +10,13 @@ ArchLinux是一个以简洁, 高效, 用户完全控制为目标的Linux发行�
 > 要特别感谢 [ArchTurorial](https://archlinuxstudio.github.io/ArchLinuxTutorial/#/) 的教程, 是一份非常详细的 ArchLinux 安装教程, 对我在接触使用 Arch 的过程中提供了非常大的帮助.  
 
 ---  
-我对操作系统的期望是 ArchLinux + Gnome + Wayland. 接下来的内容都是以这个为目标所使用的步骤.  
-在开始安装前需要做一些准备工作.  
+本文所搭建的环境是 ArchLinux + Gnome + Wayland + Nvidia. 接下来的内容都是以这个为目标所使用的步骤.  
+在开始安装前的一些准备工作.  
 
 - 前往 [Arch 官网](https://archlinux.org/)下载最新的ISO文件
 - 制作U盘启动盘 (如果是使用虚拟机安装则不需要)  
-    windows 下建议使用 rufus  
-    linux 下直接使用命令 `sudo dd bs=4M if=/path/to/archlinux.iso of=/dev/sdx status=progress oflag=sync`
+    - windows 下建议使用 rufus  
+    - linux 下使用命令 `sudo dd bs=4M if=/path/to/archlinux.iso of=/dev/sdx status=progress oflag=sync`
 - 调整主板启动模式为UEFI
 - 关闭主板的安全启动选项 
 
@@ -56,7 +56,10 @@ timedatectl set-ntp true # 使用网络同步时间
 ```
 
 #### 转换磁盘分区格式
-UEFI 要使用 GPT 格式的磁盘分区.  
+UEFI 要使用 GPT 格式的磁盘分区.
+
+> Note: 如果你正在做双系统, 挑过这一步.  
+
 ```sh
 lsblk # 显示所有block设备信息, 找到你想要安装的硬盘名称 例如: sda
 parted /dev/sda # 使用 parted + mktable 将磁盘类型转换成gpt
@@ -81,6 +84,9 @@ fdisk -l # 检查分区情况
 
 #### 格式化分区  
 将ELF分区格式化为 vfat 文件系统, 其他格式化为 ext4.  
+
+> Note: 如果你在做双系统, 注意不要格式化 efi 分区.  
+
 ```sh
 mkfs.vfat /dev/sda1 # efi
 mkfs.ext4 /dev/sda2 # root
@@ -126,7 +132,7 @@ pacstrap /mnt base linux... # 看下面
 > linux-firmware : 一些常见的硬件固件  
 > dhcpcd : DHCP客户端  
 > iwd : 无线网管理工具(不使用无线网可以不用)  
-> bash-completion : 命令补全工具 (以后想使用zsh的可以先不装这个)
+> bash-completion : 命令补全工具  
 > neovim : 文本编辑器  
 > git : git 工具, 后面很多软件安装要使用到它
 
@@ -151,16 +157,15 @@ hwclock --systohc # 同步到硬件
 
 #### 设置 Locale 信息  
 locale 信息影响系统中的字符编码, 货币日期时间等信息的显示方式. 
+编辑 /etc/locale.gen 去掉 **en_US.UTF-8** 和 **zh_CN.UTF-8** 的注释. 然后执行:  
 ```sh
-# 设置Local信息
-nvim /etc/locale.gen # 去掉 en_US.UTF-8 和 zh_CN.UTF-8 的注释
 locale-gen
 echo 'LANG=en_US.UTF-8' > /etc/locale.conf # 设置成英文, 我们还没安装中文字体
 ```
 
 #### 设置主机名与 
 ```sh
-nvim /etc/hostname # 直接写入自定义的名称就行 例如: archLinux
+nvim /etc/hostname # 直接写入自定义的名称就行 例如: you_hostname
 ```
 
 #### 设置 hosts 文件
@@ -168,7 +173,7 @@ nvim /etc/hostname # 直接写入自定义的名称就行 例如: archLinux
 nvim /etc/hosts
 # 127.0.0.1   localhost  
 # ::1         localhost  
-# 127.0.1.1   archLinux  
+# 127.0.1.1   you_hostname  
 ```
 
 #### 设置root密码  
@@ -187,10 +192,9 @@ pacman -S amd-ucode # AMD
 pacman -S grub efibootmgr
 grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
 ```
-编辑 /etc/default/grub 文件, 删除 **GRUB_CMDLINE_LINUX_DEFAULT** 一行中的 **quite** 参数, 同时将 **loglevel** 改为5, 增加 **nowatchdog**.
+编辑 /etc/default/grub 文件, 删除 **GRUB_CMDLINE_LINUX_DEFAULT** 一行中的 **quite** 参数, 同时将 **loglevel** 改为5, 增加 **nowatchdog nvidia_drm.modeset=1**.
 ```sh
-nvim /etc/default/grub 
-grub-mkconfg -o /boot/grub/grub.cfg
+grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
 > `GRUB_CMDLINE_LINUX_DEFAULT` 一行代表传递给Linux内核的参数. 具体想要怎么设置可以按照个人决定.  
@@ -210,25 +214,22 @@ reboot
 重启后就会进入我们刚刚安装好的系统. 至此一个基础的 ArchLinux 安装完成.  
 
 ## 安装桌面环境
+进入刚刚安装好的基本 Arch 我们来进行一些配置以及桌面的安装.  
+
 #### 连接网络  
-又是连接网络, 这次记得先开启 DHCP 服务.  
+先开启 DHCP 服务.  
 ```sh
 systemctl start dhcpcd
 ```
 如果使用无线网再开启 iwd 服务, 并使用上面安装系统时的方式连接 wifi.  
 ```sh
 systemctl start iwd # 无线网
-# iwd ...
+iwctl
+station wlan0 connect YOUR-WIRELESS-NAME
 ```
 
-#### 安装网络管理工具
-不想每次连网都这么麻烦可以提前安装管理工具.  
-```sh
-pacman -S networkmanager
-# systemctl disable iwd
-# systemctl stop iwd # 使用无线网的用户先禁用 iwd
-systemctl enable NetworkManager
-```
+#### Pacman 颜色与多线程
+编辑 /etc/pacman.conf 将 **Color** 与 **ParallelDownloads** 的注释去掉.  
 
 #### 准备一个非 root 用户
 ```sh
@@ -243,22 +244,36 @@ EDITOR=nvim visudo # 去掉 %wheel ALL=(ALL:ALL) ALL前的注释
 
 #### 安装 Gnome 
 ```sh
-pacman -S gnome wayland # gnome-extra
+pacman -S gnome wayland
 systemctl enable gdm
-reboot
 ```
 安装过程比较长, 重启后就会进入登录界面了. 
 
-#### Wayland 
+> Wayland 
+> - gtk3,4 默认支持 Wayland.  
+> - Qt 想要支持 Wayland 安装 qt5-wayland / qt6-wayland. 想要显式设置的话设置环境变量 QT_QPA_PLATFORM=wayland.  
+> - Electron (>= 28) 则需要设置环境变量 ELECTRON_OZONE_PLATFORM_HINT 为 auto 或 wayland. (环境变量的优先级低于参数)  
+> 还可以使用给应用程序添加参数或写到配置文件 ~/.config/electron-flags.conf 中.   
+    > ```
+    > --enable-features=WaylandWindowDecorations # 解决缺少顶栏
+    > --ozone-platform-hint=auto
+    > ```
 
-- gtk3,4 默认支持 Wayland.  
-- Qt 想要支持 Wayland 安装 qt5-wayland / qt6-wayland. 想要显式设置的话设置环境变量 QT_QPA_PLATFORM=wayland.  
-- Electron (>= 28) 则需要设置环境变量 ELECTRON_OZONE_PLATFORM_HINT 为 auto 或 wayland. (环境变量的优先级低于参数)  
-还可以使用给应用程序添加参数或写到配置文件 ~/.config/electron-flags.conf 中.   
-    ```
-    --enable-features=WaylandWindowDecorations # 解决缺少顶栏
-    --ozone-platform-hint=auto
-    ```
+#### yay 
+Arch User repository Arch特色仓库. 使用方法跟 pacman 一样.   
+```sh
+pacman -Sy --needed git base-devel
+git clone https://aur.archlinux.org/yay.git
+cd yay
+makepkg -si
+```
+也可以使用 paur
+```sh
+sudo pacman -S --needed base-devel
+git clone https://aur.archlinux.org/paru.git
+cd paru
+makepkg -si
+```
 
 #### 设置交换文件(可选)  
 ```sh
@@ -286,22 +301,37 @@ nameserver 2001:4860:4860::8844
 ```
 要注意,  resolv.conf  文件开机时会被  NetworkManager  服务修改, 修改文件属性 `sudo chattr +i /etc/resolv.conf` 避免被修改.  
 
-#### 声音固件  
-```sh
-pacman -S sof-firmware alsa-firmware alsa-ucm-conf
-```
-
 #### 显卡驱动
-我的显卡是 1060 + intel. 其他建议过一遍文档.  
-[Intel graphics](https://wiki.archlinux.org/title/Intel_graphics) | [AMDGPU](https://wiki.archlinux.org/title/AMDGPU) | [Nvidia](https://wiki.archlinux.org/title/NVIDIA) | [optimus-manager](https://github.com/Askannz/optimus-manager)  
-```sh
-sudo pacman -S mesa lib32-mesa vulkan-intel lib32-vulkan-intel # intel 显卡
-sudo pacman -S nvidia nvidia-settings lib32-nvidia-utils # nvidia 显卡
-yay -S gdm-prime optimus-manager-git optimus-manager-qt # 切换显卡
-sudo nvim /etc/gdm/custom.conf # remove # before #WaylandEnable=false
-sudo systemctl enable optimus-manager
-# sudo pacman -S nvidia-prime # 动态切换, 在想要使用独显的程序前加 prime-run 前缀
-```
+环境关键字: arch + Nvidia + Intel + Wayland
+
+1. 安装显卡驱动  
+    ```sh
+    sudo pacman -S mesa lib32-mesa vulkan-intel lib32-vulkan-intel # intel 显卡
+    sudo pacman -S nvidia nvidia-utils nvidia-settings lib32-nvidia-utils # nvidia 显卡
+    sudo pacman -S nvidia-prime # 动态切换, 在想要使用独显的程序前加 prime-run 前缀
+    ```
+
+2. 修改 gdm 配置文件  
+    编辑 /etc/gdm/custom.conf 取消注释并修改为 `WaylandEnable=true`
+
+3. 更新Mkinitcpin  
+    编辑 /etc/mkinitcpin.conf 修改 `MODULES=()` 为:   
+    ```sh
+    MODULES=(nvidia nvidia_modset nvidia_uvm nvidia_drm)
+    ```
+    保存后执行  
+    ```sh
+    sudo mkinitcpin -P
+    ```
+
+4. 添加内核参数  
+    nvidia_drm.modeset=1 这个我们在前面已经添加过了.  
+
+5. 禁用 GDM udev 规则  
+    ```sh
+    sudo ln -s /dev/null /etc/udev/rules.d/61-gdm.rules
+
+> Wayland 下 optimus-manager 已经不好使用了, 按照上述的步骤最终只能达到 hybrid 的效果, Nv显卡通电, 想要使用需要在程序前加 prime-run. 想要看使用 Nv 运行了哪些程序可以使用 nvidia-smi  
 
 #### 中文字体
 ```sh
@@ -314,24 +344,14 @@ sudo pacman -S noto-fonts-cjk noto-fonts-emoji noto-fonts-extra
 sudo pacman -S firefox
 ```
 
-#### yay 
-Arch User repository Arch特色仓库. 使用方法跟 pacman 一样.   
+#### 安装网络管理工具
+不想每次连网都这么麻烦可以提前安装管理工具.  
 ```sh
-pacman -Sy --needed git base-devel
-git clone https://aur.archlinux.org/yay.git
-cd yay
-makepkg -si
+pacman -S networkmanager
+systemctl disable iwd
+systemctl stop iwd # 使用无线网的用户先禁用 iwd
+systemctl enable NetworkManager
 ```
-也可以使用 paur
-```sh
-sudo pacman -S --needed base-devel
-git clone https://aur.archlinux.org/paru.git
-cd paru
-makepkg -si
-```
-
-#### Pacman 颜色与多线程
-编辑 /etc/pacman.conf 将 **Color** 与 **ParallelDownloads** 的注释去掉.  
 
 ## 桌面美化
 美化一般就是壁纸 + 主题 + 插件. 壁纸就不提了, 主要介绍一下插件和主题.  
@@ -347,7 +367,9 @@ makepkg -si
     浏览器会弹窗提示是否允许安装插件, 选择 **Continue to Installation** 完成安装即可.  
     重启 firefox.  
 3. 安装 Gnome 插件  
-    进入 extensions.gnome.org 搜索想要安装的插件, 进入插件详情页面点击 **OFF/NO** 按钮即可控制插件开关, 如果该插件未安装则会出现安装提示.    
+    进入 extensions.gnome.org 搜索想要安装的插件, 进入插件详情页面点击 **OFF/NO** 按钮即可控制插件开关, 如果该插件未安装则会出现安装提示. (安装 Dash to dock 练习一下)  
+
+Gnome 桌面美化插件占了很大的一笔. 现在可以浏览插件网址安装你想要的插件了.  
 
 #### 安装 Tweaks  
  tweaks  是一个帮助我们管理 Gnome 桌面环境的软件, 它可以方便的管理主题, 字体, 窗口样式等设置. 如果你安装了 gnome-extra 可能已经拥有了它.  
@@ -358,12 +380,12 @@ sudo pacman -S gnome-tweaks
 #### 安装主题  
 1. 开启 user-themes 插件  
     这是一个系统插件, 打开 Extensions 程序可以看到所有已安装的插件, 在里面点开即可.
-2. 下载主题  
-    [Gnome-look](www.gnome-look.org)是一个很好的寻找主题的地方. 下载主题压缩包后解压到 ** ~/.themes** 或者 **/usr/share/themes/** 中.  
-    但是!! 强烈建议进入主题的 github 页面使用作者提供的安装方式.  
+2. 下载主题并安装  
+    [Gnome-look](www.gnome-look.org)是一个很好的寻找主题的地方. 下载主题压缩包后解压到 ** ~/.themes** 或者 **/usr/share/themes** 中.  
+    但是!! 强烈建议进入主题的 github 页面使用作者提供的安装方式,方便省力.  
 3. 更改主题  
     使用 user-themes 或者 Tweaks 去配置自己的主题.  
-    GNOME 43 之后部分程序使用了 Libadwaita (比如 Files), 这些程序目前不支持自定义主题, 如果想更改只能通过覆盖 gtk-4.0 的配置文件. 这种方式非常不灵活但也是目前唯一的方法. 通常主题的作者会考虑到这一点, 安装脚本中会提供一个快捷的选项稳妥的帮助你完成这一步骤.  
+    GNOME 43 之后部分程序使用了 Libadwaita (比如 Files), 这些程序目前不支持自定义主题, 如果想更改只能通过覆盖 gtk-4.0 的配置文件. 这种方式非常不灵活但也是目前唯一的方法.这里没有深研究具体覆盖哪些文件， 主题作者一般会在安装脚本中提供一个选项稳妥的帮助你完成这一目的.  
 
 #### Orchis 
 我使用的主题是 [Orchis-theme](https://github.com/vinceliuice/Orchis-theme).  
@@ -377,53 +399,33 @@ sudo pacman -S gnome-tweaks
 sudo pacman -S gnome-themes-extra gtk-engine-murrine sassc
 ```
 
+> Note: 这个主题与插件 Blur my shell 有冲突, 不要开启此插件.  
+
 安装主题:  
 ```sh
 git clone https://github.com/vinceliuice/Orchis-theme.git
 cd Orchis-theme
-./install.sh -t all 
-./install.sh -l -c dark -l purple 
+./install.sh -t purple 
+./install.sh -l -c dark -t purple 
 ```
-Flatpak  
 
-- gtk3.0 的用 stylepak
-    ```sh
-    sudo pacman -S ostree appstream-glib
-    git clone https://github.com/refi64/stylepak.git
-    cd stylepak
-    ./stylepak install-system # ./stylepak install-user
-    ```
-- gtk4.0
-    ```sh
-    flatpak override --filesystem=xdg-config/gtk-4.0
-    # flatpak override --user --filesystem=xdg-config/gtk-4.0
-    ```
-
-#### 推荐插件  
+#### 推荐安装插件  
 - Input Method Pannel  
     输入法需要使用这个插件来显示候选面板
 - Dash to dock  
     dock栏
-- Blur my shell  
-    毛玻璃效果插件
 - Coverflow Alt-tab  
     窗口切换动画
-- Clipboard Indicator  
-    剪切板记录  
 - Compiz alike magic lamp effect  
     窗口最小化动画效果
 - Compiz windows effect  
     窗口移动动画效果
 - AppIndicator and KStatusNotifierItem Support  
     程序托盘图标
-- Removable Drive Menu  
-    移动磁盘的托盘图标
-- Extension List  
-    一个插件管理的小工具, 与 Extension 作用一样只不过是显示在托盘图标上.   
 
 ## 遇到的问题
 #### VmwareTools  
-Vmware 想要共享剪切板和调整系统桌面大小需要安装 open-vm-tools, 并且记得将服务 vmtoolsd 和 vmware-vmblock-fuse 设置 enable, 还需要安装 gtkmm3.    
+Vmware 想要共享剪切板和调整系统桌面大小需要安装 open-vm-tools, 并且记得将服务 vmtoolsd 和 vmware-vmblock-fuse 设置 enable, 并且需要安装 gtkmm3.    
 ```sh
 sudo pacman -S open-vm-tools
 sudo systemctl enable vmtoolsd vmware-vmblock-fuse
@@ -431,7 +433,7 @@ sudo pacman -S gtkmm3
 ```
 
 #### 声音问题  
-(VMware 环境中)安装 Gnome 时使用了 pipewire, 但是声音会爆裂断断续续的. 不会调试具体原因查阅资料也没弄明白. 所以先选择安装 pulseaudio 代替.  
+(VMware 环境中, 实体机器没发现有异常)安装 Gnome 时使用了 pipewire, 但是声音会爆裂断断续续的. 不会调试具体原因查阅资料也没弄明白. 所以先选择安装 pulseaudio 代替.  
 ```sh
 sudo pacman -R pulse-native-provider # 与 pulseaudio 冲突的包有依赖, 先删除
 sudo pacman -S alsa-utils pulseaudio pavucontol
@@ -558,3 +560,40 @@ yay -S sunloginclient
 sudo systemctl start runsunloginclient.service
 sudo systemctl enable runsunloginclient.service # 如果不想让服务一直在后台运行每次使用前记得 start
 ```
+
+#### Waydroid  
+要使用 Waydroid 必须在 Wayland 下, 使用 `echo $XDG_SESSION_TYPE` 来检查. 并且需要使用 binder 模块.  
+```sh
+yay -S binder_linux-dkms
+sudo modprobe binder_linux
+su
+echo "binder_linux" >> /etc/modules-load.d/binder.conf
+```
+安装waydroid  
+```sh
+yay -S waydroid
+sudo waydroid init
+sudo systemctl start waydroid-container
+sudo systemctl enable waydroid-container
+```
+一些常用命令   
+```sh
+waydroid app install xxx.apk # 安装 apk
+
+waydroid prop set persist.waydroid.multi_windows true # 设置多窗口模式，记得重启服务
+
+sudo systemctl status waydroid-container # 排障可能用到的命令
+sudo waydroid logcat
+waydroid log
+```
+删除 Waydroid  
+```sh
+waydroid session stop
+sudo systemctl stop waydroid-container
+yay -Rsn waydroid
+sudo rm -rf /var/lib/waydroid ~/.local/share/application/*aydroid* ~/.local/share/waydroid
+```
+为了精简，只涉及到够用的步骤，还有关于Arm转译，Google注册等内容可进一步查看文档 [Waydroid](https://wiki.archlinux.org/title/Waydroid).  
+再推荐一篇博客 [WayDroid教学](https://ivonblog.com/posts/archlinux-waydroid)
+
+

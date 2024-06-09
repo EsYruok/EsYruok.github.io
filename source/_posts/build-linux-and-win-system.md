@@ -30,7 +30,7 @@ sudo pacman -S os-prober
 取消 **GRUB_DISABLE_OS_PROBER=false** 的注释, 没有就添加.  
 3. 更新 grub  
 ```sh
-sudo update-grub
+sudo grub-mkconfig -o /boot/grub/grub.cfg
 ```
 在输出信息中应该可以看到找到了 Windwos 的启动项.  
 
