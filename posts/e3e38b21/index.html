@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icons8-excalibur-lineal-color-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icons8-excalibur-lineal-color-32.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/orange/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"esyruok.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":"enable","style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在上一篇博客中只记录了搭建过程, 这篇文章会记录一下对 Hexo 与 NexT 的配置.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GitHub Pages + Hexo + NexT 搭建博客(配置篇)">
+<meta property="og:url" content="https://esyruok.github.io/posts/e3e38b21/index.html">
+<meta property="og:site_name" content="清涧">
+<meta property="og:description" content="在上一篇博客中只记录了搭建过程, 这篇文章会记录一下对 Hexo 与 NexT 的配置.">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-01-06T17:26:48.000Z">
+<meta property="article:modified_time" content="2024-06-10T03:13:13.320Z">
+<meta property="article:author" content="EsYruok">
+<meta property="article:tag" content="blog,binary,linux,development,coding,二进制,编程,爱好">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://esyruok.github.io/posts/e3e38b21/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://esyruok.github.io/posts/e3e38b21/","path":"posts/e3e38b21/","title":"GitHub Pages + Hexo + NexT 搭建博客(配置篇)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>GitHub Pages + Hexo + NexT 搭建博客(配置篇) | 清涧</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="清涧" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">清涧</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">让事情是它本来该有的样子</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">7</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#hexo-%E9%85%8D%E7%BD%AE-_config.yml"><span class="nav-number">1.</span> <span class="nav-text">Hexo 配置 (_config.yml)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#site"><span class="nav-number">1.1.</span> <span class="nav-text">Site</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#url"><span class="nav-number">1.2.</span> <span class="nav-text">URL</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B0%B8%E4%B9%85%E9%93%BE%E6%8E%A5"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">永久链接</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#hexo-abbrlink"><span class="nav-number">1.2.0.2.</span> <span class="nav-text">hexo-abbrlink</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E7%AB%A0%E9%85%8D%E7%BD%AE"><span class="nav-number">1.3.</span> <span class="nav-text">文章配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E5%B8%83%E5%B1%80"><span class="nav-number">1.3.0.1.</span> <span class="nav-text">默认布局</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%96%87%E7%AB%A0%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="nav-number">1.3.0.2.</span> <span class="nav-text">文章资源文件夹</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E9%AB%98%E4%BA%AE%E5%BC%95%E6%93%8E"><span class="nav-number">1.3.0.3.</span> <span class="nav-text">代码高亮引擎</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%86%E9%A1%B5%E7%9B%AE%E5%BD%95"><span class="nav-number">1.3.0.4.</span> <span class="nav-text">分页目录</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%B1%BB%E5%88%AB%E4%B8%8E%E6%A0%87%E7%AD%BE"><span class="nav-number">1.3.0.5.</span> <span class="nav-text">类别与标签</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#next-%E9%85%8D%E7%BD%AE-_config.next.yml"><span class="nav-number">2.</span> <span class="nav-text">NexT 配置 (_config.next.yml)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E9%A2%98"><span class="nav-number">2.1.</span> <span class="nav-text">主题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%B8%83%E5%B1%80"><span class="nav-number">2.1.0.1.</span> <span class="nav-text">布局</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B7%B1%E8%89%B2%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.1.0.2.</span> <span class="nav-text">深色模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9B%BE%E6%A0%87"><span class="nav-number">2.1.0.3.</span> <span class="nav-text">图标</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%BB%E9%A2%98%E9%A2%9C%E8%89%B2"><span class="nav-number">2.1.0.4.</span> <span class="nav-text">主题颜色</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%9D%97%E9%AB%98%E4%BA%AE%E4%B8%BB%E9%A2%98"><span class="nav-number">2.1.0.5.</span> <span class="nav-text">代码块高亮主题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%83%8C%E6%99%AF%E4%B8%9D%E5%B8%A6"><span class="nav-number">2.1.0.6.</span> <span class="nav-text">背景丝带</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8F%9C%E5%8D%95"><span class="nav-number">2.2.</span> <span class="nav-text">菜单</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%A7%E8%BE%B9%E6%A0%8F"><span class="nav-number">2.3.</span> <span class="nav-text">侧边栏</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A4%B4%E5%83%8F"><span class="nav-number">2.3.0.1.</span> <span class="nav-text">头像</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AB%99%E7%82%B9%E7%8A%B6%E6%80%81"><span class="nav-number">2.3.0.2.</span> <span class="nav-text">站点状态</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%A4%BE%E4%BA%A4%E9%93%BE%E6%8E%A5"><span class="nav-number">2.3.0.3.</span> <span class="nav-text">社交链接</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5"><span class="nav-number">2.3.0.4.</span> <span class="nav-text">友情链接</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%AC%E5%85%B1%E7%89%88%E6%9D%83%E8%AE%B8%E5%8F%AF"><span class="nav-number">2.3.0.5.</span> <span class="nav-text">公共版权许可</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B5%E8%84%9A"><span class="nav-number">2.4.</span> <span class="nav-text">页脚</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E7%AB%A0"><span class="nav-number">2.5.</span> <span class="nav-text">文章</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">2.5.0.1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%91%98%E8%A6%81"><span class="nav-number">2.5.0.2.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%98%85%E8%AF%BB%E5%85%A8%E6%96%87"><span class="nav-number">2.5.0.3.</span> <span class="nav-text">阅读全文</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%96%87%E7%AB%A0%E5%B1%9E%E6%80%A7%E6%98%BE%E7%A4%BA"><span class="nav-number">2.5.0.4.</span> <span class="nav-text">文章属性显示</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%89%93%E8%B5%8F%E6%8C%89%E9%92%AE"><span class="nav-number">2.5.0.5.</span> <span class="nav-text">打赏按钮</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#follow-me"><span class="nav-number">2.5.0.6.</span> <span class="nav-text">Follow Me</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BF%94%E5%9B%9E%E9%A1%B6%E9%83%A8%E6%8C%89%E9%92%AE"><span class="nav-number">2.5.0.7.</span> <span class="nav-text">返回顶部按钮</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%98%85%E8%AF%BB%E8%BF%9B%E5%85%A5%E6%9D%A1"><span class="nav-number">2.5.0.8.</span> <span class="nav-text">阅读进入条</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%92%E4%BB%B6"><span class="nav-number">2.6.</span> <span class="nav-text">插件</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E6%B8%B2%E6%9F%93"><span class="nav-number">2.6.0.1.</span> <span class="nav-text">数学公式渲染</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#loacal-search"><span class="nav-number">2.6.0.2.</span> <span class="nav-text">Loacal Search</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#rss"><span class="nav-number">2.6.0.3.</span> <span class="nav-text">RSS</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%88%E6%9E%81%E7%BE%8E%E5%8C%96%E5%A4%A7%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">终极美化大法</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="EsYruok"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">EsYruok</p>
+  <div class="site-description" itemprop="description">- 呐,你喜欢跑步吗? - 我不喜欢</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://esyruok.github.io/posts/e3e38b21/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="EsYruok">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="清涧">
+      <meta itemprop="description" content="- 呐,你喜欢跑步吗? - 我不喜欢">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="GitHub Pages + Hexo + NexT 搭建博客(配置篇) | 清涧">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          GitHub Pages + Hexo + NexT 搭建博客(配置篇)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/hexo/" itemprop="url" rel="index"><span itemprop="name">hexo</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在上一篇博客中只记录了搭建过程, 这篇文章会记录一下对 Hexo 与 NexT
+的配置. <span id="more"></span></p>
+<blockquote>
+<p>原本是想通过这篇文章一边学习一边写下每一项配置的意义和配置方法,
+不知不觉写了巨长的篇幅, 有些过于冗长, 自己看都看不下去.
+文章的本意是帮助快速的完成一个基本的配置, 所以文章会精简一些,
+只记录我认为比较常用且重要的配置,
+日后再折腾的时候不用再去一层一层的查找文档.<br />
+想细致学习的同学不用着急, 在配置文件中官方原本就附带了注释内容,
+比较清晰且附带了官方文档的链接地址.
+完整读一遍配置文件就可了解到所有的配置内容.</p>
+</blockquote>
+<h2 id="hexo-配置-_config.yml">Hexo 配置 (_config.yml)</h2>
+<h3 id="site">Site</h3>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">title:</span> <span class="string">title</span></span><br><span class="line"><span class="attr">subtitle:</span> <span class="string">subtitle</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">description</span></span><br><span class="line"><span class="attr">keywords:</span> <span class="string">keywords</span></span><br><span class="line"><span class="attr">author:</span> <span class="string">author</span></span><br><span class="line"><span class="attr">language:</span> <span class="string">zh-CN</span></span><br><span class="line"><span class="attr">timezone:</span> <span class="string">&#x27;Asia/Shanghai&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>配置项的 key 名称即内容简单易懂. <strong>title, subtitle,
+description, author</strong> 这四项是可以显示在界面上的,
+填上看看效果然后根据自己的意愿修改内容即可. 如果你想使用多语言,
+<strong>language</strong> 将你想使用的语言都写上.</p>
+<h3 id="url">URL</h3>
+<h5 id="永久链接">永久链接</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">url:</span> <span class="string">https://username.github.io/</span></span><br><span class="line"><span class="attr">permalink:</span> <span class="string">posts/:abbrlink/</span> <span class="comment"># 我这里使用了 hexo-abbrlink 插件</span></span><br><span class="line"><span class="attr">permalink_defaults:</span></span><br></pre></td></tr></table></figure>
+<p>permalinks 是指文章路径的形式, 例如:<br />
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 一篇文章在 source/_post/hello-world.md</span></span><br><span class="line"><span class="string">permalinks:year/:month/:day/:title/</span></span><br><span class="line"><span class="comment"># 生成静态文件后文章的路径为 2013/07/14/hello-world/</span></span><br></pre></td></tr></table></figure> 可使用的变量查看 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlvL3poLWNuL2RvY3MvcGVybWFsaW5rcw==">Permalinks<i class="fa fa-external-link-alt"></i></span>.<br />
+我所使用的 <strong>hexo-abbrlink</strong> 变量是插件提供的,
+使用文章的时间与文件名计算 hash 值来作为变量值.
+<strong>pretty_urls</strong> 中的两选项要你配置了 permalinks 中使用了
+index.html 才有意义. 修改看不出效果的不要疑惑哈.<br />
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># permalink: posts/:abbrlink/index.html 这样链接中才会有 index.html 让你来美化</span></span><br><span class="line"><span class="attr">pretty_urls:</span></span><br><span class="line">    <span class="attr">trailing_index:</span> <span class="literal">true</span> </span><br><span class="line">    <span class="attr">trailing_html:</span> <span class="literal">true</span> </span><br></pre></td></tr></table></figure></p>
+<h5 id="hexo-abbrlink">hexo-abbrlink</h5>
+<p>安装插件模块:<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm install hexo-abbrlink --save</span><br></pre></td></tr></table></figure> 添加配置:<br />
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">abbrlink:</span></span><br><span class="line"> <span class="attr">alg:</span> <span class="string">crc32</span>      <span class="comment">#support crc16(default) and crc32</span></span><br><span class="line"> <span class="attr">rep:</span> <span class="string">hex</span>        <span class="comment">#support dec(default) and hex</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="文章配置">文章配置</h3>
+<h5 id="默认布局">默认布局</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">default_layout:</span> <span class="string">post</span></span><br></pre></td></tr></table></figure>
+<p>这影响你使用 <code>hexo new title</code> 时使用的默认布局.</p>
+<h5 id="文章资源文件夹">文章资源文件夹</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">post_asset_folder:</span> <span class="literal">true</span> </span><br></pre></td></tr></table></figure>
+<p>开启文章资源文件夹, 开启 post_asset_folder 后, 在你进行 hexo new
+创建文章时会自动帮你创建文章资源文件夹.</p>
+<blockquote>
+<p>hexo 中资源文件夹有两种形式, 全局资源文件夹和文章资源文件夹.<br />
+- 全局资源文件夹<br />
+比如说你需要一个存放图片资源的地方那么可以建立一个目录存放
+<code>source/images</code>, 在文章中通过
+<code>![](/images/image.jpg)</code> 引用,
+所有文章都可以以这个路径引用.<br />
+- 文章资源文件夹<br />
+如果博客中的图片非常多全放在一个目录中就非常乱了.
+文章资源文件夹就是创建一个与你文章同名的目录, 比如
+<code>source/hello-world</code>, 在文章中通过相对路径
+<code>![](image.jpg)</code> 引用.
+只有这个这个文章可以使用这个相对路径.</p>
+</blockquote>
+<h5 id="代码高亮引擎">代码高亮引擎</h5>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">syntax_highlighter: highlight.js </span><br></pre></td></tr></table></figure>
+<p>自带两种高亮引擎, 选自你使用的写上名称即可.</p>
+<h5 id="分页目录">分页目录</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">pagination_dir:</span> <span class="string">pages</span></span><br><span class="line"><span class="comment"># 翻页后的URL : http://example.com/pages/2</span></span><br></pre></td></tr></table></figure>
+<p><strong>pagination_dir</strong> 是当你的文章列表翻页后 URL
+的形式.</p>
+<h5 id="类别与标签">类别与标签</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">default_category:</span> <span class="string">uncategorized</span></span><br></pre></td></tr></table></figure>
+<p>默认分类, 当你没有给文章分类信息时, 那么它就属于这个默认分类.<br />
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">category_map:</span> </span><br><span class="line">  <span class="attr">tech:</span> <span class="string">Technology</span></span><br><span class="line">  <span class="attr">jishu:</span> <span class="string">Technology</span></span><br><span class="line"><span class="attr">tag_map:</span></span><br></pre></td></tr></table></figure> 分类和标签别名,
+可以将多个分类/标签映射成一个分类/标签.</p>
+<h2 id="next-配置-_config.next.yml">NexT 配置 (_config.next.yml)</h2>
+<h3 id="主题">主题</h3>
+<h5 id="布局">布局</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">scheme:</span> <span class="string">Gemini</span></span><br></pre></td></tr></table></figure>
+<p>NexT 提供了四种布局样式,
+官方提仓库提供了一些例子可以对每种样式进行一个大概的预览再选择. <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25leHQtdGhlbWUvYXdlc29tZS1uZXh0I2xpdmUtcHJldmlldw==">awesome-next<i class="fa fa-external-link-alt"></i></span>.</p>
+<h5 id="深色模式">深色模式</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">darkmode:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>深色模式, 开启就可以跟据浏览器的亮暗模式自动进行切换.</p>
+<h5 id="图标">图标</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">favicon:</span></span><br><span class="line">  <span class="attr">small:</span> <span class="string">/images/favicon-16x16-next.png</span></span><br></pre></td></tr></table></figure>
+<p>这个是标签页上的那个小图标. 可以将自定义图标放在 source/images
+目录当中并且修改配置上文件名.</p>
+<h5 id="主题颜色">主题颜色</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">theme_color:</span> </span><br><span class="line">  <span class="attr">light:</span> <span class="string">&quot;#222&quot;</span></span><br><span class="line">  <span class="attr">dark:</span> <span class="string">&quot;#222&quot;</span></span><br></pre></td></tr></table></figure>
+<p>主题颜色, 就是 title 后面很小一部分.</p>
+<h5 id="代码块高亮主题">代码块高亮主题</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">codeblock:</span></span><br><span class="line">  <span class="comment"># Code Highlight theme</span></span><br><span class="line">  <span class="comment"># All available themes: https://theme-next.js.org/highlight/</span></span><br><span class="line">  <span class="attr">theme:</span></span><br><span class="line">    <span class="attr">light:</span> <span class="string">base16/silk-light</span></span><br><span class="line">    <span class="attr">dark:</span> <span class="string">vs2015</span></span><br></pre></td></tr></table></figure>
+<p>代码高亮主题, 可以通过给的网址去预览各种主题, 将选好的名称添上.</p>
+<h5 id="背景丝带">背景丝带</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">canvas_ribbon:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">size:</span> <span class="number">300</span> <span class="comment"># The width of the ribbon</span></span><br><span class="line">  <span class="attr">alpha:</span> <span class="number">0.6</span> <span class="comment"># The transparency of the ribbon</span></span><br><span class="line">  <span class="attr">zIndex:</span> <span class="number">-1</span> <span class="comment"># The display level of the ribbon</span></span><br></pre></td></tr></table></figure>
+<p>在背景画布上装饰一个可变化的丝带.</p>
+<h3 id="菜单">菜单</h3>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line">  <span class="attr">home:</span> <span class="string">/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-home</span></span><br></pre></td></tr></table></figure>
+<p>默认支持的菜单只有 home 和 archives. 不过 NexT
+支持我们自定义创建菜单项目.</p>
+<blockquote>
+<ul>
+<li>创建自定义页面<br />
+</li>
+</ul>
+<ol type="1">
+<li>使用 hexo new page custom-name 创建一个自定义的页面<br />
+</li>
+<li>修改新建页面的 index.md 添加 Front-matter 信息与内容<br />
+</li>
+<li>编辑 menu 配置. (例如:
+<code>custom: /custom-name/ || fa fa-custom</code>)<br />
+</li>
+</ol>
+<ul>
+<li>创建 tags 页面<br />
+一种特殊的自定义页面, tags 页面只需在 index.md 的 Front-matter 信息中将
+type 设置为 tags, 就可以将所有文章的 tag 显示在页面中.<br />
+</li>
+<li>创建 categories 页面<br />
+与 tags 相同, 只是 type = categories.</li>
+</ul>
+</blockquote>
+<p>NexT 还支持动态子菜单, 例如:<br />
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line">  <span class="attr">home:</span> <span class="string">/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-home</span></span><br><span class="line">  <span class="attr">archives:</span> <span class="string">/archives/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-archive</span></span><br><span class="line">  <span class="attr">Docs:</span></span><br><span class="line">    <span class="attr">default:</span> <span class="string">/docs/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-book</span></span><br><span class="line">    <span class="attr">Getting Started:</span></span><br><span class="line">      <span class="attr">default:</span> <span class="string">/getting-started/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-flag</span></span><br><span class="line">      <span class="attr">Installation:</span> <span class="string">/installation.html</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-download</span></span><br><span class="line">      <span class="attr">Configuration:</span> <span class="string">/configuration.html</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-wrench</span></span><br></pre></td></tr></table></figure> 上面的配置方式会在拥有子菜单的页面 (例如 docs )
+上方产生相应的子菜单.</p>
+<h3 id="侧边栏">侧边栏</h3>
+<h5 id="头像">头像</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">avatar:</span></span><br><span class="line">  <span class="attr">url:</span> <span class="string">/images/avatar.gif</span></span><br><span class="line">  <span class="attr">rounded:</span> <span class="literal">true</span> </span><br><span class="line">  <span class="attr">rotated:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>头像, 更改方式和 favicon 相同.</p>
+<h5 id="站点状态">站点状态</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">site_state:</span> <span class="literal">true</span> </span><br></pre></td></tr></table></figure>
+<p>将文章,标签, 类别数量显示在侧边栏当中.</p>
+<h5 id="社交链接">社交链接</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">social:</span></span><br><span class="line">  <span class="comment">#GitHub: https://github.com/yourname || fab fa-github</span></span><br><span class="line">  <span class="comment">#E-Mail: mailto:yourname@gmail.com || fa fa-envelope</span></span><br></pre></td></tr></table></figure>
+<p>侧边栏中添加一些社交账号的图标, 点击可以快速导航.</p>
+<h5 id="友情链接">友情链接</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">links:</span></span><br><span class="line">  <span class="attr">Title:</span> <span class="string">https://example.com</span> <span class="comment"># 友情链接的title和链接, 如果没有则不会显示友情链接块</span></span><br></pre></td></tr></table></figure>
+<p>友情链接, 出现在侧边栏下方.</p>
+<h5 id="公共版权许可">公共版权许可</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">creative_commons:</span></span><br><span class="line">  <span class="attr">license:</span> <span class="string">by-nc-sa</span></span><br><span class="line">  <span class="attr">size:</span> <span class="string">small</span></span><br><span class="line">  <span class="attr">sidebar:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">post:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">language:</span></span><br></pre></td></tr></table></figure>
+<p>版权许可信息, sidebar 设置让你在侧边栏中有个图标, post
+设置让你的许可信息出现在每篇文章的末尾.</p>
+<h3 id="页脚">页脚</h3>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">footer:</span></span><br><span class="line">  <span class="string">...</span></span><br></pre></td></tr></table></figure>
+<p>页面最底部显示的一系列信息.</p>
+<h3 id="文章">文章</h3>
+<h5 id="目录">目录</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">toc:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>文章目录, 浏览文章时, 会自动根据 Markdown
+格式在侧边栏相同的位置产生一个目录</p>
+<h5 id="摘要">摘要</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">excerpt_description:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<p>控制文章摘要的方式, 如果使用 true 则要在文章中使用 description
+变量来储存摘要, false 则在文章内容中添加 <code>&lt;!--more--&gt;</code>
+来表示标签之前的内容为摘要. 建议使用 false.</p>
+<h5 id="阅读全文">阅读全文</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">read_more_btn:</span> <span class="literal">true</span> </span><br></pre></td></tr></table></figure>
+<p>文章列表中显示"阅读全文"按钮.</p>
+<h5 id="文章属性显示">文章属性显示</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">post_meta:</span></span><br></pre></td></tr></table></figure>
+<p>这部分是选择展示出来的文件属性. 可以在文章列表中看到,
+也可以在文章详情看到, 都是在标题下方.<br />
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">symbols_count_time:</span> <span class="comment"># 字数统计,阅读时间</span></span><br><span class="line">  <span class="attr">separated_meta:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">item_text_total:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure> 字数统计与大概阅读时间. 显示位置与 post_meta 相同.
+需要额外安装插件模块:<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm install hexo-word-counter</span><br><span class="line">hexo clean</span><br></pre></td></tr></table></figure> <figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">tag_icon:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure> tag 会显示在文章底部, true 表示在 tag
+前使用图标, false 是使用一个 #</p>
+<h5 id="打赏按钮">打赏按钮</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">reward_settings:</span></span><br><span class="line"><span class="attr">reward:</span></span><br></pre></td></tr></table></figure>
+<p>文章末尾添加一个打赏按钮.</p>
+<h5 id="follow-me">Follow Me</h5>
+<p>文章内版本的 social. <figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">follow_me:</span></span><br><span class="line">  <span class="comment">#Twitter: https://twitter.com/username || fab fa-twitter</span></span><br></pre></td></tr></table></figure> 这个也是显示在文章末尾.</p>
+<h5 id="返回顶部按钮">返回顶部按钮</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">back2top:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>左下角一个返回顶部按钮.</p>
+<h5 id="阅读进入条">阅读进入条</h5>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">reading_progress:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>阅读文章时, 顶部有一个带颜色的阅读进度条.</p>
+<h3 id="插件">插件</h3>
+<h5 id="数学公式渲染">数学公式渲染</h5>
+<p>math 配置提供渲染 Markdown 中数学公式的能力.<br />
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">math:</span></span><br><span class="line">  <span class="attr">every_page:</span> <span class="literal">false</span> <span class="comment"># `mathjax: true`</span></span><br><span class="line">  <span class="attr">mathjax:</span></span><br><span class="line">    <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">    <span class="comment"># Available values: none | ams | all</span></span><br><span class="line">    <span class="attr">tags:</span> <span class="string">none</span></span><br></pre></td></tr></table></figure> every_page 代表是否要每个页面都加载渲染引擎, 如果设置成
+false 需要在想要进行公式渲染页面的 Front-matter 中手动添加 mathjax: true
+开启渲染.<br />
+使用 mathjax 需要卸载 Hexo 原有的渲染器改用 hexo-renderer-pandoc.<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># sudo pacman -S pandoc # 渲染器依赖 pandoc</span></span><br><span class="line"><span class="comment"># npm un hexo-renderer-marked</span></span><br><span class="line"><span class="comment"># npm i hexo-renderer-pandoc --save</span></span><br><span class="line"><span class="comment"># hexo clean &amp;&amp; hexo s</span></span><br></pre></td></tr></table></figure></p>
+<h5 id="loacal-search">Loacal Search</h5>
+<p>搜索功能, 它会出现在菜单上.<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-searchdb</span><br></pre></td></tr></table></figure> Hexo 配置.<br />
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">search:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">search.xml</span></span><br><span class="line">  <span class="attr">field:</span> <span class="string">post</span></span><br><span class="line">  <span class="attr">content:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">format:</span> <span class="string">html</span></span><br></pre></td></tr></table></figure> NexT 配置.<br />
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">local_search:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">top_n_per_article:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">unescape:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">preload:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure></p>
+<h5 id="rss">RSS</h5>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-feed --save</span><br></pre></td></tr></table></figure>
+<p>配置文件, 配置在 Hexo 或 NexT 哪个配置里都行.<br />
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">feed:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span> </span><br><span class="line">  <span class="attr">type:</span> <span class="string">atom</span> </span><br><span class="line">  <span class="attr">path:</span> <span class="string">atom.xml</span> </span><br><span class="line">  <span class="attr">limit:</span> <span class="number">20</span> </span><br><span class="line">  <span class="attr">content_limit:</span> <span class="number">140</span></span><br><span class="line">  <span class="attr">order_by:</span> <span class="string">-date</span> </span><br></pre></td></tr></table></figure> 页面链接可以添加在 menu , follow 或 social 中都可以.
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">RSS:</span> <span class="string">/atom.xml</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-rss</span></span><br></pre></td></tr></table></figure></p>
+<p>Ok, 一个包括所有基本 DIY 配置的博客就搭建完成了.
+当然还有很多关于性能, SEO, CDN 等配置感兴趣的同学继续加油!</p>
+<h2 id="终极美化大法">终极美化大法</h2>
+<p>对于想要尽情挥洒创意的同学, 配置文件中有一项非常重要的部分
+custom_file_path. 它可以让你自己通过 css 去设定样式.</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">custom_file_path:</span></span><br><span class="line">  <span class="comment">#head: source/_data/head.njk</span></span><br><span class="line">  <span class="attr">style:</span> <span class="string">source/_data/styles.styl</span></span><br></pre></td></tr></table></figure>
+<p>取消注释并创建对应的文件后, 浏览器按下 F12 对照布局尽情创作吧.
+作者不是太懂这方面都是网上翻着例子文档照葫芦画瓢就不班门弄斧了.<br />
+最后推荐几个素材网站. (吐槽一下:
+某些网站真是无语不是要注册就是要会员)<br />
+<span class="exturl" data-url="aHR0cHM6Ly9pY29uczguY29tL2ljb25z">icons<i class="fa fa-external-link-alt"></i></span> | <span class="exturl" data-url="aHR0cHM6Ly93d3cucG5nZWdnLmNvbS8=">pngegg<i class="fa fa-external-link-alt"></i></span><br />
+还有个颜色代码工具, 相信你们会用到的 :)<br />
+<span class="exturl" data-url="aHR0cHM6Ly9odG1sY29sb3Jjb2Rlcy5jb20vemgv">HTML颜色代码<i class="fa fa-external-link-alt"></i></span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>EsYruok
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://esyruok.github.io/posts/e3e38b21/" title="GitHub Pages + Hexo + NexT 搭建博客(配置篇)">https://esyruok.github.io/posts/e3e38b21/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/6b2ed3a/" rel="prev" title="GitHub Pages + Hexo + NexT 博客搭建 (搭建篇)">
+                  <i class="fa fa-angle-left"></i> GitHub Pages + Hexo + NexT 博客搭建 (搭建篇)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/2a77f85f/" rel="next" title="搭建ArchLinux桌面环境(一) -- 基本系统安装">
+                  搭建ArchLinux桌面环境(一) -- 基本系统安装 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">EsYruok</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">9k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">33 分钟</span>
+  </span>
+</div>
+  <div class="powered-by">由 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="https://cdnjs.cloudflare.com/ajax/libs/ribbon.js/1.0.2/ribbon.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://esyruok.github.io/posts/e3e38b21/"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+
+</body>
+</html>

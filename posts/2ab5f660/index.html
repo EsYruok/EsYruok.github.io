@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icons8-excalibur-lineal-color-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icons8-excalibur-lineal-color-32.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/orange/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"esyruok.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":"enable","style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="上篇文章我们安装了一个最基本的ArchLinux以及Gnome桌面, 本篇介绍一些常用软件的安装方法.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建ArchLinux桌面环境(二) -- 常用软件安装">
+<meta property="og:url" content="https://esyruok.github.io/posts/2ab5f660/index.html">
+<meta property="og:site_name" content="清涧">
+<meta property="og:description" content="上篇文章我们安装了一个最基本的ArchLinux以及Gnome桌面, 本篇介绍一些常用软件的安装方法.">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-01-13T09:31:43.000Z">
+<meta property="article:modified_time" content="2024-06-10T10:17:03.963Z">
+<meta property="article:author" content="EsYruok">
+<meta property="article:tag" content="blog,binary,linux,development,coding,二进制,编程,爱好">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://esyruok.github.io/posts/2ab5f660/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://esyruok.github.io/posts/2ab5f660/","path":"posts/2ab5f660/","title":"搭建ArchLinux桌面环境(二) -- 常用软件安装"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>搭建ArchLinux桌面环境(二) -- 常用软件安装 | 清涧</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="清涧" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">清涧</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">让事情是它本来该有的样子</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">7</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#pacman"><span class="nav-number">1.</span> <span class="nav-text">Pacman</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#yaypaur"><span class="nav-number">2.</span> <span class="nav-text">Yay&#x2F;paur</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%AD%E6%96%87%E5%AD%97%E4%BD%93"><span class="nav-number">3.</span> <span class="nav-text">中文字体</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8"><span class="nav-number">4.</span> <span class="nav-text">浏览器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8"><span class="nav-number">5.</span> <span class="nav-text">显卡驱动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nerd-%E5%AD%97%E4%BD%93"><span class="nav-number">6.</span> <span class="nav-text">Nerd 字体</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E6%B3%95"><span class="nav-number">7.</span> <span class="nav-text">输入法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#dialect"><span class="nav-number">8.</span> <span class="nav-text">Dialect</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8C%AB%E5%92%AA%E9%AD%94%E6%B3%95"><span class="nav-number">9.</span> <span class="nav-text">猫咪魔法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#openvpn"><span class="nav-number">10.</span> <span class="nav-text">Openvpn</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#remmina"><span class="nav-number">11.</span> <span class="nav-text">Remmina</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vscode"><span class="nav-number">12.</span> <span class="nav-text">vscode</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#zsh"><span class="nav-number">13.</span> <span class="nav-text">Zsh</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sunlogin"><span class="nav-number">14.</span> <span class="nav-text">Sunlogin</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#waydroid"><span class="nav-number">15.</span> <span class="nav-text">Waydroid</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#wayland"><span class="nav-number">16.</span> <span class="nav-text">Wayland</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A3%B0%E9%9F%B3%E9%97%AE%E9%A2%98"><span class="nav-number">17.</span> <span class="nav-text">声音问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#f%E5%8C%BA%E6%8C%89%E9%94%AE%E6%98%A0%E5%B0%84"><span class="nav-number">18.</span> <span class="nav-text">F区按键映射</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="EsYruok"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">EsYruok</p>
+  <div class="site-description" itemprop="description">- 呐,你喜欢跑步吗? - 我不喜欢</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://esyruok.github.io/posts/2ab5f660/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="EsYruok">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="清涧">
+      <meta itemprop="description" content="- 呐,你喜欢跑步吗? - 我不喜欢">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="搭建ArchLinux桌面环境(二) -- 常用软件安装 | 清涧">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          搭建ArchLinux桌面环境(二) -- 常用软件安装
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>上篇文章我们安装了一个最基本的ArchLinux以及Gnome桌面,
+本篇介绍一些常用软件的安装方法. <span id="more"></span><br />
+另外两篇:<br />
+<a href="/posts/2a77f85f/" title="搭建ArchLinux桌面环境(一) -- 基本系统安装">搭建ArchLinux桌面环境(一) -- 基本系统安装</a><br />
+<a href="/posts/5db2c6f6/" title="搭建ArchLinux桌面环境(三) -- 桌面美化">搭建ArchLinux桌面环境(三) -- 桌面美化</a></p>
+<h4 id="pacman">Pacman</h4>
+<p>在介绍其他软件之前,
+先介绍以下Arch中最基本的包管理器pacman的使用方法.<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S package_name     <span class="comment"># 安装软件包</span></span><br><span class="line">sudo pacman -Syyu               <span class="comment"># 升级系统 yy标记强制刷新 u标记升级动作</span></span><br><span class="line">sudo pacman -R package_name     <span class="comment"># 删除软件包</span></span><br><span class="line">sudo pacman -Rs package_name    <span class="comment"># 删除软件包，及其所有没有被其他已安装软件包使用的依赖包</span></span><br><span class="line">sudo pacman -Qdt                <span class="comment"># 找出孤立包 Q为查询本地软件包数据库 d标记依赖包 t标记不需要的包 dt合并标记孤立包</span></span><br><span class="line">sudo pacman -Rs $(pacman -Qtdq) <span class="comment"># 删除孤立软件包</span></span><br><span class="line">pacman -Ss package_name         <span class="comment"># 正则查询软件包</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="yaypaur">Yay/paur</h4>
+<p>Aur即Arch User repository是Arch特色仓库. yay/paur则是包管理工具,
+它可以同时使用Aur和标准仓库的资源, 使用方法与pacman 一样.<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pacman -Sy --needed git base-devel</span><br><span class="line">git <span class="built_in">clone</span> https://aur.archlinux.org/yay.git</span><br><span class="line"><span class="built_in">cd</span> yay</span><br><span class="line">makepkg -si</span><br></pre></td></tr></table></figure> paur:<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S --needed git base-devel</span><br><span class="line">git <span class="built_in">clone</span> https://aur.archlinux.org/paru.git</span><br><span class="line"><span class="built_in">cd</span> paru</span><br><span class="line">makepkg -si</span><br></pre></td></tr></table></figure></p>
+<h4 id="中文字体">中文字体</h4>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S noto-fonts-cjk noto-fonts-emoji noto-fonts-extra</span><br></pre></td></tr></table></figure>
+<p>安装完就可以去设置里将系统切换成中文的了.</p>
+<h4 id="浏览器">浏览器</h4>
+<p>选择firefox就是选择最少的折腾. :&gt;<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S firefox</span><br></pre></td></tr></table></figure></p>
+<h4 id="显卡驱动">显卡驱动</h4>
+<p>环境关键字: arch + Nvidia + Intel + Wayland</p>
+<ol type="1">
+<li><p>安装显卡驱动<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S mesa lib32-mesa vulkan-intel lib32-vulkan-intel <span class="comment"># intel 显卡</span></span><br><span class="line">sudo pacman -S nvidia nvidia-utils nvidia-settings lib32-nvidia-utils <span class="comment"># nvidia 显卡</span></span><br><span class="line">sudo pacman -S nvidia-prime <span class="comment"># 动态切换, 在想要使用独显的程序前加 prime-run 前缀</span></span><br></pre></td></tr></table></figure></p></li>
+<li><p>修改 gdm 配置文件<br />
+编辑 /etc/gdm/custom.conf 取消注释并修改为
+<code>WaylandEnable=true</code></p></li>
+<li><p>更新Mkinitcpin<br />
+编辑 /etc/mkinitcpin.conf 修改 <code>MODULES=()</code> 为:<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)</span><br></pre></td></tr></table></figure> 保存后执行<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo mkinitcpin -P</span><br></pre></td></tr></table></figure></p></li>
+<li><p>添加内核参数<br />
+nvidia_drm.modeset=1 这个我们在前面已经添加过了.</p></li>
+<li><p>禁用 GDM udev 规则<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">    sudo <span class="built_in">ln</span> -s /dev/null /etc/udev/rules.d/61-gdm.rules</span><br><span class="line"></span><br><span class="line">&gt; Wayland 下 optimus-manager 已经不好使用了, 按照上述的步骤最终只能达到 hybrid 的效果, Nv显卡通电, 想要使用需要在程序前加 prime-run. 想要看使用 Nv 运行了哪些程序可以使用 nvidia-smi  </span><br><span class="line"></span><br><span class="line"><span class="comment">#### VmwareTools  </span></span><br><span class="line">```sh</span><br><span class="line">sudo pacman -S open-vm-tools gtkmm3 --noconfirm</span><br><span class="line">sudo systemctl <span class="built_in">enable</span> vmtoolsd vmware-vmblock-fuse</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<h4 id="nerd-字体">Nerd 字体</h4>
+<p>这个字体在配置 nvim zsh 等很多地方都能用到.<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S ttf-jetbrains-mono-nerd</span><br></pre></td></tr></table></figure> 手动安装方法:</p>
+<ol type="1">
+<li>在 <code>usr/share/fonts</code> 或 <code>.locale/share/fonts</code>
+下建立属于你字体的目录.<br />
+</li>
+<li>将字体文件全部解压到文件夹中.<br />
+</li>
+<li>修改所有 ttf 文件权限为 644.<br />
+</li>
+<li>刷新字体缓存 <code>sudo fc-cache -fv</code></li>
+</ol>
+<h4 id="输入法">输入法</h4>
+<p>我选择了fcitx5.<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S fcitx5 fcitx5-im fcitx5-chinese-addons </span><br><span class="line">yay -S fcitx5-input-support</span><br></pre></td></tr></table></figure> 添加环境变量<br />
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">QT_IM_MODULE=fcitx</span><br><span class="line">XMODIFIERS=@im=fcitx</span><br></pre></td></tr></table></figure> 输入法候选面板需要 Gnome 插件Input Method Pannel支持.
+怎么安装插件看一下 <a href="/posts/5db2c6f6/" title="搭建ArchLinux桌面环境(三) -- 桌面美化">搭建ArchLinux桌面环境(三) -- 桌面美化</a><br />
+打开fcitx5-configuration, 点击Run Fcitx5,
+从右侧找到输入法添加到左侧确认即可.</p>
+<h4 id="dialect">Dialect</h4>
+<p>一款翻译软件.<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">yay -S dialect</span><br></pre></td></tr></table></figure></p>
+<h4 id="猫咪魔法">猫咪魔法</h4>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">yay -S clash-verge-rev-bin</span><br></pre></td></tr></table></figure>
+<h4 id="openvpn">Openvpn</h4>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S openvpn</span><br></pre></td></tr></table></figure>
+<p>为了支持旧版本的加密算法, 需要在 .ovpn 配置文件中增加以下配置.<br />
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">data-ciphers BF-CBC</span><br><span class="line">data-ciphers-fallback BF-CBC</span><br><span class="line">providers legacy default</span><br></pre></td></tr></table></figure> 使用时执行
+<code>sudo openvpn --config xxxx.ovpn</code>.</p>
+<h4 id="remmina">Remmina</h4>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S remmina freerdp</span><br></pre></td></tr></table></figure>
+<h4 id="vscode">vscode</h4>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S code </span><br><span class="line">yay -S code-oss-marketplace</span><br></pre></td></tr></table></figure>
+<h4 id="zsh">Zsh</h4>
+<blockquote>
+<p>Zsh需要使用noto字体</p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S zsh zsh-completions</span><br></pre></td></tr></table></figure>
+<p>执行 <code>zsh</code> 运行安装向导(没什么用直接关了就行,
+后面还有oh-my-zsh), 也可以手动执行, 在 zsh 下执行<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">autoload</span> -Uz zsh-newuser-install</span><br><span class="line">zsh-newuser-install -f</span><br></pre></td></tr></table></figure> 设置 zsh 为默认 shell.<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">chsh -l <span class="comment"># list all shell</span></span><br><span class="line">chsh -s /usr/bin/zsh <span class="comment"># change default shell to zsh</span></span><br></pre></td></tr></table></figure> 安装 oh-my-zsh.<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure> 设置插件, 编辑~/.zshrc修改plugins:<br />
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">plugins = (git z sudo web-search)</span><br></pre></td></tr></table></figure> 安装powerlevel10k主题. 这是Arch的安装方法, powerlevel10k
+的仓库有详细的各种安装方式.<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">yay -S zsh-theme-powerlevel10k-git</span><br></pre></td></tr></table></figure> 配置进配置文件 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme&#x27;</span> &gt;&gt;~/.zshrc</span><br></pre></td></tr></table></figure>
+然后使用<code>exec zsh</code>来重启zsh,
+应该会自动执行powerlevel10k的配置向导,
+也可以执行<code>p10k configure</code>来手动执行向导,
+跟随向导来配置你想要的款式.</p>
+<h4 id="sunlogin">Sunlogin</h4>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">yay -S sunloginclient</span><br><span class="line">sudo systemctl start runsunloginclient.service</span><br><span class="line">sudo systemctl <span class="built_in">enable</span> runsunloginclient.service <span class="comment"># 如果不想让服务一直在后台运行每次使用前记得 start</span></span><br></pre></td></tr></table></figure>
+<h4 id="waydroid">Waydroid</h4>
+<p>要使用 Waydroid 必须在 Wayland 下, 使用
+<code>echo $XDG_SESSION_TYPE</code> 来检查. 并且需要使用 binder
+模块.<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">yay -S binder_linux-dkms</span><br><span class="line">sudo modprobe binder_linux</span><br><span class="line">su</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;binder_linux&quot;</span> &gt;&gt; /etc/modules-load.d/binder.conf</span><br></pre></td></tr></table></figure> 安装waydroid<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">yay -S waydroid</span><br><span class="line">sudo waydroid init</span><br><span class="line">sudo systemctl start waydroid-container</span><br><span class="line">sudo systemctl <span class="built_in">enable</span> waydroid-container</span><br></pre></td></tr></table></figure> 一些常用命令<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">waydroid app install xxx.apk <span class="comment"># 安装 apk</span></span><br><span class="line"></span><br><span class="line">waydroid prop <span class="built_in">set</span> persist.waydroid.multi_windows <span class="literal">true</span> <span class="comment"># 设置多窗口模式，记得重启服务</span></span><br><span class="line"></span><br><span class="line">sudo systemctl status waydroid-container <span class="comment"># 排障可能用到的命令</span></span><br><span class="line">sudo waydroid logcat</span><br><span class="line">waydroid <span class="built_in">log</span></span><br></pre></td></tr></table></figure> 删除 Waydroid<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">waydroid session stop</span><br><span class="line">sudo systemctl stop waydroid-container</span><br><span class="line">yay -Rsn waydroid</span><br><span class="line">sudo <span class="built_in">rm</span> -rf /var/lib/waydroid ~/.local/share/application/*aydroid* ~/.local/share/waydroid</span><br></pre></td></tr></table></figure>
+为了精简，只涉及到够用的步骤，还有关于Arm转译，Google注册等内容可进一步查看文档
+<span class="exturl" data-url="aHR0cHM6Ly93aWtpLmFyY2hsaW51eC5vcmcvdGl0bGUvV2F5ZHJvaWQ=">Waydroid<i class="fa fa-external-link-alt"></i></span>.<br />
+再推荐一篇博客 <span class="exturl" data-url="aHR0cHM6Ly9pdm9uYmxvZy5jb20vcG9zdHMvYXJjaGxpbnV4LXdheWRyb2lk">WayDroid教学<i class="fa fa-external-link-alt"></i></span></p>
+<h4 id="wayland">Wayland</h4>
+<p>Wayland这东西毕竟比较新, 各个开发者适配的进度不一,
+下面是我查阅到的一些资料留作备用,
+在遇到程序对wayland兼容有问题时可以试一试.<br />
+- gtk3/4默认支持Wayland.<br />
+- Qt想要支持Wayland安装qt5-wayland/qt6-wayland.
+想要显式设置的话设置环境变量 QT_QPA_PLATFORM=wayland.<br />
+- Electron (&gt;= 28) 则需要设置环境变量 ELECTRON_OZONE_PLATFORM_HINT 为
+auto 或 wayland. (环境变量的优先级低于参数)
+还可以使用给应用程序添加参数或写到配置文件 ~/.config/electron-flags.conf
+中.<br />
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">--enable-features=WaylandWindowDecorations # 解决缺少顶栏</span><br><span class="line">--ozone-platform-hint=auto</span><br></pre></td></tr></table></figure></p>
+<h4 id="声音问题">声音问题</h4>
+<p>(VMware 环境中, 实体机器没发现有异常)安装 Gnome 时使用了 pipewire,
+但是声音会爆裂断断续续的. 不会调试具体原因查阅资料也没弄明白.
+所以先选择安装 pulseaudio 代替.<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -R pulse-native-provider <span class="comment"># 与 pulseaudio 冲突的包有依赖, 先删除</span></span><br><span class="line">sudo pacman -S alsa-utils pulseaudio pavucontol</span><br><span class="line">systemctl --user <span class="built_in">enable</span> pulseaudio.service pulseaudio.socket </span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>安装完成后声音是正常了, 但是重启后发生一种现象就是,
+静音播放视频可以播放, 一旦开了声音视频就卡死了. 查阅资料找到一个方案.
+修改配置文件 <code>/etc/pulse/default.pa</code>, 注释行
+<code>load-module module-suspend-on-idle</code>.</p>
+</blockquote>
+<h4 id="f区按键映射">F区按键映射</h4>
+<p>F1 - F12 被映射成多媒体按键<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> 0 | sudo <span class="built_in">tee</span> /sys/module/hid_apple/parameters/fnmode</span><br></pre></td></tr></table></figure> 看看是否恢复正常, 如果正常了就将他写入配置文件.<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;options hid_apple fnmode=0&quot;</span> | sudo <span class="built_in">tee</span> -a /etc/modprobe.d/hid_apple.conf</span><br></pre></td></tr></table></figure></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>EsYruok
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://esyruok.github.io/posts/2ab5f660/" title="搭建ArchLinux桌面环境(二) -- 常用软件安装">https://esyruok.github.io/posts/2ab5f660/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/2a77f85f/" rel="prev" title="搭建ArchLinux桌面环境(一) -- 基本系统安装">
+                  <i class="fa fa-angle-left"></i> 搭建ArchLinux桌面环境(一) -- 基本系统安装
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/5db2c6f6/" rel="next" title="搭建ArchLinux桌面环境(三) -- 桌面美化">
+                  搭建ArchLinux桌面环境(三) -- 桌面美化 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">EsYruok</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">9k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">33 分钟</span>
+  </span>
+</div>
+  <div class="powered-by">由 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="https://cdnjs.cloudflare.com/ajax/libs/ribbon.js/1.0.2/ribbon.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://esyruok.github.io/posts/2ab5f660/"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+
+</body>
+</html>

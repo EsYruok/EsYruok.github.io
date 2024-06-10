@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icons8-excalibur-lineal-color-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icons8-excalibur-lineal-color-32.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/orange/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"esyruok.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":"enable","style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="记录一下小白使用 GitHub Pages + Hexo + NexT 搭建博客的方法与使用方式, 作为笔记方便不熟悉时进行查阅. 由于作者不懂前端, 所以DIY 程度有限, 仅限于一些基本的配置, 本博客就是搭建的成果可以作为参考.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GitHub Pages + Hexo + NexT 博客搭建 (搭建篇)">
+<meta property="og:url" content="https://esyruok.github.io/posts/6b2ed3a/index.html">
+<meta property="og:site_name" content="清涧">
+<meta property="og:description" content="记录一下小白使用 GitHub Pages + Hexo + NexT 搭建博客的方法与使用方式, 作为笔记方便不熟悉时进行查阅. 由于作者不懂前端, 所以DIY 程度有限, 仅限于一些基本的配置, 本博客就是搭建的成果可以作为参考.">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-12-31T16:12:25.000Z">
+<meta property="article:modified_time" content="2024-06-10T03:13:13.320Z">
+<meta property="article:author" content="EsYruok">
+<meta property="article:tag" content="blog,binary,linux,development,coding,二进制,编程,爱好">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://esyruok.github.io/posts/6b2ed3a/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://esyruok.github.io/posts/6b2ed3a/","path":"posts/6b2ed3a/","title":"GitHub Pages + Hexo + NexT 博客搭建 (搭建篇)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>GitHub Pages + Hexo + NexT 博客搭建 (搭建篇) | 清涧</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="清涧" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">清涧</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">让事情是它本来该有的样子</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">7</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AB%99%E7%82%B9%E6%90%AD%E5%BB%BA"><span class="nav-number">1.</span> <span class="nav-text">站点搭建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E7%AB%A0%E7%AE%A1%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">文章管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AB%99%E7%82%B9%E9%83%A8%E7%BD%B2"><span class="nav-number">3.</span> <span class="nav-text">站点部署</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="EsYruok"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">EsYruok</p>
+  <div class="site-description" itemprop="description">- 呐,你喜欢跑步吗? - 我不喜欢</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://esyruok.github.io/posts/6b2ed3a/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="EsYruok">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="清涧">
+      <meta itemprop="description" content="- 呐,你喜欢跑步吗? - 我不喜欢">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="GitHub Pages + Hexo + NexT 博客搭建 (搭建篇) | 清涧">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          GitHub Pages + Hexo + NexT 博客搭建 (搭建篇)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/hexo/" itemprop="url" rel="index"><span itemprop="name">hexo</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>记录一下小白使用 GitHub Pages + Hexo + NexT 搭建博客的方法与使用方式,
+作为笔记方便不熟悉时进行查阅. 由于作者不懂前端, 所以DIY 程度有限,
+仅限于一些基本的配置, 本博客就是搭建的成果可以作为参考. <span id="more"></span>
+使用的环境是 ArchLinux, 其他版本的系统除了基本工具安装外步骤应该相同,
+也可以进一步查阅官方文档.<br />
+<span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlvL3poLWNuL2RvY3Mv">Hexo文档<i class="fa fa-external-link-alt"></i></span> | <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9kb2NzLw==">NexT文档<i class="fa fa-external-link-alt"></i></span></p>
+<h2 id="站点搭建">站点搭建</h2>
+<ol type="1">
+<li><p>安装Git/Nodejs/npm.<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S git nodejs npm </span><br></pre></td></tr></table></figure></p></li>
+<li><p>安装 Hexo.<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo npm install -g hexo-cli</span><br></pre></td></tr></table></figure></p></li>
+<li><p>创建 Hexo 站点.<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">hexo init hexo-site</span><br><span class="line"><span class="built_in">cd</span> hexo-site</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure> <strong>hexo-site</strong> 目录中会出现一个
+<strong>_config.yml</strong> 文件, 后面提到的 <strong>Hexo
+配置文件</strong> 就是指这个文件.<br />
+</p></li>
+<li><p>生成静态文件 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">hexo generate</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>简写 hexo g</p>
+</blockquote></li>
+<li><p>启动本地服务器 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">hexo server </span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>简写 hexo s</p>
+</blockquote>
+<p>控制台会显示一个本地的 http 地址来让你预览站点.</p>
+<blockquote>
+<p>Options:<br />
+--safe 安全模式, 不加载插件<br />
+--debug 在终端中显示调试信息<br />
+--silent 简介模式, 隐藏终端信息<br />
+--draft 显示草稿</p>
+</blockquote></li>
+</ol>
+<p>Ok! 一个毛坯站点就这样完成了.</p>
+<h2 id="文章管理">文章管理</h2>
+<ol type="1">
+<li><p>新建文章 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">hexo new <span class="string">&quot;title&quot;</span></span><br></pre></td></tr></table></figure> <strong>new</strong> 命令格式为
+<strong>hexo new [layout] &lt;title&gt;</strong>,
+<strong>layout</strong> 为可选参数, hexo 默认有三种方案 <strong>post /
+draft / page</strong>.</p>
+<blockquote>
+<ul>
+<li>post<br />
+代表你要创建一个要发布的文章, 命令直接在 <strong>source/_post/</strong>
+下建立一个 <strong>&lt;title&gt;.md</strong> 文件.<br />
+</li>
+<li>draft<br />
+代表你要创建一个草稿, 命令在 <strong>source/_draft/</strong> 下建立一个
+<strong>&lt;title&gt;.md</strong> 文件.</li>
+<li>page<br />
+方案代表要创建一个页面,命令在 <strong>source/</strong> 下创建一个
+<strong>&lt;title&gt;</strong> 目录, 并在目录中产生一个
+<strong>index.md</strong> 文件.</li>
+</ul>
+</blockquote>
+<p>如果不使用 layout 参数, 则默认使用在 **_config.yml** 配置文件中
+<strong>default_layout</strong> 项所设置的方案, 初始状态为
+<strong>post</strong>.<br />
+<strong>&lt;title&gt;</strong> 如果包含空格需要用引号括起来
+<strong>"Hello World"</strong>.<br />
+接下来就可以在新建的文件中使用 Markdown 来书写文章内容了.
+如果想删除文章直接删除对应的文件即可.<br />
+</p></li>
+<li><p>发表草稿 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">hexo publish &lt;filename&gt;</span><br></pre></td></tr></table></figure> <strong>publish</strong>
+操作是将你的文章从 <strong>_draft</strong> 文件夹移动到
+<strong>_post</strong> 文件夹.<br />
+</p></li>
+<li><p>Front-matter<br />
+使用 <strong>Hexo new</strong> 创建的文章会根据模板携带
+<strong>Front-matter</strong>. 指的是文件最上方以 <strong>---</strong>
+分隔的区域, 用于指定当前文件的一些变量.<br />
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">title: Hello World</span><br><span class="line">data: 2013/9/13 12:45:11</span><br></pre></td></tr></table></figure> 它们会对应一些 Hexo 功能的使用, 比如创建页面时需要使用
+<strong>updated</strong> 来展示更新时间, <strong>tag</strong> 和
+<strong>categories</strong>
+为文章添加标签和分类属性以便参与标签分类的统计与分类展示.<br />
+</p></li>
+<li><p>修改 Hexo 配置文件<br />
+修改 **_config.yml** 文件选择使用的主题.<br />
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="string">theme:next</span></span><br></pre></td></tr></table></figure></p></li>
+<li><p>主题配置文件<br />
+官方文档建议使用 <strong>Alternate Theme Config</strong> 进行配置,
+大概意思就是除了主题模块中所携带的配置文件外,
+还可以在另一个约定好的位置有另一份配置文件,
+这样可以避免主题升级时将配置文件覆盖. 要求这个文件与 Hexo
+配置文件在同一级目录, 并且文件名必须是 **_config.next.yml**.
+我们可以使用下列命令来生成配置文件.<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># pwd : hexo-site/</span></span><br><span class="line"><span class="built_in">cp</span> node_modules/hexo-theme-next/_config.yml _config.next.yml</span><br></pre></td></tr></table></figure></p></li>
+<li><p>升级NexT主题 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hexo-site</span><br><span class="line">npm install hexo-theme-next@latest</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<h2 id="站点部署">站点部署</h2>
+<p>这里我们除了使用 GitHub Pages 作为部署工具外, 还将使用 Github
+作为多端同步的手段. 多端同步的思路大致是, 使用 GitHub 的 master
+分支来存放源代码, 使用 page 分支来作为 Pages 的部署分支. 用 master
+分支编写文章, page 分支部署站点.</p>
+<ol type="1">
+<li>创建 GitHub 仓库<br />
+仓库名必须是 <strong><username>.github.io</strong> 其中 username 是指
+GitHub 的用户名. 仓库必须是 Public 或者您是 Github Pro.<br />
+</li>
+<li>提交源代码到 master<br />
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hexo-site</span><br><span class="line">git init</span><br><span class="line">git branch -M master</span><br><span class="line">git add .gitginore</span><br><span class="line">git commit -m <span class="string">&quot;init site source&quot;</span></span><br><span class="line">git remote add origin git@github.com:Username/Username.github.io.git</span><br><span class="line">git checkout -b page </span><br><span class="line"><span class="built_in">rm</span> .gitginore</span><br><span class="line">git commit -m <span class="string">&quot;clean page repo&quot;</span></span><br><span class="line">git push origin master</span><br><span class="line">git push origin page</span><br></pre></td></tr></table></figure> 稍微有一点繁琐, 因为我们需要两个分支, 而 Git
+不能推送一个空的仓库上去, 也不能创建空的分支, 所以我利用 .gitginore
+创造一条记录, 创建完 page
+分支后又将该文件删除来创造两个需要的分支.<br />
+page 分支创造好后就可以将 <strong>hexo-site</strong> 下的内容提交到
+master 分支上了.<br />
+</li>
+<li>安装部署工具 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hexo-site</span><br><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure></li>
+<li>配置部署参数 打开 Hexo 配置文件寻找 <strong>deploy</strong>
+部分.格式如下:<br />
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">https://github.com/username/username.github.io</span> </span><br><span class="line">  <span class="attr">branch:</span> <span class="string">page</span></span><br><span class="line">  <span class="attr">message:</span> [<span class="string">message</span>]</span><br></pre></td></tr></table></figure> 如果你想使用 ssh 来连接, <strong>repo</strong> 使用 ssh
+连接即可.<br />
+<strong>message</strong> 是自定义提交信息, 如果不设置有默认格式.<br />
+</li>
+<li>部署至远程库 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure> 这个动作会产生一个
+<strong>.deploy_git</strong> 目录, 并可能提示你去配置一些 git 设置,
+最终会将站点的静态文件推送到指定的分支当中.<br />
+</li>
+<li>设置 Pages<br />
+登入 Github 进入仓库 -&gt; Setting -&gt; Pages.<br />
+Build and deployment 下的 Source 选择 Deploy from a branch, Branch
+下选择使用的分支 <code>page</code>.</li>
+</ol>
+<p>大功告成了.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>EsYruok
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://esyruok.github.io/posts/6b2ed3a/" title="GitHub Pages + Hexo + NexT 博客搭建 (搭建篇)">https://esyruok.github.io/posts/6b2ed3a/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/e3e38b21/" rel="next" title="GitHub Pages + Hexo + NexT 搭建博客(配置篇)">
+                  GitHub Pages + Hexo + NexT 搭建博客(配置篇) <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">EsYruok</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">9k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">33 分钟</span>
+  </span>
+</div>
+  <div class="powered-by">由 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="https://cdnjs.cloudflare.com/ajax/libs/ribbon.js/1.0.2/ribbon.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://esyruok.github.io/posts/6b2ed3a/"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+
+</body>
+</html>
