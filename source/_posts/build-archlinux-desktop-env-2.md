@@ -205,6 +205,7 @@ sudo systemctl start waydroid-container
 sudo systemctl enable waydroid-container
 ```
 一些常用命令   
+
 ```sh
 waydroid app install xxx.apk # 安装 apk
 
