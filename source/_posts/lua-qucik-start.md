@@ -141,28 +141,61 @@ a = "10" + 1 -- 11
 ### Userdata
 userdata主要是用来保存C的数据(与外部交互的数据), Lua无法创建或修改这种类型的值. userdata除了赋值和相等性测试以外没有其他预定义的操作.  
 
-### Function
-function类型就是指函数.  
+### Table
+类似数组, 集合, 索引可以是任意类型的值, 同一个table中可以储存不同类型的值, 也可以使用不同类型的索引.  
 ```lua
-function add (a,b)
-    return a + b
-end
-f = add
-f(1,2) -- 3
-type(f) -- function
+a = {} -- 一个空的table
+b = a -- a只是table的一个引用可以赋值给其他变量, 此时b与a是同一个table
+k = "x"
+a[k] = 10 -- 键:"x" 值:10
+a[20] = "great" -- 键:20 值:"great"
+a["x"] -- 10
+a.x = 10 -- 等价于 a["x"] = 10
+a[1] -- 未初始化的索引为nil
 ```
-定义一个函数需要:  
+索引使用的是算术值, 也就是2和2.0是同一个键. 当table没有指向它的引用时会自动删除. 我们平时常见的库其实也是table, math.sin 就等价于 math["sin"] 这个键的值为一个function类型的值.  
 
-- function 关键字  
-- 参数列表, 没有参数也需要一个空的()  
-- 函数体  
-- end 关键字表示函数定义结束  
+#### 构造table
+table的几种初始化方式:  
+```lua
+a = {} -- 空构造器, 一个空的table
+a = {"a", "b"} -- 初始化列表, 索引为1,2
+a = {x=10, y=20} -- 记录式初始化, 等价于 a.x = 10  a.y = 20
+```
 
-传参时, 多传的实参抛弃, 实参不足时补nil.  
+#### 序列
+当一个table只以数值为索引(1,2,3...), 且中间没有空洞, 对这种table叫做序列. 可以使用长度运算符#获取序列的长度. 非序列的table使用#获得的结果不可靠.  
+```lua
+a = {1,2,3,4,5,6,7,8}
+#a -- 8
+```
 
-#### Return
-return 用来返回结果或退出函数或脚本, 所有的函数最后一行都有一个隐含的return.  
-还有return 必须是所在代码块的最后一个语句, 否则会报错.   
+#### 遍历
+```lua
+t = {"a", "b"}
+for k,v in pairs(t) do 
+    print(k,v))
+end
+```
+这种方式元素出现顺序是随即的. 使用ipars可以保证顺序, 但是只能用在序列上.  
+
+### Function
+
+#### 函数定义
+```lua
+function foo(x) return x end
+-- 等价于
+foo = function(x) return x end
+type(foo) -- function
+```
+定义的含义实际上就是创建一个function类型的值并赋值给一个变量. 函数类型于其他基本类型一样都属于"第一类值", 可以保存在变量或表中.  
+
+#### 参数
+调用函数传参时, 多传的实参被抛弃, 不足时补nil.  
+
+#### 返回值
+return 返回结果或退出函数(整个脚本其实也可以被看成一个函数). 所有的函数最后一行都有一个隐含的return.  
+return 必须是所在代码块的最后一个语句, 否则会报错.  
 ```lua
 a = 10
 if a == 10 then
@@ -224,44 +257,44 @@ function add (...)
     return a
 end
 ```
-
-### Table
-类似数组, 集合, 索引可以是任意类型的值, 同一个table中可以储存不同类型的值, 也可以使用不同类型的索引.  
+#### 非全局函数
+储存在局部变量或表字段中就是非全局函数. 大部分的库就是这种形式.  
 ```lua
-a = {} -- 一个空的table
-b = a -- a只是table的一个引用可以赋值给其他变量, 此时b与a是同一个table
-k = "x"
-a[k] = 10 -- 键:"x" 值:10
-a[20] = "great" -- 键:20 值:"great"
-a["x"] -- 10
-a.x = 10 -- 等价于 a["x"] = 10
-a[1] -- 未初始化的索引为nil
+local foo = function(x,y) return x,y end
+-- 等价于
+local function foo(x,y) return x,y end
+
+lib = {}
+lib.foo = function(x,y) return x,y end
+-- 或者
+lib = {
+    foo = function(x,y) return x,y end
+}
+-- 或者
+function lib.foo(x,y) return x,y end
 ```
-索引使用的是算术值, 也就是2和2.0是同一个键. 当table没有指向它的引用时会自动删除. 我们平时常见的库其实也是table, math.sin 就等价于 math["sin"] 这个键的值为一个function类型的值.  
-
-#### 构造table
-table的几种初始化方式:  
+使用局部递归时要注意
 ```lua
-a = {} -- 空构造器, 一个空的table
-a = {"a", "b"} -- 初始化列表, 索引为1,2
-a = {x=10, y=20} -- 记录式初始化, 等价于 a.x = 10  a.y = 20
-```
-
-#### 序列
-当一个table只以数值为索引(1,2,3...), 且中间没有空洞, 对这种table叫做序列. 可以使用长度运算符#获取序列的长度. 非序列的table使用#获得的结果不可靠.  
-```lua
-a = {1,2,3,4,5,6,7,8}
-#a -- 8
-```
-
-#### 遍历
-```lua
-t = {"a", "b"}
-for k,v in pairs(t) do 
-    print(k,v))
+local fact=function(n)
+    if n==0 then return 1
+    else return n*fact(n-1)
+    end
 end
 ```
-这种方式元素出现顺序是随即的. 使用ipars可以保证顺序, 但是只能用在序列上.  
+当解释到fact(n-1)时, 由于局部变量fact还没创建, 解释器将会判断寻找全局的fact. 需要使用先定义局部变量(向前声明)的方式.  
+```lua
+local fact
+fact=function(n)
+    if n==0 then return 1
+    else return n*fact(n-1)
+    end
+end
+```
+实际上Lua展开函数定义语法糖时:  
+local function foo(params) body end
+会被展开成
+local foo; foo = function(params) body end
+所以使用这种语法定义递归函数没有问题. 但是, 间接递归的情况下必须使用向前声明的形式.  
 
 ### thread
 
