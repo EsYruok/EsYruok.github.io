@@ -180,22 +180,31 @@ end
 这种方式元素出现顺序是随即的. 使用ipars可以保证顺序, 但是只能用在序列上.  
 
 ### Function
+Lua中函数与其他类型的值一样属于"第一类值", 可以保存在变量或表中, 也可以作为函数的参数和返回值.  
 
-#### 函数定义
+#### 全局函数
+Lua中最常见的定义函数的方式是:  
 ```lua
 function foo(x) return x end
--- 等价于
-foo = function(x) return x end
-type(foo) -- function
 ```
-定义的含义实际上就是创建一个function类型的值并赋值给一个变量. 函数类型于其他基本类型一样都属于"第一类值", 可以保存在变量或表中.  
+这实际上是一种语法糖, 它等价于:  
+```lua
+foo = function(x) return x end
+```
+Lua中所有函数都是匿名的, 当我们讨论函数名, 比如, print, foo等, 都是值保存该函数的变量. 这种形式默认是保存在全局变量中.  
 
-#### 参数
-调用函数传参时, 多传的实参被抛弃, 不足时补nil.  
+> 调用函数进行传参时, 多传的实参被抛弃, 不足时补nil.  
+> 变长参数用...来表示.  
+> ```lua
+> function add (...)
+>     local a, b, c = ...
+>     return a
+> end
+> ```
 
-#### 返回值
-return 返回结果或退出函数(整个脚本其实也可以被看成一个函数). 所有的函数最后一行都有一个隐含的return.  
-return 必须是所在代码块的最后一个语句, 否则会报错.  
+#### Return
+return 语句用来返回函数结果或结束函数的运行. 所有函数最后都有一个隐含的return.  
+Lua语法规定, return必须是所在代码块的最后一个语句.  
 ```lua
 a = 10
 if a == 10 then
@@ -203,7 +212,8 @@ if a == 10 then
     a = a + 1 -- 有这行会报错
 end
 ```
-如果有特殊情况必须如调试需要这么做可以使用do end包裹(制造一个代码块).  
+
+但在某些时候在代码块中间使用return很有用(比如调试), 可以显示的使用包含return的do(制造一个代码块).  
 ```lua
 function foo()
     return -- 这么写会报错
@@ -212,36 +222,28 @@ function foo()
 end
 ```
 
-return可以返回多个返回值.  
+return可以返回多个返回值. 返回多个值的函数单独被调用时抛弃所有返回值, 被当作非最后一个表达式时返回第一个值, 最后一个表达式返回所有值.  
 ```lua
 function foo(a, b)
     return a, b
 end
-
-c, d=foo(10,20)
-```
-返回多个值的函数单独被调用时抛弃所有返回值, 被当作非最后一个表达式时返回第一个值, 最后一个表达式返回所有值, 多重赋值时, 不够的用Nil  
-```lua
-function foo2()
-    return 1,2
-end
-foo2() -- 没有返回值
-x,y,z = foo2(),20 -- 1,20,nil 返回1个值
-x,y,z = foo2() -- 1,2,nil 返回所有值
+foo(1,2) -- 抛弃所有返回值
+x,y,z = foo(1,2),20 -- 1,20,nil 非最后一个表达式, 返回1个值,
+x,y,z = foo(1,2) -- 1,2,nil 最后一个表达式, 返回所有值, 多重赋值时, 不够的用Nil  
 ```
 当函数作为参数最后一个参数也返回所有值.  
 ```lua
-print(foo2(),10) -- 返回1个值
-print(10,foo2()) -- 返回所有值
+print(foo(1,2),10) -- 返回1个值
+print(10,foo(1,2)) -- 返回所有值
 ```
 作为表构造参数时返回所有值.  
 ```lua
-t = {foo2()}
+t = {foo(1,2)}
 ```
 用作返回值时也会返回所有值.  
 ```lua
 function foo3()
-    return foo2()
+    return foo(1,2)
 end
 ```
 用括号括起来强制返回1个结果.  
@@ -249,52 +251,79 @@ end
 a = (foo2()) -- 1
 ```
 
-#### 变长参数
-变长参数用...来表示.  
+#### 第一类值  
+相对于全局函数, 定义局部函数的方式是:  
 ```lua
-function add (...)
-    local a, b, c = ...
-    return a
+local function foo2 (x) return x end
+```
+它是一种语法糖, 会被展开成:  
+```lua
+local foo2; foo2 = function(x) return x end
+```
+但是使用间接递归调用时, 不要使用语法糖, 要明确的向前声明, 否则会有问题.  
+```lua
+local f -- 向前声明
+local function g()
+	some code() f() some code()
+end
+
+function f() 
+	some code() g() some code()
 end
 ```
-#### 非全局函数
-储存在局部变量或表字段中就是非全局函数. 大部分的库就是这种形式.  
-```lua
-local foo = function(x,y) return x,y end
--- 等价于
-local function foo(x,y) return x,y end
 
-lib = {}
-lib.foo = function(x,y) return x,y end
+函数储存在表中(Lua中大部分的库就是使用这种形式):  
+```lua
+Lib = {}
+Lib.foo = function(x,y) return x + y end
+Lib.goo = function(x,y) return x - y end
 -- 或者
-lib = {
-    foo = function(x,y) return x,y end
+Lib = {
+	foo = function(x,y) return x + y end
+	goo = function(x,y) return x - y end
 }
 -- 或者
-function lib.foo(x,y) return x,y end
+Lib = {}
+function Lib.foo (x,y) return x + y end
+function Lib.goo (x,y) return x - y end
 ```
-使用局部递归时要注意
+
+函数作为参数:  
 ```lua
-local fact=function(n)
-    if n==0 then return 1
-    else return n*fact(n-1)
-    end
+network = {
+	{name = "grauna", IP = "201.26.30.34"},
+	{name = "lua",IP = "201.26.30.35"},
+}
+table.sort(network, function (a,b) return (a.name > b.name) end)
+```
+
+函数作为返回值:
+```lua
+foo = function() return print end
+```
+
+#### 词法定界
+这是Lua函数的一种特性, 指一个被其他函数B包含的函数A, 被包含的函数A可以访问包含其的函数B的所有局部变量.  
+```lua
+function newCounter()
+	local count = 0
+	return function()
+			count = count + 1
+			return count
+		   end
 end
 ```
-当解释到fact(n-1)时, 由于局部变量fact还没创建, 解释器将会判断寻找全局的fact. 需要使用先定义局部变量(向前声明)的方式.  
+在返回的函数中, 可以使用的count是newCounter的局部变量, 这种非局部变量的值称为 upvalue.  
+而返回值其实也并非是一个函数而是一个闭包, 闭包就是函数外加能够使函数访问upvalue的机制. 再看下面的使用:    
 ```lua
-local fact
-fact=function(n)
-    if n==0 then return 1
-    else return n*fact(n-1)
-    end
-end
+c1 = newCounter()
+c2 = newCounter()
+print(c1()) -- 1
+print(c1()) -- 2
+print(c2()) -- 1
+print(c1()) -- 3
 ```
-实际上Lua展开函数定义语法糖时:  
-local function foo(params) body end
-会被展开成
-local foo; foo = function(params) body end
-所以使用这种语法定义递归函数没有问题. 但是, 间接递归的情况下必须使用向前声明的形式.  
+两次调用返回的是两个不同的闭包, 它们拥有不同upvalue(count). 所以互不影响.  
 
 ### thread
 
