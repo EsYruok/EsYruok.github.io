@@ -5,29 +5,12 @@ categories:
 abbrlink: 2a77f85f
 date: 2024-01-12 20:04:15
 ---
-ArchLinux是一个以简洁, 高效, 用户完全控制为目标的Linux发行版, 非常适合喜欢自定义系统的朋友. 文章分成了三个部分, 系统安装 + 软件安装 + 桌面美化. 本篇记录了ArchLinux基本系统以及桌面环境的安装步骤. <!--more-->   
-另外两篇:  
-{% post_link build-archlinux-desktop-env-2 %}  
-{% post_link build-archlinux-desktop-env-3 %}  
+ArchLinux是一个以简洁, 高效, 用户完全控制为目标的Linux发行版, 非常适合喜欢自定义系统的朋友. 本篇文章仅仅记录一个安装ArchLinux过程的Command List以方便以后重装时参照. <!--more--> 详细的学习安装过程可参考ArchTurorial.  
 
 > 要特别感谢 [ArchTurorial](https://archlinuxstudio.github.io/ArchLinuxTutorial/#/) 的教程, 是一份非常详细的 ArchLinux 安装教程, 对我在接触使用Arch的过程中提供了非常大的帮助.  
 
 ---  
-在开始安装前的准备工作:  
-
-- 前往 [Arch 官网](https://archlinux.org/)下载最新的ISO文件
-- 制作U盘启动盘 (虚拟机直接挂在ISO即可)  
-    - Win 下建议使用 rufus  
-    - Linux 下使用命令  
-    `sudo dd bs=4M if=/path/to/archlinux.iso of=/dev/sdx status=progress oflag=sync`
-- 调整主板设置,启动模式为UEFI,关闭安全启动  
-
 ## 基本系统安装
-Arch没有提供一个GUI的安装界面,安装过程完全使用命令一步一步进行构造.  
-
-> 虽然Arch也提供了一个安装脚本 **archinstall** 快速安装,不过建议在熟悉 Arch 之后再使用这种方式.  
-
-#### 检查是否是UEFI启动  
 ```sh
 ls /sys/firmware/efi/efivars
 ```
