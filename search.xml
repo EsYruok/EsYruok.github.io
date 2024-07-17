@@ -1,339 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>搭建ArchLinux桌面环境(一) -- 基本系统安装</title>
-    <url>/posts/2a77f85f/</url>
+    <title>搭建ArchLinux桌面环境</title>
+    <url>/posts/debdcd0c/</url>
     <content><![CDATA[<p>ArchLinux是一个以简洁, 高效, 用户完全控制为目标的Linux发行版,
-非常适合喜欢自定义系统的朋友. 文章分成了三个部分, 系统安装 + 软件安装 +
-桌面美化. 本篇记录了ArchLinux基本系统以及桌面环境的安装步骤.
-<span id="more"></span><br />
-另外两篇:<br />
-<a href="/posts/2ab5f660/" title="搭建ArchLinux桌面环境(二) -- 常用软件安装">搭建ArchLinux桌面环境(二) -- 常用软件安装</a><br />
-<a href="/posts/5db2c6f6/" title="搭建ArchLinux桌面环境(三) -- 桌面美化">搭建ArchLinux桌面环境(三) -- 桌面美化</a></p>
+非常适合喜欢自定义系统的朋友. <span id="more"></span><br />
+本篇文章仅记录一个自己安装ArchLinux过程的Command
+List以方便以后重装时参照. 详细的学习安装过程可参考ArchTurorial.</p>
 <blockquote>
-<p>要特别感谢 <span class="exturl" data-url="aHR0cHM6Ly9hcmNobGludXhzdHVkaW8uZ2l0aHViLmlvL0FyY2hMaW51eFR1dG9yaWFsLyMv">ArchTurorial<i class="fa fa-external-link-alt"></i></span>
+<p>特别感谢 <span class="exturl" data-url="aHR0cHM6Ly9hcmNobGludXhzdHVkaW8uZ2l0aHViLmlvL0FyY2hMaW51eFR1dG9yaWFsLyMv">ArchTurorial<i class="fa fa-external-link-alt"></i></span>
 的教程, 是一份非常详细的 ArchLinux 安装教程,
 对我在接触使用Arch的过程中提供了非常大的帮助.</p>
 </blockquote>
 <hr />
-<p>在开始安装前的准备工作:</p>
-<ul>
-<li>前往 <span class="exturl" data-url="aHR0cHM6Ly9hcmNobGludXgub3JnLw==">Arch
-官网<i class="fa fa-external-link-alt"></i></span>下载最新的ISO文件</li>
-<li>制作U盘启动盘 (虚拟机直接挂在ISO即可)
-<ul>
-<li>Win 下建议使用 rufus<br />
-</li>
-<li>Linux 下使用命令<br />
-<code>sudo dd bs=4M if=/path/to/archlinux.iso of=/dev/sdx status=progress oflag=sync</code></li>
-</ul></li>
-<li>调整主板设置,启动模式为UEFI,关闭安全启动</li>
-</ul>
 <h2 id="基本系统安装">基本系统安装</h2>
-<p>Arch没有提供一个GUI的安装界面,安装过程完全使用命令一步一步进行构造.</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">systemctl stop reflector.service</span><br><span class="line"><span class="built_in">ls</span> /sys/firmware/efi/efivars <span class="comment"># 检查是否是UEFI启动</span></span><br><span class="line">iwctl <span class="comment"># 连接无线网</span></span><br><span class="line"><span class="comment"># device list</span></span><br><span class="line"><span class="comment"># station wlan0 scan</span></span><br><span class="line"><span class="comment"># station wlan0 get-networks </span></span><br><span class="line"><span class="comment"># station wlan0 connect YOUR-WIRELESS-NAME</span></span><br><span class="line"><span class="comment"># exit</span></span><br><span class="line">timedatectl set-ntp <span class="literal">true</span> <span class="comment"># 同步系统时间</span></span><br><span class="line">lsblk <span class="comment"># 查找硬盘名称.例如: sda</span></span><br><span class="line">parted /dev/sda <span class="comment"># 转换分区格式</span></span><br><span class="line"><span class="comment"># mktable</span></span><br><span class="line"><span class="comment"># gpt</span></span><br><span class="line"><span class="comment"># quit</span></span><br><span class="line">cfdisk /dev/sda <span class="comment"># 磁盘分区</span></span><br><span class="line"><span class="comment"># /efi 800M &quot;EFI system&quot;</span></span><br><span class="line"><span class="comment"># / 100G &quot;Linux filesystem&quot;</span></span><br><span class="line"><span class="comment"># /home 剩余全部 &quot;Linux filesystem&quot;</span></span><br><span class="line">fdisk -l <span class="comment"># 检查分区情况</span></span><br><span class="line">mkfs.vfat /dev/sda1 <span class="comment"># /efi</span></span><br><span class="line">mkfs.ext4 /dev/sda2 <span class="comment"># /</span></span><br><span class="line">mkfs.ext4 /dev/sda3 <span class="comment"># /home</span></span><br><span class="line">mount /dev/sda2 /mnt</span><br><span class="line"><span class="built_in">mkdir</span> /mnt/efi </span><br><span class="line">mount /dev/sda1 /mnt/efi</span><br><span class="line"><span class="built_in">mkdir</span> /mnt/home</span><br><span class="line">mount /dev/sda3 /mnt/home</span><br><span class="line">vim /etc/pacman.d/mirrorlist</span><br><span class="line"><span class="comment"># Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch</span></span><br><span class="line"><span class="comment"># Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch</span></span><br><span class="line">pacstrap /mnt base base-devel linux linux-headers linux-firmware dhcpcd iwd bash-completion neovim git</span><br><span class="line">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab</span><br><span class="line">arch-chroot /mnt </span><br><span class="line"><span class="built_in">ln</span> -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime <span class="comment"># 设置时区</span></span><br><span class="line">hwclock --systohc </span><br><span class="line">vim /etc/locale.gen <span class="comment"># 去掉en_US.UTF-8和zh_CN.UTF-8的注释</span></span><br><span class="line">locale-gen</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;LANG=en_US.UTF-8&#x27;</span> &gt; /etc/locale.conf <span class="comment"># 设置成英文</span></span><br><span class="line">vim /etc/hostname <span class="comment"># 设置主机名</span></span><br><span class="line">vim /etc/hosts</span><br><span class="line"><span class="comment"># 127.0.0.1   localhost  </span></span><br><span class="line"><span class="comment"># ::1         localhost  </span></span><br><span class="line"><span class="comment"># 127.0.1.1   you_hostname </span></span><br><span class="line">passwd root <span class="comment"># 设置root密码</span></span><br><span class="line">pacman -S intel-ucode <span class="comment"># Intel 微码</span></span><br><span class="line">pacman -S amd-ucode <span class="comment"># AMD 微码</span></span><br><span class="line">pacman -S grub efibootmgr <span class="comment"># 安装引导程序</span></span><br><span class="line">grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB</span><br><span class="line">vim /etc/default/grub <span class="comment"># 修改内核参数 GRUB_CMDLINE_LINUX_DEFAULT=&quot;loglevel=5 nowatchdog&quot;</span></span><br><span class="line">grub-mkconfig -o /boot/grub/grub.cfg</span><br><span class="line"><span class="built_in">exit</span> <span class="comment"># 退出chroot的环境</span></span><br><span class="line">umount -R /mnt</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<h2 id="桌面环境">桌面环境</h2>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">systemctl start dhcpcd <span class="comment"># 先联网</span></span><br><span class="line">systemctl start iwd</span><br><span class="line">iwctl</span><br><span class="line">vim /etc/pacman.conf <span class="comment"># 去除Color,ParallelDownloads,[multilib] 注释</span></span><br><span class="line">pacman -Syyu</span><br><span class="line">useradd -m -G wheel -s /bin/bash username <span class="comment"># 非root账户</span></span><br><span class="line">passwd username </span><br><span class="line">EDITOR=vim visudo <span class="comment"># 去掉 %wheel ALL=(ALL:ALL) ALL前的注释</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=/swapfile bs=1M count=4096 status=progress <span class="comment">#创建4G的交换空间 大小根据需要自定</span></span><br><span class="line"><span class="built_in">chmod</span> 600 /swapfile</span><br><span class="line">mkswap /swapfile <span class="comment">#格式化swap文件</span></span><br><span class="line">swapon /swapfile <span class="comment">#启用swap文件</span></span><br><span class="line">nvim /etc/fstab <span class="comment"># 文件末尾添加行 /swapfile none swap defaults 0 0</span></span><br><span class="line">pacman -S gnome wayland <span class="comment"># Gnome桌面</span></span><br><span class="line">systemctl <span class="built_in">enable</span> gdm</span><br><span class="line">pacman -S networkmanager <span class="comment"># 网络管理工具</span></span><br><span class="line">systemctl <span class="built_in">disable</span> iwd</span><br><span class="line">systemctl stop iwd</span><br><span class="line">systemctl <span class="built_in">enable</span> NetworkManager</span><br><span class="line"><span class="comment"># Wayland设置</span></span><br><span class="line">sudo pacman -S qt5-wayland/qt6-wayland</span><br><span class="line">vim ~/.config/electron-flags.conf</span><br><span class="line"><span class="comment"># --enable-features=WaylandWindowDecorations</span></span><br><span class="line"><span class="comment"># --ozone-platform-hint=auto</span></span><br></pre></td></tr></table></figure>
+<h2 id="常用软件">常用软件</h2>
 <blockquote>
-<p>虽然Arch也提供了一个安装脚本 <strong>archinstall</strong>
-快速安装,不过建议在熟悉 Arch 之后再使用这种方式.</p>
-</blockquote>
-<h4 id="检查是否是uefi启动">检查是否是UEFI启动</h4>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ls</span> /sys/firmware/efi/efivars</span><br></pre></td></tr></table></figure>
-<p>如果是则会输出一堆文件名,如果不是则找不到这个文件夹.</p>
-<h4 id="连接网络">连接网络</h4>
-<p>插入网线或虚拟机调整成桥接即可使用网络,
-如果使用无线网则使用下面的步骤连接你的wifi.<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">iwctl</span><br><span class="line">device list <span class="comment"># 列出设备名, 例如: wlan0</span></span><br><span class="line">station wlan0 scan <span class="comment"># 使用设备 wlan0 扫描网络</span></span><br><span class="line">station wlan0 get-networks <span class="comment"># 列出扫描到的网络</span></span><br><span class="line">station wlan0 connect YOUR-WIRELESS-NAME <span class="comment"># 连接网络, 过程中会提示输入密码</span></span><br><span class="line"><span class="built_in">exit</span> <span class="comment"># 退出iwctl</span></span><br></pre></td></tr></table></figure> 等待几秒用<code>ping</code>测试一下网络.</p>
-<blockquote>
-<p>如果熟悉了设备信息,
-可以进入iwctl后直接<code>station wlan0 connect YOUR-WIRELESS-NAME</code>连接.</p>
-</blockquote>
-<h4 id="同步系统时间">同步系统时间</h4>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">timedatectl set-ntp <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<h4 id="转换磁盘分区格式">转换磁盘分区格式</h4>
-<p>UEFI 要使用 GPT 格式的磁盘分区.</p>
-<blockquote>
-<p>会擦除磁盘全部数据, 如果你正在做双系统, 跳过过这一步.</p>
-</blockquote>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">lsblk                       <span class="comment"># 显示所有block设备信息, 找到你想要安装的硬盘名称 例如: sda</span></span><br><span class="line">parted /dev/sda             <span class="comment"># 使用 parted + mktable 将磁盘类型转换成gpt</span></span><br><span class="line">(parted)mktable             <span class="comment"># 进入 parted 命令后会显示 (parted) 输入 mktable</span></span><br><span class="line">New disk label <span class="built_in">type</span>? gpt    <span class="comment"># 输入 gpt</span></span><br><span class="line">quit                        <span class="comment"># 退出 parted</span></span><br></pre></td></tr></table></figure>
-<h4 id="磁盘分区">磁盘分区</h4>
-<p>磁盘分区根据个人需求进行自定义,
-要注意磁盘分区会清除磁盘中的全部内容.</p>
-<blockquote>
-<p>一个比较通用的方案<br />
-EFI分区:800M <code>/efi</code><br />
-根目录: 100G <code>/</code><br />
-home目录: 剩余全部 <code>/home</code></p>
-</blockquote>
-<p>使用cfdisk进行分区, 分区时建议将EFI分区作为第一个分区.
-其中EFI分区要使用<strong>EFI system</strong>类型, 其余使用<strong>Linux
-filesystem</strong>类型.</p>
-<blockquote>
-<p>如果你正在做双系统, 不需要创建EFI分区,
-你应该可以看到Win已经创建好的EFI分区.</p>
-</blockquote>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">cfdisk /dev/sda</span><br></pre></td></tr></table></figure>
-<p>完成后使用<code>fdisk -l</code>检查以下分区情况是否正确.</p>
-<h4 id="格式化分区">格式化分区</h4>
-<p>EFI分区格式化为vfat文件系统, 其他格式化为ext4.</p>
-<blockquote>
-<p>如果你在做双系统, 注意不要格式化efi分区与Win使用的分区.</p>
-</blockquote>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">mkfs.vfat /dev/sda1 <span class="comment"># efi</span></span><br><span class="line">mkfs.ext4 /dev/sda2 <span class="comment"># root</span></span><br><span class="line">mkfs.ext4 /dev/sda3 <span class="comment"># home</span></span><br></pre></td></tr></table></figure>
-<h4 id="挂载分区">挂载分区</h4>
-<p>我们将分区依次以操作系统的布局挂载到/mnt下面,
-就好比挂载了另一个操作系统.<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">mount /dev/sda2 /mnt <span class="comment"># 这是我们新系统的根分区</span></span><br><span class="line"><span class="built_in">mkdir</span> /mnt/efi  <span class="comment"># 创建efi目录</span></span><br><span class="line">mount /dev/sda1 /mnt/efi <span class="comment"># 将EFI分区挂载到efi目录上</span></span><br><span class="line"><span class="built_in">mkdir</span> /mnt/home <span class="comment"># 创建home目录</span></span><br><span class="line">mount /dev/sda3 /mnt/home <span class="comment"># 将home分区挂载到home目录上</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="选择镜像源">选择镜像源</h4>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">nvim /etc/pacman.d/mirrorlist</span><br></pre></td></tr></table></figure>
-<p>编辑mirrorlist文件,
-将下面的源添加到最前面(如果你了解你的网络按照合适你自己的编辑).<br />
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 中科大和清华的源</span><br><span class="line">Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch</span><br><span class="line">Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>Linux使用镜像源时会在mirrorlist中从上到下依次尝试每一个源,
-直到选择一个可用的源, 所以应当将速度快的服务器放在顶端.</p>
-</blockquote>
-<p>也可以借助 reflector 工具:<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pacman -S reflector <span class="comment"># 安装reflector </span></span><br><span class="line">reflector --verbose -l 200 -p https --<span class="built_in">sort</span> rate --save /etc/pacman.d/mirrorlist <span class="comment"># 选择最快的镜像源</span></span><br><span class="line">reflector --verbose --country <span class="string">&#x27;China&#x27;</span> -l 200 -p https --<span class="built_in">sort</span> rate --save /etc/pacman.d/mirrorlist <span class="comment"># 选择在中国的最快镜像源</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="安装系统">安装系统</h4>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pacstrap /mnt base linux... <span class="comment"># 看下面</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>base : 基础系统工具和库<br />
-base-devel : 一些用来构建和编译软件使用的工具和库<br />
-linux : Linux内核<br />
-linux-headers : 内核头文件, 帮助编译内核模块和驱动<br />
-linux-firmware : 一些常见的硬件固件<br />
-dhcpcd : DHCP客户端<br />
-iwd : 无线网管理工具(不使用无线网可以不用)<br />
-bash-completion : 命令补全工具<br />
-neovim : 终端文本编辑器<br />
-git : git 工具, 后面很多软件安装要使用到它</p>
-</blockquote>
-<h4 id="生成-fstab-文件">生成 fstab 文件</h4>
-<p>fstab 文件用于定义系统启动要自动挂在的磁盘分区与文件系统.<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab</span><br></pre></td></tr></table></figure></p>
-<h4 id="change-root">Change root</h4>
-<p>chroot 能够改变当前环境的根目录,
-就好比切换到了另一个系统环境中.<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">arch-chroot /mnt </span><br></pre></td></tr></table></figure> 切换进新安装的系统环境中做一些配置. 就像我们使用 GUI
-界面安装系统时设置一些内容一样.</p>
-<h4 id="设置时区">设置时区</h4>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ln</span> -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span><br><span class="line">hwclock --systohc </span><br></pre></td></tr></table></figure>
-<h4 id="设置-locale-信息">设置 Locale 信息</h4>
-<p>locale 信息影响系统中的字符编码, 货币日期时间等信息的显示方式.<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">nvim /etc/locale.gen</span><br></pre></td></tr></table></figure>
-编辑locale.gen去掉<strong>en_US.UTF-8</strong>和<strong>zh_CN.UTF-8</strong>的注释,
-然后执行:<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">locale-gen</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;LANG=en_US.UTF-8&#x27;</span> &gt; /etc/locale.conf <span class="comment"># 设置成英文, 我们还没安装中文字体</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="设置主机名">设置主机名</h4>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">nvim /etc/hostname <span class="comment"># 直接写入自定义的名称就行 例如: you_hostname</span></span><br></pre></td></tr></table></figure>
-<h4 id="设置-hosts-文件">设置 hosts 文件</h4>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">nvim /etc/hosts</span><br><span class="line"><span class="comment"># 127.0.0.1   localhost  </span></span><br><span class="line"><span class="comment"># ::1         localhost  </span></span><br><span class="line"><span class="comment"># 127.0.1.1   you_hostname  </span></span><br></pre></td></tr></table></figure>
-<h4 id="设置root密码">设置root密码</h4>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">passwd root</span><br></pre></td></tr></table></figure>
-<h4 id="安装处理器微码">安装处理器微码</h4>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pacman -S intel-ucode <span class="comment"># Intel </span></span><br><span class="line">pacman -S amd-ucode <span class="comment"># AMD</span></span><br></pre></td></tr></table></figure>
-<h4 id="安装引导程序">安装引导程序</h4>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pacman -S grub efibootmgr</span><br><span class="line">grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB</span><br></pre></td></tr></table></figure>
-<p>修改grub配置文件设置内核启动参数 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">nvim /et/cdefault/grub</span><br></pre></td></tr></table></figure></p>
-<p>编辑grub 文件, 修改<strong>GRUB_CMDLINE_LINUX_DEFAULT="loglevel=5
-nowatchdog nvidia_drm.modeset=1</strong>, 保存并执行:<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">grub-mkconfig -o /boot/grub/grub.cfg</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<ul>
-<li>quite : 抑制大多数的启动信息, 仅显示错误信息<br />
-</li>
-<li>loglevel : 内核日志的详细程度, 3代表错误信息,
-5代表普通但重要的信息<br />
-</li>
-<li>nowatchdog : 禁用watchdog机制, watchdog
-可以在系统挂起或失去响应的情况下系统重启, 但不利于排查错误.<br />
-</li>
-<li>nvidia_drm.modeset=1 : 如果使用N卡, 在最后加入参数, 开启 DRM.</li>
-</ul>
-</blockquote>
-<p>更多参数可以查阅 <span class="exturl" data-url="aHR0cHM6Ly93d3cua2VybmVsLm9yZy9kb2MvaHRtbC92NC4xNC9hZG1pbi1ndWlkZS9rZXJuZWwtcGFyYW1ldGVycy5odG1s">The
-kernel’s command-line parameters<i class="fa fa-external-link-alt"></i></span>.</p>
-<h4 id="完成安装">完成安装</h4>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">exit</span> <span class="comment"># 退出chroot的环境</span></span><br><span class="line">umount -R /mnt</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
-<p>重启后就会进入我们刚刚安装好的系统.
-一个无桌面的控制台ArchLinux安装完成.</p>
-<h2 id="安装桌面环境">安装桌面环境</h2>
-<p>对刚装好的Arch进行一些基本的配置后进行桌面的安装.</p>
-<h4 id="连接网络-1">连接网络</h4>
-<p>先开启 DHCP 服务.<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">systemctl start dhcpcd</span><br></pre></td></tr></table></figure> 如果使用无线网再开启 iwd 服务.<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">systemctl start iwd</span><br></pre></td></tr></table></figure></p>
-<h4 id="pacman-颜色与多线程">Pacman 颜色与多线程</h4>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">nvim /etc/pacman.conf</span><br></pre></td></tr></table></figure>
-<p>编辑pacman.conf将<strong>Color</strong>与<strong>ParallelDownloads</strong>的注释去掉.</p>
-<h4 id="准备一个非-root-用户">准备一个非 root 用户</h4>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">useradd -m -G wheel -s /bin/bash username  </span><br><span class="line">passwd username </span><br></pre></td></tr></table></figure>
-<p>修改sudoers配置, 让wheel组用户能够使用sudo执行任何命令.<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">EDITOR=nvim visudo <span class="comment"># 去掉 %wheel ALL=(ALL:ALL) ALL前的注释</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="安装网络管理工具">安装网络管理工具</h4>
-<p>安装NetworkManager后就可以使用桌面点击右上角图标连接wifi了.<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pacman -S networkmanager</span><br><span class="line">systemctl <span class="built_in">disable</span> iwd</span><br><span class="line">systemctl stop iwd</span><br><span class="line">systemctl <span class="built_in">enable</span> NetworkManager</span><br></pre></td></tr></table></figure></p>
-<h4 id="设置交换文件可选">设置交换文件(可选)</h4>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=/swapfile bs=1M count=4096 status=progress <span class="comment">#创建4G的交换空间 大小根据需要自定</span></span><br><span class="line"><span class="built_in">chmod</span> 600 /swapfile</span><br><span class="line">mkswap /swapfile <span class="comment">#格式化swap文件</span></span><br><span class="line">swapon /swapfile <span class="comment">#启用swap文件</span></span><br><span class="line">nvim /etc/fstab <span class="comment"># 文件末尾添加行 /swapfile none swap defaults 0 0</span></span><br></pre></td></tr></table></figure>
-<h4 id="开启32位库支持可选">开启32位库支持(可选)</h4>
-<p>可以安装 multilib 库中的32位程序.<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">nvim /etc/pacman.conf  <span class="comment"># 去掉 [multilib] 一节中的两行注释</span></span><br><span class="line">pacman -Syyu</span><br></pre></td></tr></table></figure></p>
-<h4 id="安装-gnome">安装 Gnome</h4>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pacman -S gnome wayland</span><br><span class="line">systemctl <span class="built_in">enable</span> gdm</span><br></pre></td></tr></table></figure>
-<p>安装过程比较长, 重启后就会进入登录界面了.</p>
-<h2 id="结尾">结尾</h2>
-<p>  一个桌面环境就安装完了, 在你熟悉了的情况下依靠命令行也能很快的完成.
-要特别记得Arch是滚动更新, 每天记得<code>pacman -Syyu</code>,
-不然太久不更新系统滚挂的风险很高.
-另外如果遇到系统进不去了的情况可以使用前面安装基本操作系统中挂载使用<code>arch-chroot</code>的方法进入系统进行调整.</p>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>搭建ArchLinux桌面环境(二) -- 常用软件安装</title>
-    <url>/posts/2ab5f660/</url>
-    <content><![CDATA[<p>上篇文章我们安装了一个最基本的ArchLinux以及Gnome桌面,
-本篇介绍一些常用软件的安装方法. <span id="more"></span><br />
-另外两篇:<br />
-<a href="/posts/2a77f85f/" title="搭建ArchLinux桌面环境(一) -- 基本系统安装">搭建ArchLinux桌面环境(一) -- 基本系统安装</a><br />
-<a href="/posts/5db2c6f6/" title="搭建ArchLinux桌面环境(三) -- 桌面美化">搭建ArchLinux桌面环境(三) -- 桌面美化</a></p>
-<h4 id="pacman">Pacman</h4>
-<p>在介绍其他软件之前,
-先介绍以下Arch中最基本的包管理器pacman的使用方法.<br />
+<p>Note: pacman用法:<br />
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S package_name     <span class="comment"># 安装软件包</span></span><br><span class="line">sudo pacman -Syyu               <span class="comment"># 升级系统 yy标记强制刷新 u标记升级动作</span></span><br><span class="line">sudo pacman -R package_name     <span class="comment"># 删除软件包</span></span><br><span class="line">sudo pacman -Rs package_name    <span class="comment"># 删除软件包，及其所有没有被其他已安装软件包使用的依赖包</span></span><br><span class="line">sudo pacman -Qdt                <span class="comment"># 找出孤立包 Q为查询本地软件包数据库 d标记依赖包 t标记不需要的包 dt合并标记孤立包</span></span><br><span class="line">sudo pacman -Rs $(pacman -Qtdq) <span class="comment"># 删除孤立软件包</span></span><br><span class="line">pacman -Ss package_name         <span class="comment"># 正则查询软件包</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="yaypaur">Yay/paur</h4>
-<p>Aur即Arch User repository是Arch特色仓库. yay/paur则是包管理工具,
-它可以同时使用Aur和标准仓库的资源, 使用方法与pacman 一样.<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pacman -Sy --needed git base-devel</span><br><span class="line">git <span class="built_in">clone</span> https://aur.archlinux.org/yay.git</span><br><span class="line"><span class="built_in">cd</span> yay</span><br><span class="line">makepkg -si</span><br></pre></td></tr></table></figure> paur:<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S --needed git base-devel</span><br><span class="line">git <span class="built_in">clone</span> https://aur.archlinux.org/paru.git</span><br><span class="line"><span class="built_in">cd</span> paru</span><br><span class="line">makepkg -si</span><br></pre></td></tr></table></figure></p>
-<h4 id="中文字体">中文字体</h4>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S noto-fonts-cjk noto-fonts-emoji noto-fonts-extra</span><br></pre></td></tr></table></figure>
-<p>安装完就可以去设置里将系统切换成中文的了.</p>
-<h4 id="浏览器">浏览器</h4>
-<p>选择firefox就是选择最少的折腾. :&gt;<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S firefox</span><br></pre></td></tr></table></figure></p>
-<h4 id="显卡驱动">显卡驱动</h4>
-<p>环境关键字: arch + Nvidia + Intel + Wayland</p>
-<ol type="1">
-<li><p>安装显卡驱动<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S mesa lib32-mesa vulkan-intel lib32-vulkan-intel <span class="comment"># intel 显卡</span></span><br><span class="line">sudo pacman -S nvidia nvidia-utils nvidia-settings lib32-nvidia-utils <span class="comment"># nvidia 显卡</span></span><br><span class="line">sudo pacman -S nvidia-prime <span class="comment"># 动态切换, 在想要使用独显的程序前加 prime-run 前缀</span></span><br></pre></td></tr></table></figure></p></li>
-<li><p>修改 gdm 配置文件<br />
-编辑 /etc/gdm/custom.conf 取消注释并修改为
-<code>WaylandEnable=true</code></p></li>
-<li><p>更新Mkinitcpin<br />
-编辑 /etc/mkinitcpin.conf 修改 <code>MODULES=()</code> 为:<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)</span><br></pre></td></tr></table></figure> 保存后执行<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo mkinitcpin -P</span><br></pre></td></tr></table></figure></p></li>
-<li><p>添加内核参数<br />
-nvidia_drm.modeset=1 这个我们在前面已经添加过了.</p></li>
-<li><p>禁用 GDM udev 规则<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">    sudo <span class="built_in">ln</span> -s /dev/null /etc/udev/rules.d/61-gdm.rules</span><br><span class="line"></span><br><span class="line">&gt; Wayland 下 optimus-manager 已经不好使用了, 按照上述的步骤最终只能达到 hybrid 的效果, Nv显卡通电, 想要使用需要在程序前加 prime-run. 想要看使用 Nv 运行了哪些程序可以使用 nvidia-smi  </span><br><span class="line"></span><br><span class="line"><span class="comment">#### VmwareTools  </span></span><br><span class="line">```sh</span><br><span class="line">sudo pacman -S open-vm-tools gtkmm3 --noconfirm</span><br><span class="line">sudo systemctl <span class="built_in">enable</span> vmtoolsd vmware-vmblock-fuse</span><br></pre></td></tr></table></figure></p></li>
-</ol>
-<h4 id="nerd-字体">Nerd 字体</h4>
-<p>这个字体在配置 nvim zsh 等很多地方都能用到.<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S ttf-jetbrains-mono-nerd</span><br></pre></td></tr></table></figure> 手动安装方法:</p>
-<ol type="1">
-<li>在 <code>usr/share/fonts</code> 或 <code>.locale/share/fonts</code>
-下建立属于你字体的目录.<br />
-</li>
-<li>将字体文件全部解压到文件夹中.<br />
-</li>
-<li>修改所有 ttf 文件权限为 644.<br />
-</li>
-<li>刷新字体缓存 <code>sudo fc-cache -fv</code></li>
-</ol>
-<h4 id="输入法">输入法</h4>
-<p>我选择了fcitx5.<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S fcitx5 fcitx5-im fcitx5-chinese-addons </span><br><span class="line">yay -S fcitx5-input-support</span><br></pre></td></tr></table></figure> 添加环境变量<br />
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">QT_IM_MODULE=fcitx</span><br><span class="line">XMODIFIERS=@im=fcitx</span><br></pre></td></tr></table></figure> 输入法候选面板需要 Gnome 插件Input Method Pannel支持.
-怎么安装插件看一下 <a href="/posts/5db2c6f6/" title="搭建ArchLinux桌面环境(三) -- 桌面美化">搭建ArchLinux桌面环境(三) -- 桌面美化</a><br />
-打开fcitx5-configuration, 点击Run Fcitx5,
-从右侧找到输入法添加到左侧确认即可.</p>
-<h4 id="dialect">Dialect</h4>
-<p>一款翻译软件.<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">yay -S dialect</span><br></pre></td></tr></table></figure></p>
-<h4 id="猫咪魔法">猫咪魔法</h4>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">yay -S clash-verge-rev-bin</span><br></pre></td></tr></table></figure>
-<h4 id="openvpn">Openvpn</h4>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S openvpn</span><br></pre></td></tr></table></figure>
-<p>为了支持旧版本的加密算法, 需要在 .ovpn 配置文件中增加以下配置.<br />
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">data-ciphers BF-CBC</span><br><span class="line">data-ciphers-fallback BF-CBC</span><br><span class="line">providers legacy default</span><br></pre></td></tr></table></figure> 使用时执行
-<code>sudo openvpn --config xxxx.ovpn</code>.</p>
-<h4 id="remmina">Remmina</h4>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S remmina freerdp</span><br></pre></td></tr></table></figure>
-<h4 id="vscode">vscode</h4>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S code </span><br><span class="line">yay -S code-oss-marketplace</span><br></pre></td></tr></table></figure>
-<h4 id="zsh">Zsh</h4>
-<blockquote>
-<p>Zsh需要使用noto字体</p>
 </blockquote>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S zsh zsh-completions</span><br></pre></td></tr></table></figure>
-<p>执行 <code>zsh</code> 运行安装向导(没什么用直接关了就行,
-后面还有oh-my-zsh), 也可以手动执行, 在 zsh 下执行<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">autoload</span> -Uz zsh-newuser-install</span><br><span class="line">zsh-newuser-install -f</span><br></pre></td></tr></table></figure> 设置 zsh 为默认 shell.<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">chsh -l <span class="comment"># list all shell</span></span><br><span class="line">chsh -s /usr/bin/zsh <span class="comment"># change default shell to zsh</span></span><br></pre></td></tr></table></figure> 安装 oh-my-zsh.<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure> 设置插件, 编辑~/.zshrc修改plugins:<br />
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">plugins = (git z sudo web-search)</span><br></pre></td></tr></table></figure> 安装powerlevel10k主题. 这是Arch的安装方法, powerlevel10k
-的仓库有详细的各种安装方式.<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">yay -S zsh-theme-powerlevel10k-git</span><br></pre></td></tr></table></figure> 配置进配置文件 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme&#x27;</span> &gt;&gt;~/.zshrc</span><br></pre></td></tr></table></figure>
-然后使用<code>exec zsh</code>来重启zsh,
-应该会自动执行powerlevel10k的配置向导,
-也可以执行<code>p10k configure</code>来手动执行向导,
-跟随向导来配置你想要的款式.</p>
-<h4 id="sunlogin">Sunlogin</h4>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">yay -S sunloginclient</span><br><span class="line">sudo systemctl start runsunloginclient.service</span><br><span class="line">sudo systemctl <span class="built_in">enable</span> runsunloginclient.service <span class="comment"># 如果不想让服务一直在后台运行每次使用前记得 start</span></span><br></pre></td></tr></table></figure>
-<h4 id="waydroid">Waydroid</h4>
-<p>要使用 Waydroid 必须在 Wayland 下, 使用
-<code>echo $XDG_SESSION_TYPE</code> 来检查. 并且需要使用 binder
-模块.<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">yay -S binder_linux-dkms</span><br><span class="line">sudo modprobe binder_linux</span><br><span class="line">su</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;binder_linux&quot;</span> &gt;&gt; /etc/modules-load.d/binder.conf</span><br></pre></td></tr></table></figure> 安装waydroid<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">yay -S waydroid</span><br><span class="line">sudo waydroid init</span><br><span class="line">sudo systemctl start waydroid-container</span><br><span class="line">sudo systemctl <span class="built_in">enable</span> waydroid-container</span><br></pre></td></tr></table></figure> 一些常用命令<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">waydroid app install xxx.apk <span class="comment"># 安装 apk</span></span><br><span class="line"></span><br><span class="line">waydroid prop <span class="built_in">set</span> persist.waydroid.multi_windows <span class="literal">true</span> <span class="comment"># 设置多窗口模式，记得重启服务</span></span><br><span class="line"></span><br><span class="line">sudo systemctl status waydroid-container <span class="comment"># 排障可能用到的命令</span></span><br><span class="line">sudo waydroid logcat</span><br><span class="line">waydroid <span class="built_in">log</span></span><br></pre></td></tr></table></figure> 删除 Waydroid<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">waydroid session stop</span><br><span class="line">sudo systemctl stop waydroid-container</span><br><span class="line">yay -Rsn waydroid</span><br><span class="line">sudo <span class="built_in">rm</span> -rf /var/lib/waydroid ~/.local/share/application/*aydroid* ~/.local/share/waydroid</span><br></pre></td></tr></table></figure>
-为了精简，只涉及到够用的步骤，还有关于Arm转译，Google注册等内容可进一步查看文档
-<span class="exturl" data-url="aHR0cHM6Ly93aWtpLmFyY2hsaW51eC5vcmcvdGl0bGUvV2F5ZHJvaWQ=">Waydroid<i class="fa fa-external-link-alt"></i></span>.<br />
-再推荐一篇博客 <span class="exturl" data-url="aHR0cHM6Ly9pdm9uYmxvZy5jb20vcG9zdHMvYXJjaGxpbnV4LXdheWRyb2lk">WayDroid教学<i class="fa fa-external-link-alt"></i></span></p>
-<h4 id="wayland">Wayland</h4>
-<p>Wayland这东西毕竟比较新, 各个开发者适配的进度不一,
-下面是我查阅到的一些资料留作备用,
-在遇到程序对wayland兼容有问题时可以试一试.<br />
-- gtk3/4默认支持Wayland.<br />
-- Qt想要支持Wayland安装qt5-wayland/qt6-wayland.
-想要显式设置的话设置环境变量 QT_QPA_PLATFORM=wayland.<br />
-- Electron (&gt;= 28) 则需要设置环境变量 ELECTRON_OZONE_PLATFORM_HINT 为
-auto 或 wayland. (环境变量的优先级低于参数)
-还可以使用给应用程序添加参数或写到配置文件 ~/.config/electron-flags.conf
-中.<br />
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">--enable-features=WaylandWindowDecorations # 解决缺少顶栏</span><br><span class="line">--ozone-platform-hint=auto</span><br></pre></td></tr></table></figure></p>
-<h4 id="声音问题">声音问题</h4>
-<p>(VMware 环境中, 实体机器没发现有异常)安装 Gnome 时使用了 pipewire,
-但是声音会爆裂断断续续的. 不会调试具体原因查阅资料也没弄明白.
-所以先选择安装 pulseaudio 代替.<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -R pulse-native-provider <span class="comment"># 与 pulseaudio 冲突的包有依赖, 先删除</span></span><br><span class="line">sudo pacman -S alsa-utils pulseaudio pavucontol</span><br><span class="line">systemctl --user <span class="built_in">enable</span> pulseaudio.service pulseaudio.socket </span><br></pre></td></tr></table></figure></p>
+<h3 id="基本软件">基本软件</h3>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S git neovim</span><br><span class="line">git <span class="built_in">clone</span> https://aur.archlinux.org/yay.git &amp;&amp; <span class="built_in">cd</span> yay &amp;&amp; makepkg -si <span class="comment"># yay</span></span><br><span class="line">sudo pacman -S noto-fonts-cjk noto-fonts-emoji noto-fonts-extra <span class="comment"># 中文字体</span></span><br><span class="line">sudo pacman -S firefox</span><br><span class="line">sudo pacman -S ttf-jetbrains-mono-nerd <span class="comment"># nerd字体</span></span><br><span class="line">yay -S dialect <span class="comment"># 翻译软件</span></span><br><span class="line">yay -S clash-verge-rev-bin</span><br><span class="line">sudo pacman -S remmian freerdp <span class="comment"># 远程桌面工具</span></span><br><span class="line">sudo pacman -S code &amp;&amp; yay -S code-oss-marketplace <span class="comment"># vscode</span></span><br></pre></td></tr></table></figure>
+<h3 id="显卡驱动">显卡驱动</h3>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S mesa lib32-mesa vulkan-intel lib32-vulkan-intel <span class="comment"># intel驱动</span></span><br><span class="line">sudo pacman -S nvidia nvidia-utils nvidia-settings lib32-nvidia-utils <span class="comment"># nv驱动</span></span><br><span class="line">sudo pacman -S nvidia-prime <span class="comment"># 动态切换工具, 在使用独显的程序命令前加prime-run</span></span><br><span class="line">vim /etc/gdm/custom.conf <span class="comment"># 修改 WaylandEnable=true</span></span><br><span class="line">vim /etc/mkinitcpin.conf <span class="comment"># 编辑 MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)</span></span><br><span class="line">sudo mkinitcpin -P</span><br><span class="line">vim /etc/default/grub <span class="comment"># 添加内核参数 nvidia_drm.modeset=1</span></span><br><span class="line">sudo <span class="built_in">ln</span> -s /dev/null /etc/udev/rules.d/61-gdm.rules <span class="comment"># 禁用GDM udev规则</span></span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>安装完成后声音是正常了, 但是重启后发生一种现象就是,
-静音播放视频可以播放, 一旦开了声音视频就卡死了. 查阅资料找到一个方案.
-修改配置文件 <code>/etc/pulse/default.pa</code>, 注释行
-<code>load-module module-suspend-on-idle</code>.</p>
+<p><code>nvidia-smi</code>命令可以查看nv显卡使用情况.</p>
 </blockquote>
-<h4 id="f区按键映射">F区按键映射</h4>
-<p>F1 - F12 被映射成多媒体按键<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> 0 | sudo <span class="built_in">tee</span> /sys/module/hid_apple/parameters/fnmode</span><br></pre></td></tr></table></figure> 看看是否恢复正常, 如果正常了就将他写入配置文件.<br />
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;options hid_apple fnmode=0&quot;</span> | sudo <span class="built_in">tee</span> -a /etc/modprobe.d/hid_apple.conf</span><br></pre></td></tr></table></figure></p>
+<h3 id="vmwaretools">VmwareTools</h3>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S open-vm-tools gtkmm3</span><br><span class="line">sudo systemctl <span class="built_in">enable</span> vmtoolsd vmware-vmblock-fuse</span><br></pre></td></tr></table></figure>
+<h3 id="中文输入法">中文输入法</h3>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S fcitx5 fcitx5-im fcitx5-chinese-addons</span><br><span class="line">yay -S fcitx5-input-support</span><br><span class="line">vim /etc/environment</span><br><span class="line"><span class="comment"># QT_IM_MODULE=fcitx</span></span><br><span class="line"><span class="comment"># XMODIFIERS=@im=fcitx</span></span><br><span class="line">fcitx5-configuration <span class="comment"># 打开配置工具配置</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Gnome需要安装<code>Input Method Pannel</code>插件支持候选面板显示.</p>
+</blockquote>
+<h3 id="openvpn-client">Openvpn Client</h3>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S openvpn</span><br><span class="line"><span class="comment"># 为支持旧版本加密算法,需要在.ovpn配置文件中增加配置</span></span><br><span class="line"><span class="comment"># data-ciphers BF-CBC</span></span><br><span class="line"><span class="comment"># data-ciphers-fallback BF-CBC</span></span><br><span class="line"><span class="comment"># providers legacy default</span></span><br><span class="line">sudo openvpn --config xxxx.ovpn</span><br></pre></td></tr></table></figure>
+<h3 id="zsh">Zsh</h3>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo pacman -S zsh zsh-completions</span><br><span class="line">chsh -l <span class="comment"># 查看所有shell</span></span><br><span class="line">chsh -s /usr/bin/zsh <span class="comment"># 改变默认shell</span></span><br><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)</span>&quot;</span></span><br><span class="line">vim ~/.zshrc <span class="comment"># plugins = (git z sudo web-search)</span></span><br><span class="line">yay -S zsh-theme-powerlevel10k-git</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme&#x27;</span> &gt;&gt; ~/.zshrc</span><br><span class="line"><span class="built_in">exec</span> zsh <span class="comment"># 重启zsh执行向导 或 p10k configure</span></span><br></pre></td></tr></table></figure>
+<h3 id="sunlogin">Sunlogin</h3>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">yay -S sunloginclient</span><br><span class="line">sudo systemctl start runsunloginclient.service <span class="comment"># 使用前先启动服务</span></span><br></pre></td></tr></table></figure>
+<h3 id="waydroid">Waydroid</h3>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">yay -S binder_linux_dkms</span><br><span class="line">sudo modprobe binder_linux</span><br><span class="line">su</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;binder_linux&quot;</span> &gt;&gt; /etc/modules-load.d/binder.conf</span><br><span class="line">yay -S waydroid</span><br><span class="line">sudo waydroid init</span><br><span class="line">sudo systemctl start waydroid-container</span><br><span class="line">sudo systemctl <span class="built_in">enable</span> waydroid-container</span><br><span class="line">waydroid session start <span class="comment"># 手动执行一下waydroid</span></span><br><span class="line">waydroid app install xxx.apk <span class="comment"># 安装apk</span></span><br><span class="line">waydroid prop <span class="built_in">set</span> persist.waydroid.multi_windows <span class="literal">true</span> <span class="comment"># 设置多窗口</span></span><br><span class="line"><span class="comment"># 卸载方法</span></span><br><span class="line">waydroid session stop</span><br><span class="line">sudo systemctl stop waydroid-container</span><br><span class="line">yay -Rsn waydroid</span><br><span class="line">sudo <span class="built_in">rm</span> -rf /var/lib/waydroid ~/.local/share/application/*aydroid* ~/.local/share/waydroid</span><br></pre></td></tr></table></figure>
+<h2 id="常见问题记录">常见问题记录</h2>
+<h3 id="f区按键映射">F区按键映射</h3>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> 0 | sudo <span class="built_in">tee</span> /sys/module/hid_apple/parameters/fnmode</span><br><span class="line"><span class="comment"># 如果恢复正常写入配置</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;options hid_apple fnmode=0&quot;</span> | sudo <span class="built_in">tee</span> -a /etc/modprobe.d/hid_apple.conf</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>linux</category>
       </categories>
   </entry>
   <entry>
-    <title>搭建ArchLinux桌面环境(三) -- 桌面美化</title>
-    <url>/posts/5db2c6f6/</url>
-    <content><![CDATA[<p>最后一篇介绍以下Gnome桌面美化. <span id="more"></span><br />
-另外两篇:<br />
-<a href="/posts/2a77f85f/" title="搭建ArchLinux桌面环境(一) -- 基本系统安装">搭建ArchLinux桌面环境(一) -- 基本系统安装</a><br />
-<a href="/posts/2ab5f660/" title="搭建ArchLinux桌面环境(二) -- 常用软件安装">搭建ArchLinux桌面环境(二) -- 常用软件安装</a></p>
-<p>美化一般就是壁纸 + 主题 + 插件. 壁纸就不提了设置中可以很容易的设置,
+    <title>搭建ArchLinux桌面环境 -- 桌面美化</title>
+    <url>/posts/44a301f7/</url>
+    <content><![CDATA[<p>介绍一下Gnome桌面美化. <span id="more"></span><br />
+美化一般就是壁纸 + 主题 + 插件. 壁纸就不提了设置中可以很容易的设置,
 主要介绍一下插件和主题.</p>
 <h4 id="如何安装插件">如何安装插件</h4>
 <ol type="1">
@@ -774,7 +497,7 @@ Linux + Win11 的双系统环境. <span id="more"></span><br />
 <li>在给 Win11 划分磁盘空间时不要全部划分出去, 给 Linux 预留出空间.</li>
 </ol>
 <h2 id="安装-linux">安装 Linux</h2>
-<p>安装步骤可以参考 <a href="/posts/2a77f85f/" title="搭建ArchLinux桌面环境(一) -- 基本系统安装">搭建ArchLinux桌面环境(一) -- 基本系统安装</a>. 安装过程中要注意以下几点:</p>
+<p>安装过程中要注意以下几点:</p>
 <ol type="1">
 <li>磁盘分区时不需要再创建一个 EFI 分区, 使用 Windows 的 EFI
 分区即可.<br />
