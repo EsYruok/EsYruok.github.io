@@ -1,14 +1,10 @@
 ---
-title: 搭建ArchLinux桌面环境(三) -- 桌面美化
-abbrlink: 5db2c6f6
-date: 2024-01-13 17:31:46
+title: 搭建ArchLinux桌面环境 -- 桌面美化
 categories: linux
+abbrlink: 44a301f7
+date: 2024-01-13 17:31:46
 ---
-最后一篇介绍以下Gnome桌面美化.  <!--more-->  
-另外两篇:  
-{% post_link build-archlinux-desktop-env-1 %}  
-{% post_link build-archlinux-desktop-env-2 %}  
-
+介绍一下Gnome桌面美化.  <!--more-->  
 美化一般就是壁纸 + 主题 + 插件. 壁纸就不提了设置中可以很容易的设置, 主要介绍一下插件和主题.  
 
 #### 如何安装插件  
