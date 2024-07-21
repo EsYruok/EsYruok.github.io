@@ -26,6 +26,31 @@ nvim lua/config/keymaps.lua
 # }
 ```
 
+## Vim options
+```sh
+nvim lua/config/options.lua
+```
+```lua
+--tab
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+vim.opt.softtabstop = 4
+vim.opt.shiftround = true
+
+--ui
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.cursorline = true
+vim.opt.colorcolumn = "160"
+
+--search
+vim.opt.incsearch = true
+vim.opt.hlsearch = false
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+```
+
 ## Lazy.nvim
 ```sh
 sudo pacman -S luarocks ttf-jetbrains-mono-nerd
@@ -150,5 +175,137 @@ return {
 vim.api.nvim_set_keymaps("t","<Esc>","<C-\\><C-n>",opt)
 vim.api.nvim_set_keymaps("n","<leader>tf","<cmd>ToggleTerm direction=float<cr>",opt)
 vim.api.nvim_set_keymaps("n","<leader>th","<cmd>ToggleTerm direction=horizontal<cr>",opt)
+```
+
+## LSP
+```sh
+nvim lua/plugins/plugin-lsp.lua
+```
+```lua
+return {
+    --mason
+    {
+        'williamboman/mason.nvim',
+        opts = {
+            ui = {
+                icons = {
+                    package_installed = "✓",
+                    package_pending = "➜",
+                    package_uninstalled = "✗"
+                },
+            },
+        },
+    },
+    --mason-lspconfig
+    {
+        'williamboman/mason-lspconfig.nvim',
+        opts = {
+            ensure_installed = { "lua_ls", "rust_analyzer" },
+        },
+    },
+    --lspconfig
+    {
+        'neovim/nvim-lspconfig',
+        config = function ()
+            local lspconfig = require('lspconfig')
+            lspconfig['lua_ls'].steup({})
+            lspconfig['rust_analyzer'].setup({})
+        end,
+    },
+    --lspsaga
+    {
+        'nvimdev/lspsaga.nvim',
+        config = function ()
+            require('lspsaga').setup({})
+        end,
+        dependencies = {
+            'nvim-treesitter/nvim-treesitter',
+            'nvim-tree/nvim-web-devicons',
+        },
+    },
+}
+```
+```lua
+--keymap
+```
+
+## Nvim-cmp
+```sh
+nvim lua/plugins/plugin-cmp.lua
+```
+```lua
+return {
+    {
+        'L3MON4D3/LuaSnip',
+        version = 'v2.*',
+        build = 'make install_jsregexp',
+        dependencies = {
+            'saadparwaiz1/cmp_luasnip',
+        },
+    },
+    {
+        'hrsh7th/nvim-cmp',
+        dependencies = {
+            --'onsails/lspkind.nvim',
+            'hrsh7th/cmp-nvim-lsp',
+            'hrsh7th/cmp-buffer',
+            'hrsh7th/cmp-path',
+            'hrsh7th/cmp-cmdline',
+            'neovim/nvim-lspconfig',
+        },
+        config = function ()
+            local cmp = require('cmp')
+            --local lspkind = require('lspkind')
+            cmp.setup({
+                snippet = {
+                    expand = function(args)
+                        require('luasnip').lsp_expand(args.body)
+                    end,
+                },
+                mapping = cmp.mapping.preset.insert({
+                    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+                    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+                    ['<C-k>'] = cmp.mapping.select_prev_item(),
+                    ['<C-j>'] = cmp.mapping.select_next_item(),
+                    ['<C-Space>'] = cmp.mapping.complete(),
+                    ['<C-e>'] = cmp.mappiing.abort(),
+                    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+                }),
+                sources = cmp.config.sources({
+                    { name = 'nvim_lsp' },
+                    { name = 'luasnip' },
+                },{
+                    { name = 'buffer' },
+                }),
+                --lspkind
+                --[[
+                formatting = {
+                    format = lspkind.cmp_format({
+                        mode = 'symbol',
+                        maxwidth = 50,
+                        ellipsis_char = '...',
+                        show_labeDetails = true,
+                    }),
+                },
+                --]]
+            })
+            cmp.setup.cmdline({'/', '?'},{
+                mapping = cmp.mapping.preset.cmdline(),
+                sources = {
+                    { name = 'buffer' }
+                },
+            })
+            cmp.setup.cmdline(':',{
+                mapping = cmp.mapping.preset.cmdline(),
+                sources = cmp.config.sources({
+                    { name = 'path' },
+                },{
+                    { name = 'cmdline' },
+                }),
+                mathcing = { disallow_symbol_nonprefix_matching = false },
+            })
+        end,
+    },
+}
 ```
 
