@@ -17,8 +17,8 @@ mkdir lua/config
 touch lua/config/keymaps.lua
 touch lua/config/options.lua
 nvim init.lua 
-# require("config.keymaps")
 # require("config.options")
+# require("config.keymaps")
 nvim lua/config/keymaps.lua
 # local opts = {
     # noremap = true,
@@ -31,6 +31,11 @@ nvim lua/config/keymaps.lua
 nvim lua/config/options.lua
 ```
 ```lua
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
+vim.opt.clipboard = "unnamedplus"
+
 --tab
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
@@ -83,7 +88,7 @@ return {
 ```
 ```lua
 --keymaps
-vim.api.nvim_set_keymaps("n","T","<cmd>NvimTreeToggle<cr>",opts)
+vim.api.nvim_set_keymap("n","T","<cmd>NvimTreeToggle<cr>",opt)
 ```
 
 ## Bufferline.nvim
@@ -114,9 +119,9 @@ return {
 
 ```lua
 --keymaps
-vim.api.nvim_set_keymaps("n","<C-h>","<cmd>BufferLineCyclePrev<cr>",opt)
-vim.api.nvim_set_keymaps("n","<C-l>","<cmd>BufferLineCycleNext<cr>",opt)
-vim.api.nvim_set_keymaps("n","<leader>bc","<cmd>bdelete %<cr>",opt)
+vim.api.nvim_set_keymap("n","<C-h>","<cmd>BufferLineCyclePrev<cr>",opt)
+vim.api.nvim_set_keymap("n","<C-l>","<cmd>BufferLineCycleNext<cr>",opt)
+vim.api.nvim_set_keymap("n","<leader>bc","<cmd>bdelete %<cr>",opt)
 ```
 
 ## Lualine.nvim
@@ -150,15 +155,15 @@ return {
 ```
 ```lua
 --keymaps
-vim.api.nvim_set_keymaps("n","<leader>ff","<cmd>Telescope find_files<cr>",opt)
-vim.api.nvim_set_keymaps("n","<leader>fg","<cmd>Telescope live_grep<cr>",opt)
-vim.api.nvim_set_keymaps("n","<leader>fh","<cmd>Telescope help_tags<cr>",opt)
-vim.api.nvim_set_keymaps("n","<leader>fk","<cmd>Telescope keymaps<cr>",opt)
+vim.api.nvim_set_keymap("n","<leader>ff","<cmd>Telescope find_files<cr>",opt)
+vim.api.nvim_set_keymap("n","<leader>fg","<cmd>Telescope live_grep<cr>",opt)
+vim.api.nvim_set_keymap("n","<leader>fh","<cmd>Telescope help_tags<cr>",opt)
+vim.api.nvim_set_keymap("n","<leader>fk","<cmd>Telescope keymaps<cr>",opt)
 ```
 
 ## Toggleterm.nvim
 ```sh
-nvim lua/plugins/plugin-toogleterm.lua
+nvim lua/plugins/plugin-toggleterm.lua
 ```
 ```lua
 return {
@@ -172,9 +177,9 @@ return {
 ```
 ```lua
 --keymaps
-vim.api.nvim_set_keymaps("t","<Esc>","<C-\\><C-n>",opt)
-vim.api.nvim_set_keymaps("n","<leader>tf","<cmd>ToggleTerm direction=float<cr>",opt)
-vim.api.nvim_set_keymaps("n","<leader>th","<cmd>ToggleTerm direction=horizontal<cr>",opt)
+vim.api.nvim_set_keymap("t","<Esc>","<C-\\><C-n>",opt)
+vim.api.nvim_set_keymap("n","<leader>tf","<cmd>ToggleTerm direction=float<cr>",opt)
+vim.api.nvim_set_keymap("n","<leader>th","<cmd>ToggleTerm direction=horizontal<cr>",opt)
 ```
 
 ## LSP
@@ -208,7 +213,7 @@ return {
         'neovim/nvim-lspconfig',
         config = function ()
             local lspconfig = require('lspconfig')
-            lspconfig['lua_ls'].steup({})
+            lspconfig['lua_ls'].setup({})
             lspconfig['rust_analyzer'].setup({})
         end,
     },
@@ -268,7 +273,7 @@ return {
                     ['<C-k>'] = cmp.mapping.select_prev_item(),
                     ['<C-j>'] = cmp.mapping.select_next_item(),
                     ['<C-Space>'] = cmp.mapping.complete(),
-                    ['<C-e>'] = cmp.mappiing.abort(),
+                    ['<C-e>'] = cmp.mapping.abort(),
                     ['<CR>'] = cmp.mapping.confirm({ select = true }),
                 }),
                 sources = cmp.config.sources({
